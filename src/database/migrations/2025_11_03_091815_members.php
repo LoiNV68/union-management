@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id'); // khóa chính
             $table->string('full_name', 255);
             $table->date('birth_date');
-            $table->enum('gender', [0, 1]); // 0: Nam, 1: Nữ,
+            $table->tinyInteger('gender')->default(0);; // 0: Nam, 1: Nữ,
             $table->string('address')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number', 20)->nullable();
