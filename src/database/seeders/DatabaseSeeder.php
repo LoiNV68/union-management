@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
         Branch::factory(100)->create();
         Member::factory(100)->create();
 
-        // User::factory()->create([
-        //     'full_name' => 'admin',
-        //     'password' => '123',
-        //     'role' => 2
-        // ]);
+        User::factory()->create([
+            'student_code' => '2254800',
+            'password' => '123',
+            'role' => 2
+        ]);
     }
 }
