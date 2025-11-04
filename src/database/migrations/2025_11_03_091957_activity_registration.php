@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
             $table->foreignId('activity_id')->nullable()->constrained('activity')->onDelete('cascade');
             $table->date('registration_time');
-            $table->enum('registration_status', [0, 1]);
+            $table->tinyInteger('registration_status')->default(0);
             $table->string('note');
             $table->timestamps();
         });

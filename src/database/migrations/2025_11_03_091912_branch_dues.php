@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id');
             $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
             $table->decimal('amount_money', 12, 2);
-            $table->enum('status', [0, 1])->default(0);
+            $table->tinyInteger('type')->default(0); // 0: Income, 1: Expenditure
             $table->date('payment_date')->nullable();
             $table->string('qr_code')->nullable();
             $table->timestamps();

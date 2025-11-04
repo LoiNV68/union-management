@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('location');
-            $table->enum('status', [0, 1])->default(0); // 0: Pending, 1: Approved
+            $table->tinyInteger('type')->default(0); // 0: Income, 1: Expenditure
             $table->integer('max_participants');
             $table->foreignId('creator')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();

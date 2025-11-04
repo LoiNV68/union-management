@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone_number', 20)->nullable();
             $table->date('join_date')->nullable();
-            $table->enum('status', [0, 1])->default(1); // 0: Inactive, 1: Active
+            $table->tinyInteger('status')->default(0); // 0: Inactive, 1: Active
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); // liên kết tài khoản đăng nhập nếu có
             $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('cascade'); // liên kết chi đoàn nếu có
             $table->timestamps();

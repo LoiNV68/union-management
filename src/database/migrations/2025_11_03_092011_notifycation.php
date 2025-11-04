@@ -18,7 +18,8 @@ return new class extends Migration
             $table->date('date_sent');
             $table->foreignId('sender')->nullable()->constrained('users')->onDelete('cascade');
             $table->foreignId('receiver')->nullable()->constrained('users')->onDelete('cascade');
-            $table->enum('notify_type', [0, 1])->default(0); // 0: all, 1: specific
+            $table->enum('notify_type', [0, 1])->default(0); // 0: all, 1: specific            
+            $table->tinyInteger('registration_status')->default(0);
             $table->timestamps();
         });
     }
