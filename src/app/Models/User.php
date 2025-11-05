@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -47,5 +49,45 @@ class User extends Authenticatable
             // 'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function member(): HasOne
+    {
+        return $this->hasOne(Member::class, 'user_id');
+    }
+
+    public function updatedTrainingPoints(): HasMany
+    {
+        return $this->hasMany(TrainingPoint::class, 'updater_id');
+    }
+
+    public function sender(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'sender_id');
+    }
+
+    public function receiver(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'receiver_id');
+    }
+
+
+    public function income_expenditure(): HasMany
+    {
+        return $this->hasMany(IncomeExpenditure::class, 'performer_id');
+    }
+
+    public function branch(): HasMany
+    {
+        return $this->hasMany(Branch::class, 'secretary');
+    }
+
+    public function trainingPoints()
+    {
+        return $this->hasMany(TrainingPoint::class, 'member_id');
+    }
+
+    public function initials(): ?string
+    {
+        return $this->member?->initials();
     }
 }

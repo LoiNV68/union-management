@@ -50,12 +50,25 @@ class Member extends Model
         ];
     }
 
+    
+
     /**
      * The user account associated with the member.
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function branchDues()
+    {
+        return $this->hasMany(BranchDues::class, 'member_id');
+    }
+
+
+    public function registrations()
+    {
+        return $this->hasMany(ActivityRegistration::class, 'member_id');
     }
 
     /**
@@ -63,9 +76,35 @@ class Member extends Model
      */
     public function branch(): BelongsTo
     {
-        return $this->belongsTo('App\\Models\\Branch', 'branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
+    public function branch_dues(): BelongsTo
+    {
+        return $this->belongsTo(BranchDues::class, 'member_id');
+    }
+
+    public function notify_receiver(): BelongsTo
+    {
+        return $this->belongsTo(NotificationReceiver::class, 'member_id');
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'notification_receivers')
+            ->withPivot('is_read')
+            ->withTimestamps();
+    }
+
+    public function trainingPoints()
+    {
+        return $this->hasMany(TrainingPoint::class, 'member_id');
+    }
+
+    public function activity_registration()
+    {
+        return $this->hasMany(TrainingPoint::class, 'member_id');
+    }
     /**
      * Get the user's initials
      */
