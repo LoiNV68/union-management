@@ -90,4 +90,14 @@ class User extends Authenticatable
     {
         return $this->member?->initials();
     }
+
+    public function getFullNameAttribute(): ?string
+    {
+        return $this->member?->full_name;
+    }
+
+    public function getEmailAttribute(): ?string
+    {
+        return $this->member?->email;
+    }
 }
