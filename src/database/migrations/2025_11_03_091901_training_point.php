@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_point', function (Blueprint $table) {
-            $table->id('id');
-            $table->decimal('point', 2, 2);
+        Schema::create('training_points', function (Blueprint $table) {
+            $table->id();
+
+            // Điểm rèn luyện, tối đa 100.00
+            $table->decimal('point', 5, 2)->default(0);
+
+            // Khóa ngoại
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
-            $table->foreignId('semester_id')->constrained('semester')->onDelete('cascade');
-            $table->foreignId('updater')->constrained('users')->onDelete('cascade');
+            $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade');
+            $table->foreignId('updater_id')->constrained('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_point');
+        Schema::dropIfExists('training_points');
     }
 };

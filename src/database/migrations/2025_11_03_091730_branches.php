@@ -15,7 +15,7 @@
                 $table->id('id');
                 $table->string('branch_name');
                 $table->string('description')->nullable();
-                $table->foreignId('secretary')->constrained('users')->onDelete('cascade');
+                $table->foreignId('secretary')->nullable()->constrained('users')->onDelete('cascade');
                 $table->timestamps();
             });
         }

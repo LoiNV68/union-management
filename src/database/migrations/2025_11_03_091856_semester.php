@@ -6,24 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('semester', function (Blueprint $table) {
-            $table->id('id');
-            $table->year('shool_year');
-            $table->integer('semester');
+        Schema::create('semesters', function (Blueprint $table) {
+            $table->id();
+            $table->year('school_year'); // Năm học
+            $table->tinyInteger('semester'); // Học kỳ (1 hoặc 2)
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('semester');
+        Schema::dropIfExists('semesters');
     }
 };

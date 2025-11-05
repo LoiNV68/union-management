@@ -6,29 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('notifycation', function (Blueprint $table) {
-            $table->id('id');
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
             $table->string('title');
-            $table->longText('content');
-            $table->date('date_sent');
-            $table->foreignId('sender')->constrained('users')->onDelete('cascade');
-            $table->foreignId('receiver')->constrained('users')->onDelete('cascade');
-            $table->enum('notify_type', [0, 1])->default(0); // 0: all, 1: specific            
-            $table->tinyInteger('registration_status')->default(0);
+            $table->longText('content'); // có thể lưu markdown hoặc HTML
+            $table->timestamp('date_sent')->useCurrent();
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('receiver_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->tinyInteger('notify_type')->default(0); // 0: Gửi tất cả, 1: Gửi riêng
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('notifycation');
+        Schema::dropIfExists('notifications');
     }
 };

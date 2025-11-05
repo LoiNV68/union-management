@@ -16,8 +16,8 @@ return new class extends Migration
             $table->tinyInteger('type')->default(0); // 0: Income, 1: Expenditure
             $table->decimal('amount_money', 10, 2);
             $table->date('transaction_date');
-            $table->date('description')->nullable();
-            $table->foreignId('performers')->constrained('users')->onDelete('cascade');
+            $table->string('description')->nullable();
+            $table->foreignId('performer')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('receiver_notify', function (Blueprint $table) {
-            $table->id('id');
-            $table->foreignId('notify_id')->constrained('notifycation')->onDelete('cascade');
+        Schema::create('notification_receivers', function (Blueprint $table) {
+            $table->foreignId('notification_id')->constrained('notifications')->onDelete('cascade');
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
+
+            $table->primary(['notification_id', 'member_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('receiver_notify');
+        Schema::dropIfExists('notification_receivers');
     }
 };
