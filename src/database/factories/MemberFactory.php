@@ -29,8 +29,8 @@ class MemberFactory extends Factory
             'phone_number' => $this->faker->numerify('0#########'),
             'join_date' => $this->faker->date('Y-m-d'),
             'status' => 1,
-            'user_id' => User::factory(),
-            'branch_id' => Branch::factory(),
+            'user_id' => null,
+            'branch_id' => null,
         ];
     }
 }

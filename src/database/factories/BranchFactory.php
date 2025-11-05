@@ -26,7 +26,7 @@ class BranchFactory extends Factory
             'branch_name' => "{$prefix}.{$part1}.{$part2}",
             // 'description' => $this->faker->optional()->sentence(),
             'description' => "Chi đoàn của đoàn viên",
-            'secretary' => User::factory(),
+            'secretary' => null,
         ];
     }
 }
