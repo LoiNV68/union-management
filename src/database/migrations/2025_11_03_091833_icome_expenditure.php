@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('amount_money', 10, 2);
             $table->date('transaction_date');
             $table->date('description')->nullable();
-            $table->foreignId('performers')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('performers')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

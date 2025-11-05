@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('activity_registration', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
-            $table->foreignId('activity_id')->nullable()->constrained('activity')->onDelete('cascade');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('activity_id')->constrained('activity')->onDelete('cascade');
             $table->date('registration_time');
             $table->tinyInteger('registration_status')->default(0);
             $table->string('note');

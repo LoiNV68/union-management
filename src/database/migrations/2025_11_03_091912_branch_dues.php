@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('branch_dues', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
             $table->decimal('amount_money', 12, 2);
             $table->tinyInteger('type')->default(0); // 0: Income, 1: Expenditure
             $table->date('payment_date')->nullable();

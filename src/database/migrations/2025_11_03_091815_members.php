@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('phone_number', 20)->nullable();
             $table->date('join_date')->nullable();
             $table->tinyInteger('status')->default(0); // 0: Inactive, 1: Active
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); // liên kết tài khoản đăng nhập nếu có
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('cascade'); // liên kết chi đoàn nếu có
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // liên kết tài khoản đăng nhập nếu có
+            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade'); // liên kết chi đoàn nếu có
             $table->timestamps();
         });
     }

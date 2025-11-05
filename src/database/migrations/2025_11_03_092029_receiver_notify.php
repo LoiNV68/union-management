@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('receiver_notify', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('notify_id')->nullable()->constrained('notifycation')->onDelete('cascade');
-            $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
+            $table->foreignId('notify_id')->constrained('notifycation')->onDelete('cascade');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
             $table->timestamps();
         });
     }

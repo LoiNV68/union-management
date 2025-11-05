@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('location');
             $table->tinyInteger('type')->default(0); // 0: Income, 1: Expenditure
             $table->integer('max_participants');
-            $table->foreignId('creator')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('creator')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

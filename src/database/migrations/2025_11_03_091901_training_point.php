@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('training_point', function (Blueprint $table) {
             $table->id('id');
             $table->decimal('point', 2, 2);
-            $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
-            $table->foreignId('semester_id')->nullable()->constrained('semester')->onDelete('cascade');
-            $table->foreignId('updater')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('semester_id')->constrained('semester')->onDelete('cascade');
+            $table->foreignId('updater')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
