@@ -11,6 +11,6 @@ class UnionDashboardController extends Controller
    */
   public function index()
   {
-    return view('union.dashboard');
+    return view('livewire.union.dashboard');
   }
 }
