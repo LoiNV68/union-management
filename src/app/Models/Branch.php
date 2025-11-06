@@ -26,7 +26,23 @@ class Branch extends Model
         'branch_name',
         'description',
         'secretary',
+        'birth_date',
+        'gender',
+        'phone_number',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'birth_date' => 'date',
+            'gender' => 'int',
+        ];
+    }
 
     /**
      * Members that belong to this branch.

@@ -23,7 +23,8 @@ class User extends Authenticatable
     protected $fillable = [
         'student_code',
         'password',
-        'role'
+        'role',
+        'is_locked'
     ];
 
     /**
@@ -46,8 +47,9 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            // 'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_locked' => 'boolean',
+            'role' => 'integer',
         ];
     }
     public function member(): HasOne
@@ -99,5 +101,30 @@ class User extends Authenticatable
     public function getEmailAttribute(): ?string
     {
         return $this->member?->email;
+    }
+
+    public function getPhoneNumberAttribute(): ?string
+    {
+        return $this->member?->phone_number;
+    }
+
+    public function getBirthDateAttribute(): ?string
+    {
+        return $this->member?->birth_date;
+    }
+
+    public function getGenderAttribute(): ?string
+    {
+        return $this->member?->gender;
+    }
+
+    public function getAddressAttribute(): ?string
+    {
+        return $this->member?->address;
+    }
+
+    public function getJoinDateAttribute(): ?string
+    {
+        return $this->member?->join_date;
     }
 }

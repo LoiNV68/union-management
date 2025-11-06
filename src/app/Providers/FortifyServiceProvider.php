@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -30,6 +31,26 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureViews();
         $this->configureRateLimiting();
         Fortify::username('student_code');
+        Fortify::authenticateUsing(function (\Illuminate\Http\Request $request) {
+            $credentials = $request->only('student_code', 'password');
+            $user = \App\Models\User::query()
+                ->where('student_code', $credentials['student_code'] ?? null)
+                ->first();
+
+            if (! $user) {
+                return null; // keep generic message for unknown user
+            }
+
+            if ($user->is_locked ?? false) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => __('Your account is locked. Please contact support.'),
+                ]);
+            }
+
+            return \Illuminate\Support\Facades\Hash::check($credentials['password'] ?? '', $user->password)
+                ? $user
+                : null; // wrong password -> generic message
+        });
     }
 
     /**
