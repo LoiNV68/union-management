@@ -1,6 +1,5 @@
-<section class="w-full">
-    <section class="p-6">
-        <form wire:submit="createUser" class="my-6 w-full space-y-4">
+    <section>
+        <form wire:submit="createUser" class=" w-full space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <flux:input wire:model="new_student_code" :label="__('Student Code')" type="text" required />
@@ -16,15 +15,15 @@
                     </flux:select>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center justify-end gap-4">
                 <flux:button variant="primary" type="submit">{{ __('Create Account') }}</flux:button>
                 <x-action-message class="me-3" on="user-created">{{ __('Created.') }}</x-action-message>
             </div>
         </form>
 
-        <div class="mt-8">
+        <div class="mt-2">
             <div class="flex items-center justify-between mb-4">
-                <flux:heading size="lg">{{ __('Users') }}</flux:heading>
+                <flux:heading size="lg">{{ __('Manage Users') }}</flux:heading>
 
                 <div class="flex items-end gap-4">
                     <div class="w-64">
@@ -90,4 +89,3 @@
             </div>
         </div>
     </section>
-</section>
