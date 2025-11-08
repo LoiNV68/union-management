@@ -9,9 +9,11 @@
     <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-        {{-- <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-            <x-app-logo />
-        </a> --}}
+        <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse w-full"
+            wire:navigate>
+            {{-- <x-app-logo /> --}}
+            <img src="{{ asset('images/logo.svg') }}" alt="logo" class="rounded-xs">
+        </a>
 
         <flux:navlist variant="outline">
             <flux:navlist.group :heading="__('QUẢN LÝ ĐOÀN VIÊN')" class="grid">
@@ -19,6 +21,9 @@
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                 <flux:navlist.item icon="home" :href="route('admin.permission')"
                     :current="request()->routeIs('admin.permission')" wire:navigate>{{ __('Manage Permission') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="home" :href="route('admin.members')"
+                    :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Manage Members') }}
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>

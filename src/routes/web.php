@@ -44,10 +44,13 @@ Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'role'])
     ->name('admin.dashboard');
 
-// Admin (role=2) - User management (Volt SFC)
+// Admin (role=1, 2) - Management pages (Volt SFC)
 Route::middleware(['auth', 'verified', 'role'])->group(function () {
     Volt::route('admin/manage-permission', 'admin.manage-permission')
         ->name('admin.permission');
+
+    Volt::route('admin/manage-members', 'admin.manage-members')
+        ->name('admin.members');
 });
 
 Route::middleware(['auth'])->group(function () {
