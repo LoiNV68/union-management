@@ -53,10 +53,10 @@ class ManageMembers extends Component
       'address' => ['nullable', 'string', 'max:500'],
       'email' => ['required', 'email', 'max:255', "unique:members,email,{$ignore}"],
       'phone_number' => ['nullable', 'string', 'regex:/^[0-9]{10,11}$/'],
-      'join_date' => ['nullable', 'date', 'after_or_equal:birth_date'],
+      'join_date' => ['required', 'date', 'after_or_equal:birth_date'],
       'status' => ['required', 'integer', 'in:0,1'],
-      'user_id' => ['nullable', 'integer', 'exists:users,id', "unique:members,user_id,{$ignore}"],
-      'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
+      'user_id' => ['required', 'integer', 'exists:users,id', "unique:members,user_id,{$ignore}"],
+      'branch_id' => ['required', 'integer', 'exists:branches,id'],
     ];
   }
 
@@ -69,6 +69,10 @@ class ManageMembers extends Component
     'email.unique' => 'Email này đã được sử dụng',
     'phone_number.regex' => 'Số điện thoại phải có 10-11 chữ số',
     'user_id.unique' => 'Tài khoản này đã được liên kết với một member khác',
+    'branch_id.required' => 'Vui lòng chọn chi đoàn',
+    'user_id.required' => 'Vui lòng chọn tài khoản',
+    'join_date.required' => 'Vui lòng chọn ngày tham gia',
+    'gender.required' => 'Vui lòng chọn giới tính',
   ];
 
   public function mount(): void

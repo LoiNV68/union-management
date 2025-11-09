@@ -28,7 +28,8 @@
     @if ($showModal)
         <div class="fixed inset-0 flex items-center justify-center p-4 "
             style="z-index: 9999; background-color: rgba(0, 0, 0, 0.5);" wire:click="closeModal">
-            <div class="w-full max-w-2xl rounded-2xl  bg-white dark:bg-neutral-800 shadow-2xl relative" wire:click.stop>
+            <div class="w-full max-w-2xl rounded-2xl  bg-white dark:bg-neutral-800 shadow-2xl relative"
+                wire:click.stop.prevent="">
 
                 <!-- Header -->
                 <div
@@ -50,13 +51,13 @@
                 </div>
 
                 <!-- Content -->
-                <div class="p-6">
+                <div class="p-6 max-h-[500px] overflow-y-auto">
                     <!-- Create/Edit Mode -->
                     <form wire:submit="saveMember" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="full_name"
-                                    :label="__('Họ và tên')" type="text" required />
+                                    :label="__('Họ và tên')" type="text" required wire:click.stop.prevent="" />
                             </div>
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="email"
