@@ -59,4 +59,12 @@ class Branch extends Model
     {
         return $this->belongsTo(User::class, 'secretary');
     }
+
+    /**
+     * Backwards-compatible alias for the secretary relationship used in Livewire components.
+     */
+    public function secretary(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'secretary');
+    }
 }

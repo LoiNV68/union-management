@@ -26,6 +26,10 @@
                 <flux:navlist.item icon="home" :href="route('admin.members')"
                     :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Manage Members') }}
                 </flux:navlist.item>
+                <flux:navlist.item icon="home" :href="route('admin.branches')"
+                    :current="request()->routeIs('admin.branches')" wire:navigate>{{ __('Manage Branches') }}
+                </flux:navlist.item>
+
             </flux:navlist.group>
         </flux:navlist>
 

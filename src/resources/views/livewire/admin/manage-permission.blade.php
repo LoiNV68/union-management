@@ -33,11 +33,11 @@
 
                     <div class="w-40">
                         <flux:select wire:model.live="perPage" label="">
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
+                            <option value="5">5 / trang</option>
+                            <option value="10">10 / trang</option>
+                            <option value="15">15 / trang</option>
+                            <option value="20">20 / trang</option>
+                            <option value="50">50 / trang</option>
                         </flux:select>
                     </div>
                 </div>

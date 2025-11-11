@@ -51,6 +51,9 @@ Route::middleware(['auth', 'verified', 'role'])->group(function () {
 
     Volt::route('admin/manage-members', 'admin.manage-members')
         ->name('admin.members');
+
+    Volt::route('admin/manage-branches', 'admin.manage-branches')
+        ->name('admin.branches');
 });
 
 Route::middleware(['auth'])->group(function () {
