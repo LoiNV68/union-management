@@ -54,6 +54,9 @@ Route::middleware(['auth', 'verified', 'role'])->group(function () {
 
     Volt::route('admin/manage-branches', 'admin.manage-branches')
         ->name('admin.branches');
+
+    Volt::route('admin/manage-activities', 'admin.manage-activities')
+        ->name('admin.activities');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -73,4 +76,7 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+    Volt::route('union/register-activities', 'union.register-activities')
+        ->name('union.activities');
 });

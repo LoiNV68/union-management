@@ -29,7 +29,12 @@
                 <flux:navlist.item icon="home" :href="route('admin.branches')"
                     :current="request()->routeIs('admin.branches')" wire:navigate>{{ __('Manage Branches') }}
                 </flux:navlist.item>
-
+                <flux:navlist.item icon="home" :href="route('admin.activities')"
+                    :current="request()->routeIs('admin.activities')" wire:navigate>{{ __('Manage Activities') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="home" :href="route('union.activities')"
+                    :current="request()->routeIs('union.activities')" wire:navigate>{{ __('Register Activities') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

@@ -18,12 +18,14 @@ class Notification extends Model
     'sender_id',
     'receiver_id',
     'notify_type',
+    'read_at',
   ];
 
   protected function casts(): array
   {
     return [
       'date_sent' => 'datetime',
+      'read_at' => 'datetime',
       'notify_type' => 'integer',
     ];
   }

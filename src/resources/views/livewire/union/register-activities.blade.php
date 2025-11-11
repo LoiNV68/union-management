@@ -1,0 +1,204 @@
+@php
+    // View rendered by App\Livewire\Union\RegisterActivities
+@endphp
+
+
+<section>
+    <div class="mb-6 flex items-center justify-between">
+        <flux:heading size="lg">{{ __('Đăng ký Hoạt động') }}</flux:heading>
+
+    </div>
+
+
+
+    <!-- Tabs: Available Activities / Registered Activities -->
+    <div class="mb-6 border-b border-neutral-200 dark:border-neutral-700">
+        <div class="flex gap-4">
+            <button class="px-4 py-2 border-b-2 border-primary-500 font-semibold text-primary-600 dark:text-primary-400">
+                {{ __('Hoạt động Khả dụng') }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="mb-6 flex items-end gap-4">
+        <div class="flex-1">
+            <flux:input wire:model.live.debounce.300ms="search" label=""
+                placeholder="Tìm kiếm theo tên hoạt động, địa điểm..." type="text" />
+        </div>
+        <div class="w-40">
+            <flux:select wire:model.live="perPage" label="">
+                <option value="5">5 / trang</option>
+                <option value="10">10 / trang</option>
+                <option value="15">15 / trang</option>
+                <option value="20">20 / trang</option>
+            </flux:select>
+        </div>
+    </div>
+
+    <!-- Activity Details Modal -->
+    @if ($showActivityModal && $viewingActivity)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeActivityModal">
+            <div class="w-full max-w-2xl rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+                wire:click.stop>
+                <div class="mb-4 flex items-center justify-between">
+                    <flux:heading size="lg">{{ $viewingActivity->activity_name }}</flux:heading>
+                    <flux:button wire:click="closeActivityModal" variant="ghost" size="sm">×</flux:button>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    @if ($viewingActivity->description)
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Mô tả</p>
+                            <p class="text-lg">{{ $viewingActivity->description }}</p>
+                        </div>
+                    @endif
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Ngày bắt đầu</p>
+                            <p class="text-lg">{{ $viewingActivity->start_date?->format('d/m/Y') ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Ngày kết thúc</p>
+                            <p class="text-lg">{{ $viewingActivity->end_date?->format('d/m/Y') ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Địa điểm</p>
+                            <p class="text-lg">{{ $viewingActivity->location ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Loại hoạt động</p>
+                            <p class="text-lg">
+                                @switch($viewingActivity->type)
+                                    @case(0)
+                                        Thể dục
+                                    @break
+
+                                    @case(1)
+                                        Văn hóa
+                                    @break
+
+                                    @default
+                                        Khác
+                                @endswitch
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Số đã đăng ký</p>
+                            <p class="text-lg">{{ $viewingActivity->registrations_count }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Số lượng tối đa</p>
+                            <p class="text-lg">{{ $viewingActivity->max_participants ?? 'Không giới hạn' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                @error('register')
+                    <p class="mb-4 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
+                <div class="flex items-center justify-end gap-4">
+                    <flux:button wire:click="closeActivityModal" variant="ghost">
+                        {{ __('Đóng') }}
+                    </flux:button>
+                    <flux:button wire:click="registerActivity({{ $viewingActivity->id }})" variant="primary">
+                        {{ __('Đăng ký tham gia') }}
+                    </flux:button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Available Activities List -->
+    <div class="mb-6">
+        <flux:heading size="md" class="mb-4">{{ __('Các hoạt động sắp tới') }}</flux:heading>
+
+        <div class="grid gap-2">
+            @forelse ($activities as $activity)
+                <div class="flex items-center justify-between rounded border p-4">
+                    <div class="flex flex-1 gap-4">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-lg">{{ $activity->activity_name }}</span>
+                            </div>
+                            @if ($activity->description)
+                                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                                    {{ Str::limit($activity->description, 100) }}
+                                </p>
+                            @endif
+                            <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+                                <span>📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
+                                <span>📍 {{ $activity->location ?? 'Không xác định' }}</span>
+                                <span>👥 {{ $activity->registrations_count }}
+                                    @if ($activity->max_participants)
+                                        / {{ $activity->max_participants }}
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <flux:button wire:click="openActivityModal({{ $activity->id }})" variant="primary"
+                            size="sm">
+                            {{ __('Xem & Đăng ký') }}
+                        </flux:button>
+                    </div>
+                </div>
+            @empty
+                <div class="rounded border p-8 text-center text-neutral-500">
+                    {{ __('Không có hoạt động nào.') }}
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-4 space-y-2">
+            {{ $activities->onEachSide(1)->links() }}
+        </div>
+    </div>
+
+    <!-- Registered Activities Section -->
+    @if ($registeredActivities->count() > 0)
+        <div>
+            <flux:heading size="md" class="mb-4">{{ __('Hoạt động đã đăng ký') }}</flux:heading>
+
+            <div class="grid gap-2">
+                @foreach ($registeredActivities as $registration)
+                    <div
+                        class="flex items-center justify-between rounded border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20 p-4">
+                        <div class="flex flex-1 gap-4">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="font-semibold text-lg">{{ $registration->activity->activity_name }}</span>
+                                    <flux:badge variant="success">{{ __('Đã đăng ký') }}</flux:badge>
+                                </div>
+                                <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+                                    <span>📅 {{ $registration->activity->start_date?->format('d/m/Y') }}</span>
+                                    <span>📍 {{ $registration->activity->location ?? 'Không xác định' }}</span>
+                                    <span>🕒 {{ __('Đăng ký lúc: ') }} {{ $registration->registration_time->format('d/m/Y') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <flux:button
+                            onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký?') }}')) { event.stopImmediatePropagation(); }"
+                            wire:click="cancelRegistration({{ $registration->id }})" variant="danger" size="sm">
+                            {{ __('Hủy đăng ký') }}
+                        </flux:button>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    <!-- Action Messages -->
+    <x-action-message class="me-3"
+        on="activity-registered">{{ __('Đã đăng ký hoạt động thành công.') }}</x-action-message>
+    <x-action-message class="me-3"
+        on="activity-cancelled">{{ __('Đã hủy đăng ký hoạt động thành công.') }}</x-action-message>
+</section>

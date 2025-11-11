@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('activity_id')->constrained('activity')->onDelete('cascade');
             $table->date('registration_time');
             $table->tinyInteger('registration_status')->default(0);
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
