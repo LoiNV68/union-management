@@ -32,8 +32,9 @@
             style="z-index: 9999; background-color: rgba(0, 0, 0, 0.5);" wire:click="closeModal">
             <div class="w-full max-w-2xl rounded-2xl  bg-white dark:bg-neutral-800 shadow-2xl relative" wire:click.stop="">
                 <!-- Header -->
-                <div class="sticky top-0 bg-white dark:bg-neutral-800 border-b rounded-t-2xl
-                                 border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
+                <div
+                    class="sticky top-0 bg-white dark:bg-neutral-800 border-b rounded-t-2xl
+                                     border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         @if ($modalMode === 'view')
                             {{ __('Thông tin Member') }}
@@ -63,8 +64,8 @@
                                     type="email" required />
                             </div>
                             <div>
-                                <flux:input :disabled="$modalMode === 'view'" wire:model="birth_date"
-                                    :label="__('Ngày sinh')" type="date" required onclick="this.showPicker()" />
+                                <x-date-picker :disabled="$modalMode === 'view'" wire:model="birth_date"
+                                    :label="__('Ngày sinh')" required />
                             </div>
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="phone_number"
@@ -78,9 +79,10 @@
                                 </flux:select>
                             </div>
                             <div>
-                                <flux:input :disabled="$modalMode === 'view'" wire:model="join_date"
-                                    :label="__('Ngày tham gia')" type="date" onclick="this.showPicker()" />
+                                <x-date-picker :disabled="$modalMode === 'view'" wire:model="join_date"
+                                    :label="__('Ngày tham gia')" />
                             </div>
+
                             <div>
                                 <flux:select :disabled="$modalMode === 'view'" wire:model="status" :label="__('Trạng thái')"
                                     required>

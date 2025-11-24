@@ -96,3 +96,8 @@ select:focus[data-flux-control] {
 .scrollbar-auto-hide:hover {
     scrollbar-width: thin; /* hover hiện scrollbar mỏng */
 }
+
+/* Flatpickr Z-Index Fix */
+.flatpickr-calendar {
+    z-index: 9999 !important;
+}
