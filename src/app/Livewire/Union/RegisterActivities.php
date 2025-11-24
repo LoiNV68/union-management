@@ -27,6 +27,16 @@ class RegisterActivities extends Component
     abort_unless(Auth::user()?->role === 0, 403);
   }
 
+  // Listen to events from admin component
+  protected function getListeners(): array
+  {
+    return [
+      'activity-updated' => '$refresh',
+      'activity-list-updated' => '$refresh',
+      'echo:activities,ActivityUpdated' => '$refresh', // For WebSocket support later
+    ];
+  }
+
   public function updatedSearch(): void
   {
     $this->resetPage();
@@ -73,10 +83,11 @@ class RegisterActivities extends Component
       return;
     }
 
-    // Check if already registered
+    // Check if already registered (including pending)
     $existing = ActivityRegistration::query()
       ->where('member_id', $member->id)
       ->where('activity_id', $activityId)
+      ->whereIn('registration_status', [0, 1]) // Pending or Approved
       ->first();
 
     if ($existing) {
@@ -84,29 +95,31 @@ class RegisterActivities extends Component
       return;
     }
 
-    // Check max participants
+    // Check max participants (only count approved)
     $activity = Activity::findOrFail($activityId);
     if ($activity->max_participants) {
-      $registeredCount = $activity->registrations()->count();
-      if ($registeredCount >= $activity->max_participants) {
+      $approvedCount = $activity->registrations()
+        ->where('registration_status', 1)
+        ->count();
+      if ($approvedCount >= $activity->max_participants) {
         $this->addError('register', 'Hoạt động này đã đủ số lượng tham gia.');
         return;
       }
     }
 
-    // Create registration
+    // Create registration with pending status
     ActivityRegistration::create([
       'member_id' => $member->id,
       'activity_id' => $activityId,
       'registration_time' => now()->toDateString(),
-      'registration_status' => 1, // Approved
+      'registration_status' => 0, // Pending approval
       'note' => null,
     ]);
 
     $this->dispatch('activity-registered');
+    $this->dispatch('registration-created')->to('admin.manage-activities');
     $this->closeActivityModal();
   }
-
   public function cancelRegistration(int $registrationId): void
   {
     $registration = ActivityRegistration::findOrFail($registrationId);
@@ -119,6 +132,7 @@ class RegisterActivities extends Component
 
     $registration->delete();
     $this->dispatch('activity-cancelled');
+    $this->dispatch('registration-cancelled')->to('admin.manage-activities');
   }
 
 
@@ -130,11 +144,16 @@ class RegisterActivities extends Component
     return view('livewire.union.register-activities', [
       'activities' => Activity::query()
         ->withCount('registrations')
+        ->withCount([
+          'registrations as approved_registrations_count' => function ($query) {
+            $query->where('registration_status', 1);
+          }
+        ])
         ->when($this->search, function ($query) {
           $query->where('activity_name', 'like', '%' . $this->search . '%')
             ->orWhere('location', 'like', '%' . $this->search . '%');
         })
-        ->where('start_date', '>=', now()->toDateString())
+        ->where('end_date', '>=', now()->toDateString())
         ->orderBy('start_date')
         ->paginate($this->perPage)
         ->withQueryString(),

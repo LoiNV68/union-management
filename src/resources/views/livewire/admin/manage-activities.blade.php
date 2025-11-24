@@ -49,10 +49,12 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <flux:input wire:model="start_date" :label="__('Ngày bắt đầu')" type="date" required />
+                             <x-date-picker wire:model="start_date"
+                                    :label="__('Ngày bắt đầu')" />
                         </div>
                         <div>
-                            <flux:input wire:model="end_date" :label="__('Ngày kết thúc')" type="date" required />
+                            <x-date-picker wire:model="end_date"
+                                    :label="__('Ngày kết thúc')" />
                         </div>
                     </div>
                     <div>
@@ -60,11 +62,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <flux:select wire:model="type" :label="__('Loại hoạt động')" required>
-                                <option value="0">Thể dục</option>
-                                <option value="1">Văn hóa</option>
-                                <option value="2">Khác</option>
-                            </flux:select>
+                            <flux:input wire:model="type" :label="__('Loại hoạt động')" type="text" required />
                         </div>
                         <div>
                             <flux:input wire:model="max_participants" :label="__('Số lượng tối đa')" type="number"
@@ -163,7 +161,7 @@
     <!-- Registrations Approval Modal -->
     @if ($showRegistrationsModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeRegistrationsModal">
-            <div class="w-full max-w-3xl rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl max-h-[90vh] overflow-y-auto" wire:click.stop>
+            <div class="w-full max-w-3xl rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl max-h-[90vh] overflow-y-auto" wire:click.stop wire:poll.5s>
                 <div class="mb-4 flex items-center justify-between">
                     <flux:heading size="lg">{{ __('Duyệt Đăng ký') }}</flux:heading>
                     <flux:button wire:click="closeRegistrationsModal" variant="ghost" size="sm">×</flux:button>
@@ -238,7 +236,7 @@
     @endif
 
     <!-- Activities List -->
-    <div class="grid gap-2">
+    <div class="grid gap-2" wire:poll.10s.visible>
         @forelse ($activities as $activity)
             <div class="flex items-center justify-between rounded border p-4">
                 <div class="flex flex-1 gap-4">
@@ -254,7 +252,12 @@
                         <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
                             <span>📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
                             <span>📍 {{ $activity->location ?? 'Không xác định' }}</span>
-                            <span>👥 {{ $activity->registrations_count }} đăng ký</span>
+                            <span>👥 {{ $activity->approved_registrations_count }} đã duyệt 
+                                @if($activity->max_participants)
+                                    / {{ $activity->max_participants }} tối đa
+                                @endif
+                                ({{ $activity->registrations_count }} tổng đăng ký)
+                            </span>
                         </div>
                     </div>
                 </div>

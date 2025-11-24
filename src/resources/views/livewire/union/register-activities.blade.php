@@ -88,12 +88,16 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Số đã đăng ký</p>
-                            <p class="text-lg">{{ $viewingActivity->registrations_count }}</p>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Số đã được duyệt</p>
+                            <p class="text-lg">{{ $viewingActivity->approved_registrations_count }}
+                                @if($viewingActivity->max_participants)
+                                    / {{ $viewingActivity->max_participants }}
+                                @endif
+                            </p>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Số lượng tối đa</p>
-                            <p class="text-lg">{{ $viewingActivity->max_participants ?? 'Không giới hạn' }}</p>
+                            <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Tổng đăng ký</p>
+                            <p class="text-lg">{{ $viewingActivity->registrations_count }}</p>
                         </div>
                     </div>
                 </div>
@@ -106,8 +110,15 @@
                     <flux:button wire:click="closeActivityModal" variant="ghost">
                         {{ __('Đóng') }}
                     </flux:button>
-                    <flux:button wire:click="registerActivity({{ $viewingActivity->id }})" variant="primary">
-                        {{ __('Đăng ký tham gia') }}
+                    @php
+                        $isFull = $viewingActivity->max_participants && 
+                                  $viewingActivity->approved_registrations_count >= $viewingActivity->max_participants;
+                    @endphp
+                    <flux:button 
+                        wire:click="registerActivity({{ $viewingActivity->id }})" 
+                        variant="primary"
+                        :disabled="$isFull">
+                        {{ $isFull ? __('Đã đủ số lượng') : __('Đăng ký tham gia') }}
                     </flux:button>
                 </div>
             </div>
@@ -115,7 +126,7 @@
     @endif
 
     <!-- Available Activities List -->
-    <div class="mb-6">
+    <div class="mb-6" wire:poll.5s.visible>
         <flux:heading size="md" class="mb-4">{{ __('Các hoạt động sắp tới') }}</flux:heading>
 
         <div class="grid gap-2">
@@ -134,11 +145,16 @@
                             <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
                                 <span>📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
                                 <span>📍 {{ $activity->location ?? 'Không xác định' }}</span>
-                                <span>👥 {{ $activity->registrations_count }}
+                                <span>👥 {{ $activity->approved_registrations_count }}
                                     @if ($activity->max_participants)
-                                        / {{ $activity->max_participants }}
+                                        / {{ $activity->max_participants }} ({{ $activity->registrations_count }} đăng ký)
+                                    @else
+                                        đã duyệt ({{ $activity->registrations_count }} đăng ký)
                                     @endif
                                 </span>
+                                @if($activity->max_participants && $activity->approved_registrations_count >= $activity->max_participants)
+                                    <flux:badge variant="danger">{{ __('Đã đủ') }}</flux:badge>
+                                @endif
                             </div>
                         </div>
                     </div>

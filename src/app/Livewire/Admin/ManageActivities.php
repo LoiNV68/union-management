@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Activity;
+use App\Models\ActivityRegistration;
 use App\Models\User;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
@@ -22,8 +23,10 @@ class ManageActivities extends Component
     public bool $showCreateForm = false;
     public bool $showDeleteModal = false;
     public bool $showNotificationModal = false;
+    public bool $showRegistrationsModal = false;
     public ?int $deletingId = null;
     public ?int $notifyingActivityId = null;
+    public ?int $registrationsActivityId = null;
 
     // Form fields
     public string $activity_name = '';
@@ -31,7 +34,7 @@ class ManageActivities extends Component
     public string $start_date = '';
     public string $end_date = '';
     public string $location = '';
-    public int $type = 0;
+    public string $type = '';
     public ?int $max_participants = null;
 
     // Notification fields
@@ -41,6 +44,16 @@ class ManageActivities extends Component
     public function mount(): void
     {
         abort_unless(in_array(Auth::user()?->role, [1, 2]), 403);
+    }
+
+    // Listen to events from user component
+    protected function getListeners(): array
+    {
+        return [
+            'registration-created' => '$refresh',
+            'registration-cancelled' => '$refresh',
+            'echo:activities,RegistrationCreated' => '$refresh', // For WebSocket support later
+        ];
     }
 
     public function updatedSearch(): void
@@ -107,20 +120,46 @@ class ManageActivities extends Component
         $this->deletingId = null;
     }
 
-    public function openNotificationModal(int $activityId): void
-    {
-        $this->notifyingActivityId = $activityId;
-        $this->showNotificationModal = true;
-        $this->notification_title = '';
-        $this->notification_content = '';
-    }
-
     public function closeNotificationModal(): void
     {
         $this->showNotificationModal = false;
         $this->notifyingActivityId = null;
         $this->notification_title = '';
         $this->notification_content = '';
+    }
+
+    public function openRegistrationsModal(int $activityId): void
+    {
+        $this->registrationsActivityId = $activityId;
+        $this->showRegistrationsModal = true;
+    }
+
+    public function closeRegistrationsModal(): void
+    {
+        $this->showRegistrationsModal = false;
+        $this->registrationsActivityId = null;
+    }
+
+    public function approveRegistration(int $registrationId): void
+    {
+        $registration = ActivityRegistration::findOrFail($registrationId);
+        $activityId = $registration->activity_id;
+        $registration->update([
+            'registration_status' => 1, // Approved
+        ]);
+        $this->dispatch('registration-approved');
+        $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
+    }
+
+    public function rejectRegistration(int $registrationId): void
+    {
+        $registration = ActivityRegistration::findOrFail($registrationId);
+        $activityId = $registration->activity_id;
+        $registration->update([
+            'registration_status' => 2, // Rejected
+        ]);
+        $this->dispatch('registration-rejected');
+        $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
     }
 
     public function saveActivity(): void
@@ -131,7 +170,7 @@ class ManageActivities extends Component
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'location' => ['nullable', 'string', 'max:255'],
-            'type' => ['required', 'integer', 'in:0,1,2'],
+            'type' => ['nullable'],
             'max_participants' => ['nullable', 'integer', 'min:1'],
         ];
 
@@ -160,6 +199,7 @@ class ManageActivities extends Component
         } else {
             Activity::create($data);
             $this->dispatch('activity-created');
+            $this->dispatch('activity-list-updated')->to('union.register-activities');
         }
 
         $this->closeCreateForm();
@@ -187,8 +227,9 @@ class ManageActivities extends Component
 
         $activity = Activity::findOrFail($this->notifyingActivityId);
 
-        // Get all registered users for this activity
+        // Get all approved registered users for this activity
         $registeredUsers = $activity->registrations()
+            ->where('registration_status', 1) // Only approved
             ->with('member.user')
             ->get()
             ->pluck('member.user.id')
@@ -217,7 +258,7 @@ class ManageActivities extends Component
         $this->start_date = '';
         $this->end_date = '';
         $this->location = '';
-        $this->type = 0;
+        $this->type = '';
         $this->max_participants = null;
     }
 
@@ -227,6 +268,11 @@ class ManageActivities extends Component
             'activities' => Activity::query()
                 ->with(['user', 'registrations'])
                 ->withCount('registrations')
+                ->withCount([
+                    'registrations as approved_registrations_count' => function ($query) {
+                        $query->where('registration_status', 1);
+                    }
+                ])
                 ->when($this->search, function ($query) {
                     $query->where('activity_name', 'like', '%' . $this->search . '%')
                         ->orWhere('location', 'like', '%' . $this->search . '%');
@@ -235,6 +281,16 @@ class ManageActivities extends Component
                 ->paginate($this->perPage)
                 ->withQueryString(),
             'viewingActivity' => $this->viewingId ? Activity::with(['user', 'registrations.member'])->withCount('registrations')->find($this->viewingId) : null,
+            'pendingRegistrations' => $this->registrationsActivityId ? ActivityRegistration::query()
+                ->where('activity_id', $this->registrationsActivityId)
+                ->where('registration_status', 0) // Pending
+                ->with('member.user')
+                ->get() : collect(),
+            'approvedRegistrations' => $this->registrationsActivityId ? ActivityRegistration::query()
+                ->where('activity_id', $this->registrationsActivityId)
+                ->where('registration_status', 1) // Approved
+                ->with('member.user')
+                ->get() : collect(),
         ]);
     }
 }
