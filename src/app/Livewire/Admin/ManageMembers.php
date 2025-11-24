@@ -37,7 +37,7 @@ class ManageMembers extends Component
   public string $address = '';
   public string $email = '';
   public string $phone_number = '';
-  public string $join_date = '';
+  public string $join_date;
   public int $status = 1;
   public ?int $user_id = null;
   public ?int $branch_id = null;

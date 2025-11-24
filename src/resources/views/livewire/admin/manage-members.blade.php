@@ -1,5 +1,7 @@
-<section x-data
-    x-effect="$wire.showModal ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')">
+<section x-data="{ showModal: @entangle('showModal') }" x-effect="showModal 
+                    ? document.body.classList.add('overflow-hidden') 
+                    : document.body.classList.remove('overflow-hidden')">
+
     <div class=" flex items-center justify-between">
         <flux:heading size="lg">{{ __('Manage Members') }}</flux:heading>
         <flux:button wire:click="openCreateForm" variant="primary">
@@ -28,13 +30,10 @@
     @if ($showModal)
         <div class="fixed inset-0 flex items-center justify-center p-4 "
             style="z-index: 9999; background-color: rgba(0, 0, 0, 0.5);" wire:click="closeModal">
-            <div class="w-full max-w-2xl rounded-2xl  bg-white dark:bg-neutral-800 shadow-2xl relative"
-                wire:click.stop.prevent="">
-
+            <div class="w-full max-w-2xl rounded-2xl  bg-white dark:bg-neutral-800 shadow-2xl relative" wire:click.stop="">
                 <!-- Header -->
-                <div
-                    class="sticky top-0 bg-white dark:bg-neutral-800 border-b rounded-t-2xl
-                     border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
+                <div class="sticky top-0 bg-white dark:bg-neutral-800 border-b rounded-t-2xl
+                                 border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         @if ($modalMode === 'view')
                             {{ __('Thông tin Member') }}
@@ -57,34 +56,34 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="full_name"
-                                    :label="__('Họ và tên')" type="text" required wire:click.stop.prevent="" />
+                                    :label="__('Họ và tên')" type="text" required wire:click.stop />
                             </div>
                             <div>
-                                <flux:input :disabled="$modalMode === 'view'" wire:model="email"
-                                    :label="__('Email')" type="email" required />
+                                <flux:input :disabled="$modalMode === 'view'" wire:model="email" :label="__('Email')"
+                                    type="email" required />
                             </div>
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="birth_date"
-                                    :label="__('Ngày sinh')" type="date" required />
+                                    :label="__('Ngày sinh')" type="date" required onclick="this.showPicker()" />
                             </div>
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="phone_number"
                                     :label="__('Số điện thoại')" type="text" />
                             </div>
                             <div>
-                                <flux:select :disabled="$modalMode === 'view'" wire:model="gender"
-                                    :label="__('Giới tính')" required>
+                                <flux:select :disabled="$modalMode === 'view'" wire:model="gender" :label="__('Giới tính')"
+                                    required>
                                     <option value="0">Nam</option>
                                     <option value="1">Nữ</option>
                                 </flux:select>
                             </div>
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="join_date"
-                                    :label="__('Ngày tham gia')" type="date" />
+                                    :label="__('Ngày tham gia')" type="date" onclick="this.showPicker()" />
                             </div>
                             <div>
-                                <flux:select :disabled="$modalMode === 'view'" wire:model="status"
-                                    :label="__('Trạng thái')" required>
+                                <flux:select :disabled="$modalMode === 'view'" wire:model="status" :label="__('Trạng thái')"
+                                    required>
                                     <option value="0">Không hoạt động</option>
                                     <option value="1">Hoạt động</option>
                                 </flux:select>
@@ -108,8 +107,8 @@
                                 </flux:select>
                             </div>
                             <div class="md:col-span-2">
-                                <flux:textarea :disabled="$modalMode === 'view'" wire:model="address"
-                                    :label="__('Địa chỉ')" rows="2" />
+                                <flux:textarea :disabled="$modalMode === 'view'" wire:model="address" :label="__('Địa chỉ')"
+                                    rows="2" />
                             </div>
                         </div>
                     </form>
@@ -163,124 +162,156 @@
 
     <!-- Members Table -->
     <div class="relative border border-neutral-200 dark:border-neutral-700 rounded-lg">
-        <!-- Header cố định -->
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
-                <thead class="bg-neutral-50 dark:bg-neutral-800">
-                    <tr>
+        <!-- Nội dung cuộn -->
+        <div
+            class="overflow-x-auto max-h-[500px] overflow-y-auto scrollbar-auto-hide hover:scrollbar-thin overscroll-contain">
+            <table class="w-full border-separate border-spacing-0">
+                <thead>
+                    <tr class="bg-neutral-50 dark:bg-neutral-800">
                         <th
-                            class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100 w-[60px]">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:left-0 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             STT
                         </th>
                         <th
-                            class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100 lg:sticky left-0 z-30 bg-neutral-50 dark:bg-neutral-800 shadow-right">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:left-14 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Mã SV
                         </th>
                         <th
-                            class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100  bg-neutral-50 dark:bg-neutral-800 shadow-right">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:left-[174px] border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Họ và tên
                         </th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Ngày sinh</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Giới tính</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Email</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Số
-                            ĐT</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Địa chỉ</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Chi đoàn</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Ngày vào đoàn</th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Trạng thái</th>
                         <th
-                            class="px-4 py-3 text-center text-sm font-semibold text-neutral-900 dark:text-neutral-100 lg:sticky right-0 z-30 bg-neutral-50 dark:bg-neutral-800 shadow-left">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Ngày sinh
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Giới tính
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Email
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            SĐT
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Địa chỉ
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Chi đoàn
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Ngày vào Đoàn
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Trạng thái
+                        </th>
+                        <th
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:right-0 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Thao tác
                         </th>
                     </tr>
                 </thead>
-            </table>
-        </div>
 
-        <!-- Nội dung cuộn -->
-        <div
-            class="max-h-[500px] overflow-x-auto overflow-y-auto scrollbar-auto-hide hover:scrollbar-thin overscroll-contain">
-            <table class="w-full border-collapse relative">
-                <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700 bg-white dark:bg-neutral-900">
+                <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
                     @forelse ($members as $index => $member)
-                        <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+                        <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                            {{-- STT --}}
                             <td
-                                class="px-4 py-3 lg:sticky left-0 bg-white dark:bg-neutral-900 z-30 text-sm text-neutral-900 dark:text-neutral-100 w-[60px] shadow-right">
+                                class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 lg:sticky lg:left-0 lg:bg-white dark:bg-neutral-900">
                                 {{ $members->firstItem() + $index }}
                             </td>
-                            <td class="lg:sticky left-[47px] bg-white dark:bg-neutral-900 z-20 shadow-right w-[130px]">
+
+                            {{-- MÃ SV — sticky left --}}
+                            <td
+                                class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-14 lg:bg-white dark:bg-neutral-900 z-30 shadow-right">
                                 {{ $member->user?->student_code ?? 'Chưa cập nhật' }}
                             </td>
 
-                            <td class="px-4 py-3 bg-white dark:bg-neutral-900  shadow-right">
-                                <span
-                                    class="font-medium text-wrap text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
-                                    {{ $member->full_name }}
-                                </span>
+                            {{-- HỌ VÀ TÊN — sticky left (đứng sau MÃ SV) --}}
+                            <td
+                                class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-[174px] lg:bg-white dark:bg-neutral-900 z-20 shadow-right">
+                                {{ $member->full_name }}
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
                                 {{ $member->birth_date ? $member->birth_date->format('d/m/Y') : 'Chưa cập nhật' }}
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
                                 {{ $member->gender === 0 ? 'Nam' : 'Nữ' }}
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
                                 {{ $member->email ?? 'Chưa cập nhật' }}
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
                                 {{ $member->phone_number ?? 'Chưa cập nhật' }}
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
                                 <div class="max-w-xs truncate" title="{{ $member->address ?? 'Chưa cập nhật' }}">
                                     {{ $member->address ?? 'Chưa cập nhật' }}
                                 </div>
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
                                 {{ $member->branch?->branch_name ?? 'Chưa cập nhật' }}
                             </td>
+
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
                                 {{ $member->join_date ? $member->join_date->format('d/m/Y') : 'Chưa cập nhật' }}
                             </td>
-                            <td class="px-4 py-3">
+
+                            <td class="px-4 py-3 text-center">
                                 <flux:badge :variant="$member->status === 1 ? 'success' : 'neutral'">
                                     {{ $member->status === 1 ? 'Hoạt động' : 'Không hoạt động' }}
                                 </flux:badge>
                             </td>
-                            <td class="px-4 py-3 sticky right-0 bg-white dark:bg-neutral-900 z-20 shadow-left">
-                                <div class="flex items-center justify-center gap-2 whitespace-nowrap">
-                                    <flux:button wire:click="openViewModal({{ $member->id }})" variant="ghost"
-                                        size="sm">
+
+                            {{-- THAO TÁC — sticky right --}}
+                            <td
+                                class="px-4 py-3 text-sm lg:sticky lg:right-0 lg:bg-white dark:bg-neutral-900 z-20 shadow-left">
+                                <div class="flex items-center justify-end gap-2 whitespace-nowrap">
+                                    <flux:button wire:click="openViewModal({{ $member->id }})" variant="ghost" size="sm">
                                         {{ __('Xem') }}
                                     </flux:button>
-                                    <flux:button wire:click="openEditForm({{ $member->id }})" variant="ghost"
-                                        size="sm">
+                                    <flux:button wire:click="openEditForm({{ $member->id }})" variant="ghost" size="sm">
                                         {{ __('Sửa') }}
                                     </flux:button>
-                                    <flux:button wire:click="openDeleteModal({{ $member->id }})" variant="danger"
-                                        size="sm">
+                                    <flux:button wire:click="openDeleteModal({{ $member->id }})" variant="danger" size="sm">
                                         {{ __('Xóa') }}
                                     </flux:button>
                                 </div>
                             </td>
                         </tr>
+
                     @empty
                         <tr>
-                            <td colspan="12" class="px-4 py-8 text-center text-neutral-500">
-                                {{ __('Không tìm thấy member nào.') }}
+                            <td colspan="12" class="px-4 py-12 text-center">
+                                <div
+                                    class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500">
+                                    <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                                        </path>
+                                    </svg>
+                                    <p class="text-sm font-medium">{{ __('Không có dữ liệu') }}</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
     </div>
 
 
@@ -290,10 +321,8 @@
     </div>
 
     <!-- Action Messages -->
-    <x-action-message class="me-3"
-        on="member-created">{{ __('Member đã được thêm thành công.') }}</x-action-message>
+    <x-action-message class="me-3" on="member-created">{{ __('Member đã được thêm thành công.') }}</x-action-message>
     <x-action-message class="me-3"
         on="member-updated">{{ __('Member đã được cập nhật thành công.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="member-deleted">{{ __('Member đã được xóa thành công.') }}</x-action-message>
+    <x-action-message class="me-3" on="member-deleted">{{ __('Member đã được xóa thành công.') }}</x-action-message>
 </section>

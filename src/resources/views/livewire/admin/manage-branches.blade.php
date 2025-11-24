@@ -7,19 +7,18 @@
         </flux:button>
     </div>
 
-    <!-- Search and Filter -->
-    <div class="mb-6 flex items-end gap-4">
-        <div class="flex-1">
+    <!-- Search and Filter - Ant Design Style -->
+    <div class="mb-4 flex items-center justify-between gap-4">
+        <div class="flex-1 max-w-md">
             <flux:input wire:model.live.debounce.300ms="search" label="" placeholder="Tìm kiếm theo tên chi đoàn..."
                 type="text" />
         </div>
-        <div class="w-40">
+        <div class="flex items-center gap-2">
             <flux:select wire:model.live="perPage" label="">
-                <option value="5">5 / trang</option>
                 <option value="10">10 / trang</option>
-                <option value="15">15 / trang</option>
                 <option value="20">20 / trang</option>
                 <option value="50">50 / trang</option>
+                <option value="100">100 / trang</option>
             </flux:select>
         </div>
     </div>
@@ -27,12 +26,11 @@
     <!-- Branch Modal (Create/Edit/View) -->
     @if ($showBranchModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" wire:click="closeBranchModal">
-            <div class="w-full max-w-2xl rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl relative"
-                wire:click.stop="">
+            <div class="w-full max-w-2xl rounded-lg bg-white dark:bg-neutral-800 shadow-xl relative" wire:click.stop="">
                 <!-- Header -->
                 <div
-                    class="sticky top-0 bg-white dark:bg-neutral-800 border-b rounded-t-2xl border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
-                    <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                    class="border-b border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                         @if ($mode === 'view')
                             {{ __('Thông tin Chi đoàn') }}
                         @elseif ($mode === 'edit')
@@ -42,7 +40,7 @@
                         @endif
                     </h2>
                     <button wire:click="closeBranchModal"
-                        class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 text-3xl font-bold leading-none transition-colors">
+                        class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 text-2xl leading-none transition-colors">
                         ×
                     </button>
                 </div>
@@ -56,8 +54,7 @@
                                     :disabled="$mode === 'view'" />
                             </div>
                             <div>
-                                <flux:select :disabled="$mode === 'view'" wire:model="secretary"
-                                    :label="__('Bí thư')">
+                                <flux:select :disabled="$mode === 'view'" wire:model="secretary" :label="__('Bí thư')">
                                     <option value="">-- Chọn bí thư --</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->full_name }}
@@ -67,8 +64,8 @@
                                 </flux:select>
                             </div>
                             <div class="md:col-span-2">
-                                <flux:textarea :disabled="$mode === 'view'" wire:model="description"
-                                    :label="__('Mô tả')" rows="3" />
+                                <flux:textarea :disabled="$mode === 'view'" wire:model="description" :label="__('Mô tả')"
+                                    rows="3" />
                             </div>
                         </div>
                     </form>
@@ -76,7 +73,7 @@
 
                 <!-- Footer -->
                 <div
-                    class="sticky bottom-0 rounded-b-2xl bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-end gap-3">
+                    class="border-t border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-end gap-3">
                     @if ($mode === 'view')
                         <flux:button wire:click="closeBranchModal" variant="ghost">
                             {{ __('Đóng') }}
@@ -100,16 +97,15 @@
     <!-- Delete Confirmation Modal -->
     @if ($showDeleteModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" wire:click="closeDeleteModal">
-            <div class="w-full max-w-md rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl relative"
-                wire:click.stop="">
+            <div class="w-full max-w-md rounded-lg bg-white dark:bg-neutral-800 shadow-xl relative" wire:click.stop="">
                 <!-- Header -->
                 <div
-                    class="sticky top-0 bg-white dark:bg-neutral-800 border-b rounded-t-2xl border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
-                    <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                    class="border-b border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ __('Xác nhận xóa') }}
                     </h2>
                     <button wire:click="closeDeleteModal"
-                        class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 text-3xl font-bold leading-none transition-colors">
+                        class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 text-2xl leading-none transition-colors">
                         ×
                     </button>
                 </div>
@@ -127,7 +123,7 @@
 
                 <!-- Footer -->
                 <div
-                    class="sticky bottom-0 rounded-b-2xl bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-end gap-3">
+                    class="border-t border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-end gap-3">
                     <flux:button wire:click="closeDeleteModal" variant="ghost" type="button">
                         {{ __('Hủy') }}
                     </flux:button>
@@ -139,102 +135,106 @@
         </div>
     @endif
 
-    <!-- Branches Table -->
-    <div class="relative border border-neutral-200 dark:border-neutral-700 rounded-lg">
-        <!-- Header cố định -->
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
-                <thead class="bg-neutral-50 dark:bg-neutral-800">
-                    <tr>
-                        <th
-                            class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100 w-[60px]">
-                            STT
-                        </th>
-                        <th
-                            class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-800 shadow-right">
-                            Tên Chi đoàn
-                        </th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Mô tả
-                        </th>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Bí thư
-                        </th>
-
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                            Số thành viên
-                        </th>
-                        <th
-                            class="px-4 py-3 text-center text-sm font-semibold text-neutral-900 dark:text-neutral-100 lg:sticky right-0 z-30 bg-neutral-50 dark:bg-neutral-800 shadow-left">
-                            Thao tác
-                        </th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-
-        <!-- Nội dung cuộn -->
-        <div
-            class="max-h-[500px] overflow-x-auto overflow-y-auto scrollbar-auto-hide hover:scrollbar-thin overscroll-contain">
-            <table class="w-full border-collapse relative">
-                <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700 bg-white dark:bg-neutral-900">
-                    @forelse ($branches as $index => $branch)
-                        <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
-                            <td
-                                class="px-4 py-3 lg:sticky left-0 bg-white dark:bg-neutral-900 z-30 text-sm text-neutral-900 dark:text-neutral-100 w-[60px] shadow-right">
-                                {{ $branches->firstItem() + $index }}
-                            </td>
-                            <td class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 shadow-right">
-                                {{ $branch->branch_name }}
-                            </td>
-                            <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                                {{ $branch->description ?? 'N/A' }}
-                            </td>
-                            <td class=" px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                                {{ $branch->secretary?->name ?? 'Chưa có' }}
-                            </td>
-                            <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
+    <div
+        class="max-h-[500px] overflow-x-auto overflow-y-auto scrollbar-auto-hide hover:scrollbar-thin overscroll-contain">
+        <table class="w-full border-separate border-spacing-0">
+            <thead>
+                <tr class="bg-neutral-50 dark:bg-neutral-800">
+                    <th
+                        class="px-4 py-3 sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        STT
+                    </th>
+                    <th
+                        class="px-4 py-3 sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Tên Chi đoàn
+                    </th>
+                    <th
+                        class="px-4 py-3 sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Mô tả
+                    </th>
+                    <th
+                        class="px-4 py-3  sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Bí thư
+                    </th>
+                    <th
+                        class="px-4 py-3  sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Số thành viên
+                    </th>
+                    <th
+                        class="px-4 py-3  sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Thao tác
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
+                @forelse ($branches as $index => $branch)
+                    <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                        <td class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100">
+                            {{ $branches->firstItem() + $index }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                            {{ $branch->branch_name }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                            <div class="max-w-xs truncate" title="{{ $branch->description }}">
+                                {{ $branch->description ?? '—' }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                            {{ $branch->secretaryMember?->full_name }}-
+                            {{ $branch->secretaryMember?->student_code }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-center text-neutral-900 dark:text-neutral-100">
+                            <span
+                                class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                                 {{ $branch->members_count }}
-                            </td>
-                            <td class="px-4 py-3 sticky right-0 bg-white dark:bg-neutral-900 z-20 shadow-left">
-                                <div class="flex items-center justify-end gap-2 whitespace-nowrap">
-                                    <flux:button wire:click="openBranchModal('view', {{ $branch->id }})"
-                                        variant="ghost" size="sm">
-                                        {{ __('Xem') }}
-                                    </flux:button>
-                                    <flux:button wire:click="openBranchModal('edit', {{ $branch->id }})"
-                                        variant="ghost" size="sm">
-                                        {{ __('Sửa') }}
-                                    </flux:button>
-                                    <flux:button wire:click="openDeleteModal({{ $branch->id }})" variant="danger"
-                                        size="sm">
-                                        {{ __('Xóa') }}
-                                    </flux:button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="px-4 py-8 text-center text-neutral-500">
-                                {{ __('Không tìm thấy chi đoàn nào.') }}
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <div class="flex items-center justify-end gap-2 whitespace-nowrap">
+                                <flux:button wire:click="openBranchModal('view', {{ $branch->id }})" variant="ghost"
+                                    size="sm">
+                                    {{ __('Xem') }}
+                                </flux:button>
+                                <flux:button wire:click="openBranchModal('edit', {{ $branch->id }})" variant="ghost"
+                                    size="sm">
+                                    {{ __('Sửa') }}
+                                </flux:button>
+                                <flux:button wire:click="openDeleteModal({{ $branch->id }})" variant="danger" size="sm">
+                                    {{ __('Xóa') }}
+                                </flux:button>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-12 text-center">
+                            <div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500">
+                                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                                    </path>
+                                </svg>
+                                <p class="text-sm font-medium">{{ __('Không có dữ liệu') }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
-    <!-- Pagination -->
-    <div class="mt-4 space-y-2">
-        {{ $branches->onEachSide(1)->links() }}
+    <!-- Pagination - Ant Design Style -->
+    @if ($branches->hasPages())
+        <div class="px-4 py-3 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+            {{ $branches->onEachSide(1)->links() }}
+        </div>
+    @endif
     </div>
 
     <!-- Action Messages -->
-    <x-action-message class="me-3"
-        on="branch-created">{{ __('Chi đoàn đã được thêm thành công.') }}</x-action-message>
+    <x-action-message class="me-3" on="branch-created">{{ __('Chi đoàn đã được thêm thành công.') }}</x-action-message>
     <x-action-message class="me-3"
         on="branch-updated">{{ __('Chi đoàn đã được cập nhật thành công.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="branch-deleted">{{ __('Chi đoàn đã được xóa thành công.') }}</x-action-message>
+    <x-action-message class="me-3" on="branch-deleted">{{ __('Chi đoàn đã được xóa thành công.') }}</x-action-message>
 </section>
