@@ -92,29 +92,29 @@ new class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name, email, and member info')">
+    <x-settings.layout :heading="__('Hồ sơ')" :subheading="__('Cập nhật thông tin hồ sơ')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <flux:input wire:model="name" :label="__('Full Name')" type="text" required autofocus autocomplete="name" />
 
             <div>
                 <div class="grid grid-cols-1 gap-4">
                     <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
-                    <flux:input wire:model="address" :label="__('Address')" type="text" required
+                    <flux:input wire:model="address" :label="__('Địa chỉ')" type="text" required
                         autocomplete="address" />
-                    <flux:input wire:model="join_date" :label="__('Join Date')" type="date" disabled />
+                    <flux:input wire:model="join_date" :label="__('Ngày tham gia')" type="date" disabled />
 
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-3 mt-4">
-                    <flux:input wire:model="birth_date" :label="__('Birth date')" type="date" />
+                    <flux:input wire:model="birth_date" :label="__('Ngày sinh')" type="date" />
 
-                    <flux:select wire:model="gender" :label="__('Gender')">
+                    <flux:select wire:model="gender" :label="__('Giới tính')">
                         <option value="">-- {{ __('Select') }} --</option>
                         <option value="0">{{ __('Nam') }}</option>
                         <option value="1">{{ __('Nữ') }}</option>
                     </flux:select>
 
-                    <flux:input wire:model="phone_number" :label="__('Phone number')" type="text"
+                    <flux:input wire:model="phone_number" :label="__('Số điện thoại')" type="text"
                         autocomplete="tel" />
                 </div>
 
@@ -142,12 +142,12 @@ new class extends Component {
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
                     <flux:button variant="primary" type="submit" class="w-full" data-test="update-profile-button">
-                        {{ __('Save') }}
+                        {{ __('Cập nhật') }}
                     </flux:button>
                 </div>
 
                 <x-action-message class="me-3" on="profile-updated">
-                    {{ __('Saved.') }}
+                    {{ __('Cập nhật thông tin thành công.') }}
                 </x-action-message>
             </div>
         </form>

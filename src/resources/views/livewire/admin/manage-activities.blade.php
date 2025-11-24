@@ -160,7 +160,62 @@
         </div>
     @endif
 
+    <!-- Registrations Approval Modal -->
+    @if ($showRegistrationsModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeRegistrationsModal">
+            <div class="w-full max-w-3xl rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl max-h-[90vh] overflow-y-auto" wire:click.stop>
+                <div class="mb-4 flex items-center justify-between">
+                    <flux:heading size="lg">{{ __('Duyệt Đăng ký') }}</flux:heading>
+                    <flux:button wire:click="closeRegistrationsModal" variant="ghost" size="sm">×</flux:button>
+                </div>
 
+                <!-- Pending Registrations -->
+                <div class="mb-6">
+                    <flux:heading size="md" class="mb-3">{{ __('Đang chờ duyệt') }}</flux:heading>
+                    @forelse ($pendingRegistrations as $registration)
+                        <div class="mb-3 flex items-center justify-between rounded border p-3 bg-yellow-50 dark:bg-yellow-900/20">
+                            <div class="flex-1">
+                                <p class="font-semibold">{{ $registration->member->full_name }}</p>
+                                <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ $registration->member->email }}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <flux:button wire:click="approveRegistration({{ $registration->id }})"  size="sm">
+                                    {{ __('Duyệt') }}
+                                </flux:button>
+                                <flux:button wire:click="rejectRegistration({{ $registration->id }})" variant="danger" size="sm">
+                                    {{ __('Từ chối') }}
+                                </flux:button>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-center text-neutral-500 py-4">{{ __('Không có đơn nào chờ duyệt.') }}</p>
+                    @endforelse
+                </div>
+
+                <!-- Approved Registrations -->
+                <div>
+                    <flux:heading size="md" class="mb-3">{{ __('Đã duyệt') }}</flux:heading>
+                    @forelse ($approvedRegistrations as $registration)
+                        <div class="mb-3 flex items-center justify-between rounded border p-3 bg-green-50 dark:bg-green-900/20">
+                            <div class="flex-1">
+                                <p class="font-semibold">{{ $registration->member->full_name }}</p>
+                                <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ $registration->member->email }}</p>
+                            </div>
+                            <flux:badge variant="success">{{ __('Đã duyệt') }}</flux:badge>
+                        </div>
+                    @empty
+                        <p class="text-center text-neutral-500 py-4">{{ __('Không có đơn đã duyệt.') }}</p>
+                    @endforelse
+                </div>
+
+                <div class="mt-6 flex items-center justify-end">
+                    <flux:button wire:click="closeRegistrationsModal" variant="ghost">
+                        {{ __('Đóng') }}
+                    </flux:button>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Delete Confirmation Modal -->
     @if ($showDeleteModal)
@@ -210,6 +265,9 @@
                     <flux:button wire:click="openEditForm({{ $activity->id }})" variant="ghost" size="sm">
                         {{ __('Sửa') }}
                     </flux:button>
+                    <flux:button wire:click="openRegistrationsModal({{ $activity->id }})" variant="ghost" size="sm">
+                        {{ __('Duyệt') }}
+                    </flux:button>
                     <flux:button wire:click="openDeleteModal({{ $activity->id }})" variant="danger" size="sm">
                         {{ __('Xóa') }}
                     </flux:button>
@@ -234,5 +292,9 @@
         on="activity-updated">{{ __('Hoạt động đã được cập nhật thành công.') }}</x-action-message>
     <x-action-message class="me-3"
         on="activity-deleted">{{ __('Hoạt động đã được xóa thành công.') }}</x-action-message>
+    <x-action-message class="me-3"
+        on="registration-approved">{{ __('Đơn đăng ký đã được duyệt.') }}</x-action-message>
+    <x-action-message class="me-3"
+        on="registration-rejected">{{ __('Đơn đăng ký đã bị từ chối.') }}</x-action-message>
 
 </section>

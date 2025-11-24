@@ -19,21 +19,21 @@
         <flux:navlist variant="outline">
             <flux:navlist.group :heading="__('QUẢN LÝ ĐOÀN VIÊN')" class="grid">
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                    wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('admin.permission')"
-                    :current="request()->routeIs('admin.permission')" wire:navigate>{{ __('Manage Permission') }}
+                    wire:navigate>{{ __('Trang chủ') }}</flux:navlist.item>
+                <flux:navlist.item icon="lock-closed" :href="route('admin.permission')"
+                    :current="request()->routeIs('admin.permission')" wire:navigate>{{ __('Quản lý quyền truy cập') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('admin.members')"
-                    :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Manage Members') }}
+                <flux:navlist.item icon="users" :href="route('admin.members')"
+                    :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Quản lý thành viên') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('admin.branches')"
-                    :current="request()->routeIs('admin.branches')" wire:navigate>{{ __('Manage Branches') }}
+                <flux:navlist.item icon="building-library" :href="route('admin.branches')"
+                    :current="request()->routeIs('admin.branches')" wire:navigate>{{ __('Quản lý chi đoàn') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('admin.activities')"
-                    :current="request()->routeIs('admin.activities')" wire:navigate>{{ __('Manage Activities') }}
+                <flux:navlist.item icon="calendar-days" :href="route('admin.activities')"
+                    :current="request()->routeIs('admin.activities')" wire:navigate>{{ __('Quản lý hoạt động') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('union.activities')"
-                    :current="request()->routeIs('union.activities')" wire:navigate>{{ __('Register Activities') }}
+                <flux:navlist.item icon="calendar-days" :href="route('union.activities')"
+                    :current="request()->routeIs('union.activities')" wire:navigate>{{ __('Đăng ký hoạt động') }}
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
@@ -68,7 +68,7 @@
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}
+                    <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Cài đặt') }}
                     </flux:menu.item>
                 </flux:menu.radio.group>
 
@@ -78,7 +78,7 @@
                     @csrf
                     <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full"
                         data-test="logout-button">
-                        {{ __('Log Out') }}
+                        {{ __('Đăng xuất') }}
                     </flux:menu.item>
                 </form>
             </flux:menu>
@@ -116,7 +116,7 @@
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}
+                    <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Cài đặt') }}
                     </flux:menu.item>
                 </flux:menu.radio.group>
 
@@ -126,7 +126,7 @@
                     @csrf
                     <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full"
                         data-test="logout-button">
-                        {{ __('Log Out') }}
+                        {{ __('Đăng xuất') }}
                     </flux:menu.item>
                 </form>
             </flux:menu>

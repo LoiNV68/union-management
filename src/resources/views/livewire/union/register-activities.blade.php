@@ -169,27 +169,41 @@
 
             <div class="grid gap-2">
                 @foreach ($registeredActivities as $registration)
-                    <div
-                        class="flex items-center justify-between rounded border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20 p-4">
+                    @php
+                        $statusClass = match($registration->registration_status) {
+                            0 => 'border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-900/20',
+                            1 => 'border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20',
+                            2 => 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/20',
+                            default => ''
+                        };
+                        $statusBadge = match($registration->registration_status) {
+                            0 => ['label' => __('Chờ duyệt'), 'variant' => 'warning'],
+                            1 => ['label' => __('Đã duyệt'), 'variant' => 'success'],
+                            2 => ['label' => __('Bị từ chối'), 'variant' => 'danger'],
+                            default => ['label' => __('Không xác định'), 'variant' => 'neutral']
+                        };
+                    @endphp
+                    <div class="flex items-center justify-between rounded border p-4 {{ $statusClass }}">
                         <div class="flex flex-1 gap-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <span
-                                        class="font-semibold text-lg">{{ $registration->activity->activity_name }}</span>
-                                    <flux:badge variant="success">{{ __('Đã đăng ký') }}</flux:badge>
+                                    <span class="font-semibold text-lg">{{ $registration->activity->activity_name }}</span>
+                                    <flux:badge :variant="$statusBadge['variant']">{{ $statusBadge['label'] }}</flux:badge>
                                 </div>
                                 <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
                                     <span>📅 {{ $registration->activity->start_date?->format('d/m/Y') }}</span>
                                     <span>📍 {{ $registration->activity->location ?? 'Không xác định' }}</span>
-                                    <span>🕒 {{ __('Đăng ký lúc: ') }} {{ $registration->registration_time->format('d/m/Y') }}</span>
+                                    <span>🕒 {{ __('Đăng ký lúc: ') }} {{ $registration->registration_time }}</span>
                                 </div>
                             </div>
                         </div>
-                        <flux:button
-                            onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký?') }}')) { event.stopImmediatePropagation(); }"
-                            wire:click="cancelRegistration({{ $registration->id }})" variant="danger" size="sm">
-                            {{ __('Hủy đăng ký') }}
-                        </flux:button>
+                        @if ($registration->registration_status !== 2)
+                            <flux:button
+                                onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký?') }}')) { event.stopImmediatePropagation(); }"
+                                wire:click="cancelRegistration({{ $registration->id }})" variant="danger" size="sm">
+                                {{ __('Hủy đăng ký') }}
+                            </flux:button>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -198,7 +212,7 @@
 
     <!-- Action Messages -->
     <x-action-message class="me-3"
-        on="activity-registered">{{ __('Đã đăng ký hoạt động thành công.') }}</x-action-message>
+        on="activity-registered">{{ __('Đã đăng ký hoạt động thành công. Vui lòng chờ duyệt từ quản trị viên.') }}</x-action-message>
     <x-action-message class="me-3"
         on="activity-cancelled">{{ __('Đã hủy đăng ký hoạt động thành công.') }}</x-action-message>
 </section>

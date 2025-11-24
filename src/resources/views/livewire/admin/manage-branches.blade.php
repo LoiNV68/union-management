@@ -25,7 +25,7 @@
 
     <!-- Branch Modal (Create/Edit/View) -->
     @if ($showBranchModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" wire:click="closeBranchModal">
+        <div class="fixed inset-0 z-100 flex items-center justify-center bg-black/50 p-4" wire:click="closeBranchModal">
             <div class="w-full max-w-2xl rounded-lg bg-white dark:bg-neutral-800 shadow-xl relative" wire:click.stop="">
                 <!-- Header -->
                 <div

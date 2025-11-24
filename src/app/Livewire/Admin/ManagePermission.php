@@ -18,6 +18,12 @@ class ManagePermission extends Component
   public string $search = '';
   public int $perPage = 10;
 
+  // Modal state
+  public bool $showToggleLockModal = false;
+  public bool $showDeleteModal = false;
+  public ?int $selectedUserId = null;
+  public bool $selectedUserLocked = false;
+
   private function ensureSuperAdmin(): void
   {
     abort_unless(Auth::user()?->role === 2, 403);
@@ -70,21 +76,64 @@ class ManagePermission extends Component
     $this->dispatch('user-updated');
   }
 
-  public function toggleLock(int $userId): void
+  // Toggle Lock Modal Methods
+  public function openToggleLockModal(int $userId, bool $isLocked): void
   {
-    $this->ensureSuperAdmin();
-    $user = User::query()->findOrFail($userId);
-    $user->update(['is_locked' => !(bool) ($user->is_locked ?? false)]);
-    $this->dispatch('user-updated');
+    $this->selectedUserId = $userId;
+    $this->selectedUserLocked = $isLocked;
+    $this->showToggleLockModal = true;
   }
 
-  public function deleteUser(int $userId): void
+  public function closeToggleLockModal(): void
   {
+    $this->showToggleLockModal = false;
+    $this->selectedUserId = null;
+    $this->selectedUserLocked = false;
+  }
+
+  public function confirmToggleLock(): void
+  {
+    if ($this->selectedUserId === null) {
+      return;
+    }
+
     $this->ensureSuperAdmin();
-    $user = User::query()->findOrFail($userId);
-    $user->delete();
-    $this->resetPage();
+    $user = User::query()->findOrFail($this->selectedUserId);
+    $user->update(['is_locked' => !$this->selectedUserLocked]);
     $this->dispatch('user-updated');
+    $this->closeToggleLockModal();
+  }
+
+  // Delete Modal Methods
+  public function openDeleteModal(int $userId): void
+  {
+    $this->selectedUserId = $userId;
+    $this->showDeleteModal = true;
+  }
+
+  public function closeDeleteModal(): void
+  {
+    $this->showDeleteModal = false;
+    $this->selectedUserId = null;
+    $this->resetErrorBag('delete');
+  }
+
+  public function confirmDelete(): void
+  {
+    if ($this->selectedUserId === null) {
+      return;
+    }
+
+    try {
+      $this->ensureSuperAdmin();
+      $user = User::query()->findOrFail($this->selectedUserId);
+      $user->delete();
+      $this->resetPage();
+      $this->dispatch('user-updated');
+      $this->closeDeleteModal();
+    } catch (\Exception $e) {
+      $this->addError('delete', __('Có lỗi xảy ra khi xóa người dùng.'));
+    }
   }
 
   public function render()

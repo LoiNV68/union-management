@@ -3,7 +3,7 @@
                     : document.body.classList.remove('overflow-hidden')">
 
     <div class=" flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Manage Members') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Quản lý thành viên') }}</flux:heading>
         <flux:button wire:click="openCreateForm" variant="primary">
             {{ __('Thêm Member') }}
         </flux:button>

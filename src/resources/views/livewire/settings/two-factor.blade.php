@@ -181,8 +181,8 @@ new class extends Component {
     @include('partials.settings-heading')
 
     <x-settings.layout
-        :heading="__('Two Factor Authentication')"
-        :subheading="__('Manage your two-factor authentication settings')"
+        :heading="__('Xác thực hai yếu tố')"
+        :subheading="__('Quản lý cài đặt xác thực hai yếu tố')"
     >
         <div class="flex flex-col w-full mx-auto space-y-6 text-sm" wire:cloak>
             @if ($twoFactorEnabled)
@@ -204,7 +204,7 @@ new class extends Component {
                             icon:variant="outline"
                             wire:click="disable"
                         >
-                            {{ __('Disable 2FA') }}
+                            {{ __('Tắt xác thực hai yếu tố') }}
                         </flux:button>
                     </div>
                 </div>
@@ -215,7 +215,7 @@ new class extends Component {
                     </div>
 
                     <flux:text variant="subtle">
-                        {{ __('When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.') }}
+                        {{ __('Khi bạn bật xác thực hai yếu tố, bạn sẽ được yêu cầu nhập một mã pin an toàn khi đăng nhập. Mã pin này có thể được lấy từ ứng dụng TOTP trên điện thoại của bạn.') }}
                     </flux:text>
 
                     <flux:button
@@ -224,7 +224,7 @@ new class extends Component {
                         icon:variant="outline"
                         wire:click="enable"
                     >
-                        {{ __('Enable 2FA') }}
+                        {{ __('Bật xác thực hai yếu tố') }}
                     </flux:button>
                 </div>
             @endif
