@@ -171,51 +171,51 @@
                 <thead>
                     <tr class="bg-neutral-50 dark:bg-neutral-800">
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:left-0 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:left-0 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             STT
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:left-14 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:left-14 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Mã SV
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:left-[174px] border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:left-[174px] border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Họ và tên
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Ngày sinh
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Giới tính
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Email
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             SĐT
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Địa chỉ
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Chi đoàn
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Ngày vào Đoàn
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Trạng thái
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-50 lg:right-0 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:right-0 border-b border-neutral-200 dark:border-neutral-700 text-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Thao tác
                         </th>
                     </tr>
