@@ -199,7 +199,16 @@
                                 <p class="font-semibold">{{ $registration->member->full_name }}</p>
                                 <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ $registration->member->email }}</p>
                             </div>
-                            <flux:badge variant="success">{{ __('Đã duyệt') }}</flux:badge>
+                            <div class="flex items-center gap-2">
+                                <flux:badge variant="success">{{ __('Đã duyệt') }}</flux:badge>
+                                <flux:button 
+                                    onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký này?') }}')) { event.stopImmediatePropagation(); }"
+                                    wire:click="cancelRegistration({{ $registration->id }})" 
+                                    variant="danger" 
+                                    size="sm">
+                                    {{ __('Hủy đăng ký') }}
+                                </flux:button>
+                            </div>
                         </div>
                     @empty
                         <p class="text-center text-neutral-500 py-4">{{ __('Không có đơn đã duyệt.') }}</p>
@@ -299,5 +308,7 @@
         on="registration-approved">{{ __('Đơn đăng ký đã được duyệt.') }}</x-action-message>
     <x-action-message class="me-3"
         on="registration-rejected">{{ __('Đơn đăng ký đã bị từ chối.') }}</x-action-message>
+    <x-action-message class="me-3"
+        on="registration-cancelled">{{ __('Đơn đăng ký đã được hủy thành công.') }}</x-action-message>
 
 </section>

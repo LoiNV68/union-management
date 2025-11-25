@@ -27,13 +27,17 @@ class RegisterActivities extends Component
     abort_unless(Auth::user()?->role === 0, 403);
   }
 
-  // Listen to events from admin component
+  // Listen to events from WebSocket AND Livewire
   protected function getListeners(): array
   {
     return [
+      // Livewire events (fallback)
       'activity-updated' => '$refresh',
       'activity-list-updated' => '$refresh',
-      'echo:activities,ActivityUpdated' => '$refresh', // For WebSocket support later
+
+      // WebSocket events (instant)
+      'echo:activities,ActivityUpdated' => '$refresh',
+      'echo:activities,RegistrationStatusChanged' => '$refresh',
     ];
   }
 

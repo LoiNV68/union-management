@@ -162,6 +162,16 @@ class ManageActivities extends Component
         $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
     }
 
+    public function cancelRegistration(int $registrationId): void
+    {
+        $registration = ActivityRegistration::findOrFail($registrationId);
+        $activityId = $registration->activity_id;
+        $registration->delete();
+
+        $this->dispatch('registration-cancelled');
+        $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
+    }
+
     public function saveActivity(): void
     {
         $rules = [
