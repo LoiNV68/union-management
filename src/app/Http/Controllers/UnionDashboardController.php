@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Member;
+use App\Models\ActivityRegistration;
+use App\Models\MemberTransaction;
+use App\Models\TrainingPoint;
+use Illuminate\Support\Facades\Auth;
 
 class UnionDashboardController extends Controller
 {
@@ -11,6 +15,80 @@ class UnionDashboardController extends Controller
    */
   public function index()
   {
-    return view('livewire.union.dashboard');
+    $user = Auth::user();
+    $member = Member::where('user_id', $user->id)->first();
+
+    if (!$member) {
+      return view('livewire.union.dashboard', [
+        'error' => 'Bạn chưa được đăng ký là thành viên.'
+      ]);
+    }
+
+    // Activity statistics
+    $totalRegistrations = ActivityRegistration::where('member_id', $member->id)->count();
+    $approvedRegistrations = ActivityRegistration::where('member_id', $member->id)
+      ->where('registration_status', 1)
+      ->count();
+    $pendingRegistrations = ActivityRegistration::where('member_id', $member->id)
+      ->where('registration_status', 0)
+      ->count();
+
+    // Financial statistics
+    $totalTransactions = MemberTransaction::where('member_id', $member->id)->count();
+    $paidTransactions = MemberTransaction::where('member_id', $member->id)
+      ->where('payment_status', 2)
+      ->count();
+    $pendingPayments = MemberTransaction::where('member_id', $member->id)
+      ->where('payment_status', 0)
+      ->count();
+
+    $totalAmount = MemberTransaction::where('member_id', $member->id)
+      ->with('transaction')
+      ->get()
+      ->sum(function ($mt) {
+        return $mt->transaction->amount ?? 0;
+      });
+
+    $paidAmount = MemberTransaction::where('member_id', $member->id)
+      ->where('payment_status', 2)
+      ->with('transaction')
+      ->get()
+      ->sum(function ($mt) {
+        return $mt->transaction->amount ?? 0;
+      });
+
+    // Training points statistics
+    $trainingPoints = TrainingPoint::where('member_id', $member->id)
+      ->with('semester')
+      ->orderByDesc('updated_at')
+      ->get();
+
+    $totalPoints = $trainingPoints->sum('point');
+    $avgPoints = $trainingPoints->count() > 0 ? $totalPoints / $trainingPoints->count() : 0;
+    $latestPoint = $trainingPoints->first();
+
+    // Recent activity registrations
+    $recentRegistrations = ActivityRegistration::where('member_id', $member->id)
+      ->with('activity')
+      ->orderByDesc('created_at')
+      ->limit(5)
+      ->get();
+
+    return view('livewire.union.dashboard', compact(
+      'member',
+      'totalRegistrations',
+      'approvedRegistrations',
+      'pendingRegistrations',
+      'totalTransactions',
+      'paidTransactions',
+      'pendingPayments',
+      'totalAmount',
+      'paidAmount',
+      'trainingPoints',
+      'totalPoints',
+      'avgPoints',
+      'latestPoint',
+      'recentRegistrations'
+    ));
   }
 }
