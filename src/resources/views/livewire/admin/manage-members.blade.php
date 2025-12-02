@@ -171,15 +171,15 @@
                 <thead>
                     <tr class="bg-neutral-50 dark:bg-neutral-800">
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:left-0 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-11 lg:left-0 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             STT
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:left-14 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-11 lg:left-14 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Mã SV
                         </th>
                         <th
-                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-10 lg:left-[174px] border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            class="px-4 py-3 bg-white dark:bg-neutral-900 sticky top-0 z-11 lg:sticky lg:left-[173px] lg:bg-white border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                             Họ và tên
                         </th>
                         <th
@@ -238,7 +238,7 @@
 
                             {{-- HỌ VÀ TÊN — sticky left (đứng sau MÃ SV) --}}
                             <td
-                                class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-[174px] lg:bg-white dark:bg-neutral-900 z-20 shadow-right">
+                                class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-[173px] lg:bg-white dark:bg-neutral-900 z-20 shadow-right">
                                 {{ $member->full_name }}
                             </td>
 

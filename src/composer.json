@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "doctrine/dbal": "*",
+        "endroid/qr-code": "*",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",
         "laravel/reverb": "@beta",

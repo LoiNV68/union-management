@@ -57,6 +57,9 @@ Route::middleware(['auth', 'verified', 'role'])->group(function () {
 
     Volt::route('admin/manage-activities', 'admin.manage-activities')
         ->name('admin.activities');
+
+    Volt::route('admin/manage-transactions', 'admin.manage-transactions')
+        ->name('admin.transactions');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -70,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
-                    && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
+                && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
                 ['password.confirm'],
                 [],
             ),
@@ -79,4 +82,7 @@ Route::middleware(['auth'])->group(function () {
 
     Volt::route('union/register-activities', 'union.register-activities')
         ->name('union.activities');
+
+    Volt::route('union/transactions', 'union.member-transactions')
+        ->name('union.transactions');
 });

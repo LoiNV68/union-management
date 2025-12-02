@@ -35,6 +35,13 @@
                 <flux:navlist.item icon="calendar-days" :href="route('union.activities')"
                     :current="request()->routeIs('union.activities')" wire:navigate>{{ __('Đăng ký hoạt động') }}
                 </flux:navlist.item>
+                <flux:navlist.item icon="wallet" :href="route('admin.transactions')"
+                    :current="request()->routeIs('admin.transactions')" wire:navigate>{{ __('Quản lý thu chi') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="wallet" :href="route('union.transactions')"
+                    :current="request()->routeIs('union.transactions')" wire:navigate>{{ __('Quản lý thu chi') }}
+                </flux:navlist.item>
+
             </flux:navlist.group>
         </flux:navlist>
 

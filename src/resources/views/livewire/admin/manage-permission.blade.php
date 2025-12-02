@@ -106,7 +106,7 @@
                 <!-- Content -->
                 <div class="p-6">
                     <p class="mb-6 text-neutral-600 dark:text-neutral-400">
-                        {{ $selectedUserLocked ? __('Are you sure you want to unlock this user?') : __('Are you sure you want to lock this user?') }}
+                        {{ $selectedUserLocked ? __('Bạn có chắc chắn muốn mở khóa người dùng này?') : __('Bạn có chắc chắn muốn khóa người dùng này?') }}
                     </p>
                 </div>
 
