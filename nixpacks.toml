@@ -1,0 +1,6 @@
+# nixpacks.toml
+[phases.setup]
+nixPkgs = ['...', 'php84']   # <-- Cái này bắt buộc phải có
+
+[start]
+cmd = "npm start"
