@@ -17,32 +17,83 @@
         </a>
 
         <flux:navlist variant="outline">
-            <flux:navlist.group :heading="__('QUẢN LÝ ĐOÀN VIÊN')" class="grid">
+            {{-- Menu chung cho tất cả --}}
+            <flux:navlist.group :heading="__('TRANG CHỦ')" class="grid">
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                    wire:navigate>{{ __('Trang chủ') }}</flux:navlist.item>
-                <flux:navlist.item icon="lock-closed" :href="route('admin.permission')"
-                    :current="request()->routeIs('admin.permission')" wire:navigate>{{ __('Quản lý quyền truy cập') }}
+                    wire:navigate>{{ __('Trang chủ') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="users" :href="route('admin.members')"
-                    :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Quản lý thành viên') }}
-                </flux:navlist.item>
-                <flux:navlist.item icon="building-library" :href="route('admin.branches')"
-                    :current="request()->routeIs('admin.branches')" wire:navigate>{{ __('Quản lý chi đoàn') }}
-                </flux:navlist.item>
-                <flux:navlist.item icon="calendar-days" :href="route('admin.activities')"
-                    :current="request()->routeIs('admin.activities')" wire:navigate>{{ __('Quản lý hoạt động') }}
-                </flux:navlist.item>
-                <flux:navlist.item icon="calendar-days" :href="route('union.activities')"
-                    :current="request()->routeIs('union.activities')" wire:navigate>{{ __('Đăng ký hoạt động') }}
-                </flux:navlist.item>
-                <flux:navlist.item icon="wallet" :href="route('admin.transactions')"
-                    :current="request()->routeIs('admin.transactions')" wire:navigate>{{ __('Quản lý thu chi') }}
-                </flux:navlist.item>
-                <flux:navlist.item icon="wallet" :href="route('union.transactions')"
-                    :current="request()->routeIs('union.transactions')" wire:navigate>{{ __('Quản lý thu chi') }}
-                </flux:navlist.item>
-
             </flux:navlist.group>
+
+            {{-- Menu dành cho Admin (role 1, 2) --}}
+            @if(in_array(auth()->user()?->role, [2]))
+                <flux:navlist.group :heading="__('QUẢN TRỊ')" class="grid">
+                    <flux:navlist.item icon="lock-closed" :href="route('admin.permission')"
+                        :current="request()->routeIs('admin.permission')" wire:navigate>
+                        {{ __('Quyền truy cập') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="users" :href="route('admin.members')"
+                        :current="request()->routeIs('admin.members')" wire:navigate>
+                        {{ __('Thành viên') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="building-library" :href="route('admin.branches')"
+                        :current="request()->routeIs('admin.branches')" wire:navigate>
+                        {{ __('Chi đoàn') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="calendar-days" :href="route('admin.activities')"
+                        :current="request()->routeIs('admin.activities')" wire:navigate>
+                        {{ __('Hoạt động') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="wallet" :href="route('admin.transactions')"
+                        :current="request()->routeIs('admin.transactions')" wire:navigate>
+                        {{ __('Thu chi') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="academic-cap" :href="route('admin.training-points')"
+                        :current="request()->routeIs('admin.training-points')" wire:navigate>
+                        {{ __('Điểm rèn luyện') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="calendar" :href="route('admin.semesters')"
+                        :current="request()->routeIs('admin.semesters')" wire:navigate>
+                        {{ __('Học kỳ') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
+            @endif
+            @if(in_array(auth()->user()?->role, [1]))
+                <flux:navlist.group :heading="__('QUẢN TRỊ')" class="grid">
+                    <flux:navlist.item icon="users" :href="route('admin.members')"
+                        :current="request()->routeIs('admin.members')" wire:navigate>
+                        {{ __('Thành viên') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="calendar-days" :href="route('admin.activities')"
+                        :current="request()->routeIs('admin.activities')" wire:navigate>
+                        {{ __('Hoạt động') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="wallet" :href="route('admin.transactions')"
+                        :current="request()->routeIs('admin.transactions')" wire:navigate>
+                        {{ __('Thu chi') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="academic-cap" :href="route('admin.training-points')"
+                        :current="request()->routeIs('admin.training-points')" wire:navigate>
+                        {{ __('Điểm rèn luyện') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
+            @endif
+            {{-- Menu dành cho Member (role 0) --}}
+            @if(auth()->user()?->role === 0)
+                <flux:navlist.group :heading="__('THÀNH VIÊN')" class="grid">
+                    <flux:navlist.item icon="calendar-days" :href="route('union.activities')"
+                        :current="request()->routeIs('union.activities')" wire:navigate>
+                        {{ __('Hoạt động') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="wallet" :href="route('union.transactions')"
+                        :current="request()->routeIs('union.transactions')" wire:navigate>
+                        {{ __('Khoản thu') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="academic-cap" :href="route('union.training-points')"
+                        :current="request()->routeIs('union.training-points')" wire:navigate>
+                        {{ __('Điểm rèn luyện') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
+            @endif
         </flux:navlist>
 
         <flux:spacer />

@@ -60,6 +60,12 @@ Route::middleware(['auth', 'verified', 'role'])->group(function () {
 
     Volt::route('admin/manage-transactions', 'admin.manage-transactions')
         ->name('admin.transactions');
+
+    Volt::route('admin/manage-training-points', 'admin.manage-training-points')
+        ->name('admin.training-points');
+
+    Volt::route('admin/manage-semesters', 'admin.manage-semesters')
+        ->name('admin.semesters');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -85,4 +91,7 @@ Route::middleware(['auth'])->group(function () {
 
     Volt::route('union/transactions', 'union.member-transactions')
         ->name('union.transactions');
+
+    Volt::route('union/training-points', 'union.view-training-points')
+        ->name('union.training-points');
 });

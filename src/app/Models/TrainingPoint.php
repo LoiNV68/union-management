@@ -18,14 +18,21 @@ class TrainingPoint extends Model
     'updater_id',
   ];
 
+  protected function casts(): array
+  {
+    return [
+      'point' => 'decimal:2',
+    ];
+  }
+
   public function member(): BelongsTo
   {
     return $this->belongsTo(Member::class, 'member_id');
   }
 
-  public function semester(): HasMany
+  public function semester(): BelongsTo
   {
-    return $this->hasMany(Semester::class, 'semester_id');
+    return $this->belongsTo(Semester::class, 'semester_id');
   }
 
   public function updater(): BelongsTo

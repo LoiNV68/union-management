@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Semester extends Model
 {
@@ -14,8 +14,9 @@ class Semester extends Model
     'school_year',
     'semester',
   ];
-  public function trainingPoints() : BelongsTo
+
+  public function trainingPoints(): HasMany
   {
-    return $this->belongsTo(TrainingPoint::class, 'semester_id');
+    return $this->hasMany(TrainingPoint::class, 'semester_id');
   }
 }
