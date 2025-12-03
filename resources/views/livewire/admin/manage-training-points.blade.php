@@ -26,7 +26,7 @@
             <flux:select wire:model.live="filterBranchId" label="">
                 <option value="">Tất cả chi hội</option>
                 @foreach ($branches as $branch)
-                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                    <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
                 @endforeach
             </flux:select>
         </div>
@@ -156,7 +156,7 @@
                             {{ $tp->member->full_name }}
                         </td>
                         <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                            {{ $tp->member->branch?->name ?? 'N/A' }}
+                            {{ $tp->member->branch?->branch_name ?? 'N/A' }}
                         </td>
                         <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
                             {{ $tp->semester->school_year }} - HK{{ $tp->semester->semester }}
@@ -164,18 +164,18 @@
                         <td class="whitespace-nowrap px-4 py-3 text-sm">
                             <span
                                 class="inline-flex rounded-full px-2 py-1 text-xs font-semibold leading-5
-                                        {{ $tp->point >= 90 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : '' }}
-                                        {{ $tp->point >= 80 && $tp->point < 90 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' : '' }}
-                                        {{ $tp->point >= 65 && $tp->point < 80 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' : '' }}
-                                        {{ $tp->point < 65 ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' : '' }}">
+                                                        {{ $tp->point >= 90 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : '' }}
+                                                        {{ $tp->point >= 80 && $tp->point < 90 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' : '' }}
+                                                        {{ $tp->point >= 65 && $tp->point < 80 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' : '' }}
+                                                        {{ $tp->point < 65 ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' : '' }}">
                                 {{ number_format($tp->point, 2) }}
                             </span>
                         </td>
                         <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                            {{ $tp->updater?->name ?? 'N/A' }}
+                            {{ $tp->updater?->full_name ?? 'N/A' }}
                         </td>
                         <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                            {{ $tp->updated_at->format('d/m/Y H:i') }}
+                            {{ $tp->updated_at->format('d/m/Y') }}
                         </td>
                         <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
                             <div class="flex items-center justify-end gap-2">
