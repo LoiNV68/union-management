@@ -80,6 +80,10 @@
                             placeholder="0.00" />
                     </div>
 
+                    <div>
+                        <flux:textarea wire:model="note" label="Nhận xét" placeholder="Nhập nhận xét (tùy chọn)..." />
+                    </div>
+
                     <div class="flex items-center justify-end gap-4 pt-4">
                         <flux:button wire:click="closeCreateForm" variant="ghost" type="button">
                             {{ __('Hủy') }}
@@ -104,6 +108,81 @@
                 <div class="flex items-center justify-end gap-4">
                     <flux:button wire:click="closeDeleteModal" variant="ghost">{{ __('Hủy') }}</flux:button>
                     <flux:button wire:click="delete" variant="danger">{{ __('Xóa') }}</flux:button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- View Modal -->
+    @if ($showViewModal && $viewingTrainingPoint)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeViewModal">
+            <div class="w-full max-w-xl rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl" wire:click.stop>
+                <div class="mb-4 flex items-center justify-between">
+                    <flux:heading size="lg">{{ __('Chi tiết Điểm Rèn Luyện') }}</flux:heading>
+                    <flux:button wire:click="closeViewModal" variant="ghost" size="sm">×</flux:button>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Mã SV') }}</p>
+                            <p class="text-base text-neutral-900 dark:text-neutral-100">
+                                {{ $viewingTrainingPoint->member->user?->student_code ?? 'N/A' }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Họ và tên') }}</p>
+                            <p class="text-base text-neutral-900 dark:text-neutral-100">
+                                {{ $viewingTrainingPoint->member->full_name }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Chi hội') }}</p>
+                            <p class="text-base text-neutral-900 dark:text-neutral-100">
+                                {{ $viewingTrainingPoint->member->branch?->branch_name ?? 'N/A' }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Học kỳ') }}</p>
+                            <p class="text-base text-neutral-900 dark:text-neutral-100">
+                                {{ $viewingTrainingPoint->semester->school_year }} -
+                                HK{{ $viewingTrainingPoint->semester->semester }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Điểm') }}</p>
+                            <p class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($viewingTrainingPoint->point, 2) }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Ngày cập nhật') }}
+                            </p>
+                            <p class="text-base text-neutral-900 dark:text-neutral-100">
+                                {{ $viewingTrainingPoint->updated_at->format('d/m/Y H:i') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Người cập nhật') }}</p>
+                        <p class="text-base text-neutral-900 dark:text-neutral-100">
+                            {{ $viewingTrainingPoint->updater?->full_name ?? 'N/A' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{{ __('Nhận xét') }}</p>
+                        <div class="mt-1 rounded-md bg-neutral-50 p-3 dark:bg-neutral-900">
+                            <p class="text-base text-neutral-900 dark:text-neutral-100 whitespace-pre-line">
+                                {{ $viewingTrainingPoint->note ?: __('Không có nhận xét') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <flux:button wire:click="closeViewModal" variant="primary">{{ __('Đóng') }}</flux:button>
                 </div>
             </div>
         </div>
@@ -164,10 +243,10 @@
                         <td class="whitespace-nowrap px-4 py-3 text-sm">
                             <span
                                 class="inline-flex rounded-full px-2 py-1 text-xs font-semibold leading-5
-                                                        {{ $tp->point >= 90 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : '' }}
-                                                        {{ $tp->point >= 80 && $tp->point < 90 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' : '' }}
-                                                        {{ $tp->point >= 65 && $tp->point < 80 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' : '' }}
-                                                        {{ $tp->point < 65 ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' : '' }}">
+                                                            {{ $tp->point >= 90 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : '' }}
+                                                            {{ $tp->point >= 80 && $tp->point < 90 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' : '' }}
+                                                            {{ $tp->point >= 65 && $tp->point < 80 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' : '' }}
+                                                            {{ $tp->point < 65 ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' : '' }}">
                                 {{ number_format($tp->point, 2) }}
                             </span>
                         </td>
@@ -179,6 +258,9 @@
                         </td>
                         <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
                             <div class="flex items-center justify-end gap-2">
+                                <flux:button wire:click="openViewModal({{ $tp->id }})" variant="ghost" size="sm">
+                                    {{ __('Xem') }}
+                                </flux:button>
                                 <flux:button wire:click="openEditForm({{ $tp->id }})" variant="ghost" size="sm">
                                     {{ __('Sửa') }}
                                 </flux:button>

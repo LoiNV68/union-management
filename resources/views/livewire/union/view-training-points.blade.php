@@ -62,7 +62,7 @@
                         <div class="mt-3 space-y-1">
                             <p class="text-sm text-neutral-600 dark:text-neutral-400">
                                 <span class="font-semibold">Cập nhật bởi:</span>
-                                {{ $tp->updater?->name ?? 'N/A' }}
+                                {{ $tp->updater?->full_name ?? 'N/A' }}
                             </p>
                             <p class="text-sm text-neutral-600 dark:text-neutral-400">
                                 <span class="font-semibold">Ngày cập nhật:</span>
@@ -74,10 +74,10 @@
                     <div class="text-right">
                         <p class="text-sm text-neutral-600 dark:text-neutral-400">Điểm</p>
                         <p class="text-4xl font-bold
-                                {{ $tp->point >= 90 ? 'text-green-600 dark:text-green-400' : '' }}
-                                {{ $tp->point >= 80 && $tp->point < 90 ? 'text-blue-600 dark:text-blue-400' : '' }}
-                                {{ $tp->point >= 65 && $tp->point < 80 ? 'text-yellow-600 dark:text-yellow-400' : '' }}
-                                {{ $tp->point < 65 ? 'text-red-600 dark:text-red-400' : '' }}">
+                                    {{ $tp->point >= 90 ? 'text-green-600 dark:text-green-400' : '' }}
+                                    {{ $tp->point >= 80 && $tp->point < 90 ? 'text-blue-600 dark:text-blue-400' : '' }}
+                                    {{ $tp->point >= 65 && $tp->point < 80 ? 'text-yellow-600 dark:text-yellow-400' : '' }}
+                                    {{ $tp->point < 65 ? 'text-red-600 dark:text-red-400' : '' }}">
                             {{ number_format($tp->point, 2) }}
                         </p>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400">/ 100</p>

@@ -16,6 +16,7 @@ class TrainingPoint extends Model
     'member_id',
     'semester_id',
     'updater_id',
+    'note',
   ];
 
   protected function casts(): array

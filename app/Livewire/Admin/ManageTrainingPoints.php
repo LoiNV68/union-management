@@ -19,6 +19,7 @@ class ManageTrainingPoints extends Component
     public int $perPage = 10;
     public bool $showCreateForm = false;
     public bool $showDeleteModal = false;
+    public bool $showViewModal = false;
     public ?int $editingId = null;
     public ?int $deletingId = null;
     public ?int $filterSemesterId = null;
@@ -28,6 +29,8 @@ class ManageTrainingPoints extends Component
     public ?int $member_id = null;
     public ?int $semester_id = null;
     public string $point = '';
+    public string $note = '';
+    public ?TrainingPoint $viewingTrainingPoint = null;
 
     public function mount(): void
     {
@@ -75,6 +78,7 @@ class ManageTrainingPoints extends Component
         $this->member_id = $trainingPoint->member_id;
         $this->semester_id = $trainingPoint->semester_id;
         $this->point = $trainingPoint->point;
+        $this->note = $trainingPoint->note ?? '';
         $this->showCreateForm = true;
     }
 
@@ -90,18 +94,32 @@ class ManageTrainingPoints extends Component
         $this->deletingId = null;
     }
 
+    public function openViewModal(int $id): void
+    {
+        $this->viewingTrainingPoint = TrainingPoint::with(['member.user', 'semester', 'updater'])->findOrFail($id);
+        $this->showViewModal = true;
+    }
+
+    public function closeViewModal(): void
+    {
+        $this->showViewModal = false;
+        $this->viewingTrainingPoint = null;
+    }
+
     public function save(): void
     {
         $this->validate([
             'member_id' => 'required|exists:members,id',
             'semester_id' => 'required|exists:semesters,id',
             'point' => 'required|numeric|min:0|max:100',
+            'note' => 'nullable|string|max:1000',
         ]);
 
         $data = [
             'member_id' => $this->member_id,
             'semester_id' => $this->semester_id,
             'point' => $this->point,
+            'note' => $this->note,
             'updater_id' => Auth::id(),
         ];
 
@@ -140,6 +158,7 @@ class ManageTrainingPoints extends Component
         $this->member_id = null;
         $this->semester_id = null;
         $this->point = '';
+        $this->note = '';
     }
 
     public function render()
