@@ -1,6 +1,6 @@
 <x-layouts.auth>
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Log in to your account')" :description="__('Nhập mã sinh viên và mật khẩu để đăng nhập')" />
+        <x-auth-header :title="__('Đăng nhập')" :description="__('Nhập mã sinh viên và mật khẩu để đăng nhập')" />
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
