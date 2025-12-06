@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\TrainingPoint;
 use App\Models\Member;
 use App\Models\Semester;
+use App\Events\TrainingPointUpdated;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -126,6 +127,7 @@ class ManageTrainingPoints extends Component
         if ($this->editingId) {
             TrainingPoint::findOrFail($this->editingId)->update($data);
             $this->dispatch('training-point-updated');
+            TrainingPointUpdated::dispatch(TrainingPoint::find($this->editingId));
         } else {
             // Check if record already exists
             $existing = TrainingPoint::where('member_id', $this->member_id)
@@ -137,8 +139,9 @@ class ManageTrainingPoints extends Component
                 return;
             }
 
-            TrainingPoint::create($data);
+            $tp = TrainingPoint::create($data);
             $this->dispatch('training-point-created');
+            TrainingPointUpdated::dispatch($tp);
         }
 
         $this->closeCreateForm();
@@ -147,8 +150,10 @@ class ManageTrainingPoints extends Component
     public function delete(): void
     {
         if ($this->deletingId) {
-            TrainingPoint::findOrFail($this->deletingId)->delete();
+            $tp = TrainingPoint::findOrFail($this->deletingId);
+            $tp->delete();
             $this->dispatch('training-point-deleted');
+            TrainingPointUpdated::dispatch($tp);
             $this->closeDeleteModal();
         }
     }
@@ -189,5 +194,14 @@ class ManageTrainingPoints extends Component
             'semesters' => Semester::orderByDesc('school_year')->orderByDesc('semester')->get(),
             'branches' => \App\Models\Branch::orderBy('branch_name')->get(),
         ]);
+    }
+    public function getListeners(): array
+    {
+        return [
+            'echo:training-points,training-point.updated' => '$refresh',
+            'training-point-created' => '$refresh',
+            'training-point-updated' => '$refresh',
+            'training-point-deleted' => '$refresh',
+        ];
     }
 }

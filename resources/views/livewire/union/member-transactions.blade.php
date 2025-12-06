@@ -1,19 +1,33 @@
 <section>
-    <div class="mb-6">
-        <flux:heading size="lg">{{ __('Khoản Thu') }}</flux:heading>
+    <!-- Header -->
+    <div class="premium-card p-6 mb-6">
+        <div class="flex items-center gap-4">
+            <div class="icon-gradient-green">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ __('Khoản Thu') }}</h1>
+                <p class="text-neutral-600 dark:text-neutral-400 text-sm">Xem và thanh toán các khoản phí</p>
+            </div>
+        </div>
     </div>
 
     <!-- Search and Filter -->
-    <div class="mb-6 flex items-end gap-4">
-        <div class="flex-1">
-            <flux:input wire:model.live.debounce.300ms="search" label="" placeholder="Tìm kiếm..." type="text" />
-        </div>
-        <div class="w-40">
-            <flux:select wire:model.live="perPage" label="">
-                <option value="5">5 / trang</option>
-                <option value="10">10 / trang</option>
-                <option value="20">20 / trang</option>
-            </flux:select>
+    <div class="premium-card p-4 mb-6">
+        <div class="flex items-end gap-4">
+            <div class="flex-1">
+                <flux:input wire:model.live.debounce.300ms="search" placeholder="🔍 Tìm kiếm..." type="text" />
+            </div>
+            <div class="w-32">
+                <flux:select wire:model.live="perPage">
+                    <option value="10">10 / trang</option>
+                    <option value="20">20 / trang</option>
+                    <option value="50">50 / trang</option>
+                </flux:select>
+            </div>
         </div>
     </div>
 
@@ -50,9 +64,9 @@
                     <!-- Nút giả lập thanh toán (rất quan trọng khi demo) -->
                     <div class="mt-6 space-y-3">
                         <!-- <button wire:click="fakePaymentSuccess"
-                                    class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-105">
-                                    Giả lập thanh toán thành công (Demo)
-                                </button> -->
+                                                    class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-105">
+                                                    Giả lập thanh toán thành công (Demo)
+                                                </button> -->
 
                         <button wire:click="markAsPaid"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">
@@ -65,54 +79,69 @@
     @endif
 
     <!-- Transactions List -->
-    <div class="grid gap-2">
+    <div class="space-y-4">
         @forelse ($memberTransactions as $mt)
             @php
-                $statusClass = match ($mt->payment_status) {
-                    0 => 'border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-900/20',
-                    1 => 'border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-900/20',
-                    2 => 'border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20',
+                $cardClass = match ($mt->payment_status) {
+                    0 => 'border-l-4 border-l-yellow-500',
+                    1 => 'border-l-4 border-l-blue-500',
+                    2 => 'border-l-4 border-l-green-500',
                     default => '',
                 };
                 $statusBadge = match ($mt->payment_status) {
-                    0 => ['label' => __('Chưa thanh toán'), 'variant' => 'warning'],
-                    1 => ['label' => __('Chờ xác nhận'), 'variant' => 'neutral'],
-                    2 => ['label' => __('Đã xác nhận'), 'variant' => 'success'],
-                    default => ['label' => __('Không xác định'), 'variant' => 'neutral'],
+                    0 => ['label' => __('Chưa thanh toán'), 'variant' => 'warning', 'icon' => '⚠️'],
+                    1 => ['label' => __('Chờ xác nhận'), 'variant' => 'neutral', 'icon' => '⏳'],
+                    2 => ['label' => __('Đã xác nhận'), 'variant' => 'success', 'icon' => '✅'],
+                    default => ['label' => __('Không xác định'), 'variant' => 'neutral', 'icon' => '❓'],
                 };
             @endphp
-            <div class="flex items-center justify-between rounded border p-4 {{ $statusClass }}">
-                <div class="flex-1">
-                    <div class="flex items-center gap-2">
-                        <span class="font-semibold text-lg">{{ $mt->transaction->title }}</span>
-                        <flux:badge :variant="$statusBadge['variant']">{{ $statusBadge['label'] }}</flux:badge>
+            <div class="premium-card p-5 {{ $cardClass }}">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="font-bold text-lg text-neutral-900 dark:text-neutral-100">{{ $mt->transaction->title }}</span>
+                            <flux:badge :variant="$statusBadge['variant']">{{ $statusBadge['icon'] }}
+                                {{ $statusBadge['label'] }}
+                            </flux:badge>
+                        </div>
+                        <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+                            <span class="inline-flex items-center gap-1">
+                                💰 <span
+                                    class="font-semibold text-red-600">{{ number_format($mt->transaction->amount, 0, ',', '.') }}
+                                    VNĐ</span>
+                            </span>
+                            @if ($mt->transaction->due_date)
+                                <span class="inline-flex items-center gap-1">📅 Hạn:
+                                    {{ $mt->transaction->due_date->format('d/m/Y') }}</span>
+                            @endif
+                            @if ($mt->payment_date)
+                                <span class="inline-flex items-center gap-1">✅ Thanh toán:
+                                    {{ $mt->payment_date->format('d/m/Y H:i') }}</span>
+                            @endif
+                        </div>
+                        @if ($mt->transaction->description)
+                            <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ $mt->transaction->description }}
+                            </p>
+                        @endif
                     </div>
-                    <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                        Số tiền: {{ number_format($mt->transaction->amount, 0, ',', '.') }} VNĐ
-                        @if ($mt->transaction->due_date)
-                            | Hạn: {{ $mt->transaction->due_date->format('d/m/Y') }}
-                        @endif
-                        @if ($mt->payment_date)
-                            | Thanh toán: {{ $mt->payment_date->format('d/m/Y H:i') }}
-                        @endif
-                    </p>
-                    @if ($mt->transaction->description)
-                        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                            {{ $mt->transaction->description }}
-                        </p>
-                    @endif
-                </div>
-                <div class="flex items-center gap-2">
                     @if ($mt->payment_status < 2)
                         <flux:button wire:click="openQrModal({{ $mt->id }})" variant="primary" size="sm">
-                            {{ __('Thanh toán') }}
+                            💳 {{ __('Thanh toán') }}
                         </flux:button>
                     @endif
                 </div>
             </div>
         @empty
-            <div class="rounded border p-8 text-center text-neutral-500">
-                {{ __('Không có khoản thu nào.') }}
+            <div class="premium-card p-12 text-center">
+                <div
+                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                </div>
+                <p class="text-neutral-500 font-medium">{{ __('Không có khoản thu nào.') }}</p>
             </div>
         @endforelse
     </div>

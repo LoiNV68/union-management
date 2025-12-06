@@ -22,6 +22,13 @@ class ViewTrainingPoints extends Component
         // Trigger re-render when semester filter changes
     }
 
+    public function getListeners(): array
+    {
+        return [
+            'echo:training-points,training-point.updated' => '$refresh',
+        ];
+    }
+
     public function render()
     {
         $user = Auth::user();

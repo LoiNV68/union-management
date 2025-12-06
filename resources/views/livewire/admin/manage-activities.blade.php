@@ -4,27 +4,39 @@
 
 
 <section>
-    <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Quản lý Hoạt động') }}</flux:heading>
-        <flux:button wire:click="openCreateForm" variant="primary">
-            {{ __('Thêm Hoạt động') }}
-        </flux:button>
+    <!-- Header -->
+    <div class="premium-card p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="icon-gradient-orange">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ __('Quản lý Hoạt động') }}</h1>
+                    <p class="text-neutral-600 dark:text-neutral-400 text-sm">Tạo và quản lý các hoạt động đoàn</p>
+                </div>
+            </div>
+            <flux:button wire:click="openCreateForm" variant="primary">
+                {{ __('Thêm Hoạt động') }}
+            </flux:button>
+        </div>
     </div>
 
     <!-- Search and Filter -->
-    <div class="mb-6 flex items-end gap-4">
-        <div class="flex-1">
-            <flux:input wire:model.live.debounce.300ms="search" label=""
-                placeholder="Tìm kiếm theo tên hoạt động, địa điểm..." type="text" />
-        </div>
-        <div class="w-40">
-            <flux:select wire:model.live="perPage" label="">
-                <option value="5">5 / trang</option>
-                <option value="10">10 / trang</option>
-                <option value="15">15 / trang</option>
-                <option value="20">20 / trang</option>
-                <option value="50">50 / trang</option>
-            </flux:select>
+    <div class="premium-card p-4 mb-6">
+        <div class="flex items-end gap-4">
+            <div class="flex-1">
+                <flux:input wire:model.live.debounce.300ms="search" placeholder="🔍 Tìm theo tên hoạt động, địa điểm..." type="text" />
+            </div>
+            <div class="w-32">
+                <flux:select wire:model.live="perPage">
+                    <option value="10">10 / trang</option>
+                    <option value="20">20 / trang</option>
+                    <option value="50">50 / trang</option>
+                </flux:select>
+            </div>
         </div>
     </div>
 
@@ -224,70 +236,78 @@
         </div>
     @endif
 
-    <!-- Delete Confirmation Modal -->
+    <!-- Delete Modal -->
     @if ($showDeleteModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeDeleteModal">
-            <div class="w-full max-w-md rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl" wire:click.stop>
-                <flux:heading size="lg" class="mb-4">{{ __('Xác nhận xóa') }}</flux:heading>
-                <p class="mb-6 text-neutral-600 dark:text-neutral-400">
-                    {{ __('Bạn có chắc chắn muốn xóa hoạt động này? Hành động này không thể hoàn tác.') }}
-                </p>
-                <div class="flex items-center justify-end gap-4">
-                    <flux:button wire:click="closeDeleteModal" variant="ghost" type="button">
-                        {{ __('Hủy') }}
-                    </flux:button>
-                    <flux:button wire:click="deleteActivity" variant="danger" type="button">
-                        {{ __('Xóa') }}
-                    </flux:button>
+        <div class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop" wire:click="closeDeleteModal">
+            <div class="w-full max-w-md premium-modal p-6" wire:click.stop>
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ __('Xác nhận xóa') }}</h3>
+                    <p class="text-neutral-600 dark:text-neutral-400">{{ __('Bạn có chắc chắn muốn xóa hoạt động này? Hành động này không thể hoàn tác.') }}</p>
+                </div>
+                <div class="flex items-center justify-center gap-3">
+                    <flux:button wire:click="closeDeleteModal" variant="ghost">{{ __('Hủy') }}</flux:button>
+                    <flux:button wire:click="deleteActivity" variant="danger">{{ __('Xóa') }}</flux:button>
                 </div>
             </div>
         </div>
     @endif
 
     <!-- Activities List -->
-    <div class="grid gap-2" wire:poll.10s.visible>
+    <div class="space-y-4" wire:poll.10s.visible>
         @forelse ($activities as $activity)
-            <div class="flex items-center justify-between rounded border p-4">
-                <div class="flex flex-1 gap-4">
+            <div class="premium-card p-5 hover:shadow-lg transition-shadow">
+                <div class="flex items-start justify-between">
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold text-lg">{{ $activity->activity_name }}</span>
-                        </div>
-                        @if ($activity->description)
-                            <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                                {{ Str::limit($activity->description, 100) }}
-                            </p>
-                        @endif
-                        <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
-                            <span>📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
-                            <span>📍 {{ $activity->location ?? 'Không xác định' }}</span>
-                            <span>👥 {{ $activity->approved_registrations_count }} đã duyệt 
-                                @if($activity->max_participants)
-                                    / {{ $activity->max_participants }} tối đa
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <span class="font-bold text-lg text-neutral-900 dark:text-neutral-100">{{ $activity->activity_name }}</span>
+                                @if ($activity->description)
+                                    <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{{ Str::limit($activity->description, 100) }}</p>
                                 @endif
-                                ({{ $activity->registrations_count }} tổng đăng ký)
+                            </div>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+                            <span class="inline-flex items-center gap-1">📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
+                            <span class="inline-flex items-center gap-1">📍 {{ $activity->location ?? 'Không xác định' }}</span>
+                            <span class="inline-flex items-center gap-1">
+                                👥 <span class="font-medium text-green-600">{{ $activity->approved_registrations_count }}</span> đã duyệt
+                                @if($activity->max_participants)
+                                    / {{ $activity->max_participants }}
+                                @endif
+                                <span class="text-neutral-400">({{ $activity->registrations_count }} tổng)</span>
                             </span>
                         </div>
                     </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <flux:button wire:click="openViewModal({{ $activity->id }})" variant="ghost" size="sm">
-                        {{ __('Xem') }}
-                    </flux:button>
-                    <flux:button wire:click="openEditForm({{ $activity->id }})" variant="ghost" size="sm">
-                        {{ __('Sửa') }}
-                    </flux:button>
-                    <flux:button wire:click="openRegistrationsModal({{ $activity->id }})" variant="ghost" size="sm">
-                        {{ __('Duyệt') }}
-                    </flux:button>
-                    <flux:button wire:click="openDeleteModal({{ $activity->id }})" variant="danger" size="sm">
-                        {{ __('Xóa') }}
-                    </flux:button>
+                    <div class="flex items-center gap-1">
+                        <flux:button wire:click="openViewModal({{ $activity->id }})" variant="ghost" size="sm" title="Xem">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </flux:button>
+                        <flux:button wire:click="openEditForm({{ $activity->id }})" variant="ghost" size="sm" title="Sửa">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </flux:button>
+                        <flux:button wire:click="openRegistrationsModal({{ $activity->id }})" variant="ghost" size="sm" title="Duyệt đăng ký">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </flux:button>
+                        <flux:button wire:click="openDeleteModal({{ $activity->id }})" variant="danger" size="sm" title="Xóa">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </flux:button>
+                    </div>
                 </div>
             </div>
         @empty
-            <div class="rounded border p-8 text-center text-neutral-500">
-                {{ __('Không tìm thấy hoạt động nào.') }}
+            <div class="premium-card p-12 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <p class="text-neutral-500 font-medium">{{ __('Không tìm thấy hoạt động nào.') }}</p>
             </div>
         @endforelse
     </div>

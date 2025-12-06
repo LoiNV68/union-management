@@ -4,35 +4,34 @@
 
 
 <section>
-    <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Đăng ký Hoạt động') }}</flux:heading>
-
-    </div>
-
-
-
-    <!-- Tabs: Available Activities / Registered Activities -->
-    <div class="mb-6 border-b border-neutral-200 dark:border-neutral-700">
-        <div class="flex gap-4">
-            <button class="px-4 py-2 border-b-2 border-primary-500 font-semibold text-primary-600 dark:text-primary-400">
-                {{ __('Hoạt động Khả dụng') }}
-            </button>
+    <!-- Header -->
+    <div class="premium-card p-6 mb-6">
+        <div class="flex items-center gap-4">
+            <div class="icon-gradient-green">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ __('Đăng ký Hoạt động') }}</h1>
+                <p class="text-neutral-600 dark:text-neutral-400 text-sm">Xem và đăng ký tham gia các hoạt động đoàn</p>
+            </div>
         </div>
     </div>
 
     <!-- Search and Filter -->
-    <div class="mb-6 flex items-end gap-4">
-        <div class="flex-1">
-            <flux:input wire:model.live.debounce.300ms="search" label=""
-                placeholder="Tìm kiếm theo tên hoạt động, địa điểm..." type="text" />
-        </div>
-        <div class="w-40">
-            <flux:select wire:model.live="perPage" label="">
-                <option value="5">5 / trang</option>
-                <option value="10">10 / trang</option>
-                <option value="15">15 / trang</option>
-                <option value="20">20 / trang</option>
-            </flux:select>
+    <div class="premium-card p-4 mb-6">
+        <div class="flex items-end gap-4">
+            <div class="flex-1">
+                <flux:input wire:model.live.debounce.300ms="search" placeholder="🔍 Tìm theo tên hoạt động, địa điểm..." type="text" />
+            </div>
+            <div class="w-32">
+                <flux:select wire:model.live="perPage">
+                    <option value="10">10 / trang</option>
+                    <option value="20">20 / trang</option>
+                    <option value="50">50 / trang</option>
+                </flux:select>
+            </div>
         </div>
     </div>
 
@@ -126,54 +125,62 @@
     @endif
 
     <!-- Available Activities List -->
-    <div class="mb-6" wire:poll.5s.visible>
-        <flux:heading size="md" class="mb-4">{{ __('Các hoạt động sắp tới') }}</flux:heading>
+    <div class="mb-8" wire:poll.5s.visible>
+        <div class="flex items-center gap-2 mb-4">
+            <div class="icon-gradient-orange">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{ __('Các hoạt động sắp tới') }}</h2>
+        </div>
 
-        <div class="grid gap-2">
+        <div class="space-y-4">
             @forelse ($activities as $activity)
-                <div class="flex items-center justify-between rounded border p-4">
-                    <div class="flex flex-1 gap-4">
+                <div class="premium-card p-5 hover:shadow-lg transition-shadow">
+                    <div class="flex items-start justify-between">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2">
-                                <span class="font-semibold text-lg">{{ $activity->activity_name }}</span>
-                            </div>
-                            @if ($activity->description)
-                                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                                    {{ Str::limit($activity->description, 100) }}
-                                </p>
-                            @endif
-                            <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
-                                <span>📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
-                                <span>📍 {{ $activity->location ?? 'Không xác định' }}</span>
-                                <span>👥 {{ $activity->approved_registrations_count }}
-                                    @if ($activity->max_participants)
-                                        / {{ $activity->max_participants }} ({{ $activity->registrations_count }} đăng ký)
-                                    @else
-                                        đã duyệt ({{ $activity->registrations_count }} đăng ký)
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-lg text-neutral-900 dark:text-neutral-100">{{ $activity->activity_name }}</span>
+                                    @if ($activity->description)
+                                        <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{{ Str::limit($activity->description, 100) }}</p>
                                     @endif
+                                </div>
+                            </div>
+                            <div class="mt-3 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+                                <span class="inline-flex items-center gap-1">📅 {{ $activity->start_date?->format('d/m/Y') }}</span>
+                                <span class="inline-flex items-center gap-1">📍 {{ $activity->location ?? 'Không xác định' }}</span>
+                                <span class="inline-flex items-center gap-1">
+                                    👥 <span class="font-medium text-green-600">{{ $activity->approved_registrations_count }}</span>
+                                    @if ($activity->max_participants)
+                                        / {{ $activity->max_participants }}
+                                    @endif
+                                    <span class="text-neutral-400">({{ $activity->registrations_count }} đăng ký)</span>
                                 </span>
                                 @if($activity->max_participants && $activity->approved_registrations_count >= $activity->max_participants)
-                                    <flux:badge variant="danger">{{ __('Đã đủ') }}</flux:badge>
+                                    <flux:badge variant="danger">🚫 {{ __('Đã đủ') }}</flux:badge>
                                 @endif
                             </div>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <flux:button wire:click="openActivityModal({{ $activity->id }})" variant="primary"
-                            size="sm">
+                        <flux:button wire:click="openActivityModal({{ $activity->id }})" variant="primary" size="sm">
                             {{ __('Xem & Đăng ký') }}
                         </flux:button>
                     </div>
                 </div>
             @empty
-                <div class="rounded border p-8 text-center text-neutral-500">
-                    {{ __('Không có hoạt động nào.') }}
+                <div class="premium-card p-12 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <p class="text-neutral-500 font-medium">{{ __('Không có hoạt động nào.') }}</p>
                 </div>
             @endforelse
         </div>
 
         <!-- Pagination -->
-        <div class="mt-4 space-y-2">
+        <div class="mt-4">
             {{ $activities->onEachSide(1)->links() }}
         </div>
     </div>
@@ -181,30 +188,35 @@
     <!-- Registered Activities Section -->
     @if ($registeredActivities->count() > 0)
         <div>
-            <flux:heading size="md" class="mb-4">{{ __('Hoạt động đã đăng ký') }}</flux:heading>
+            <div class="flex items-center gap-2 mb-4">
+                <div class="icon-gradient-blue">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{ __('Hoạt động đã đăng ký') }}</h2>
+            </div>
 
-            <div class="grid gap-2">
+            <div class="space-y-3">
                 @foreach ($registeredActivities as $registration)
                     @php
-                        $statusClass = match($registration->registration_status) {
-                            0 => 'border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-900/20',
-                            1 => 'border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20',
-                            2 => 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/20',
+                        $cardClass = match($registration->registration_status) {
+                            0 => 'border-l-4 border-l-yellow-500',
+                            1 => 'border-l-4 border-l-green-500',
+                            2 => 'border-l-4 border-l-red-500',
                             default => ''
                         };
                         $statusBadge = match($registration->registration_status) {
-                            0 => ['label' => __('Chờ duyệt'), 'variant' => 'warning'],
-                            1 => ['label' => __('Đã duyệt'), 'variant' => 'success'],
-                            2 => ['label' => __('Bị từ chối'), 'variant' => 'danger'],
-                            default => ['label' => __('Không xác định'), 'variant' => 'neutral']
+                            0 => ['label' => __('Chờ duyệt'), 'variant' => 'warning', 'icon' => '⏳'],
+                            1 => ['label' => __('Đã duyệt'), 'variant' => 'success', 'icon' => '✅'],
+                            2 => ['label' => __('Bị từ chối'), 'variant' => 'danger', 'icon' => '❌'],
+                            default => ['label' => __('Không xác định'), 'variant' => 'neutral', 'icon' => '❓']
                         };
                     @endphp
-                    <div class="flex items-center justify-between rounded border p-4 {{ $statusClass }}">
-                        <div class="flex flex-1 gap-4">
-                            <div class="flex-1 min-w-0">
+                    <div class="premium-card p-4 {{ $cardClass }}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
                                 <div class="flex items-center gap-2">
-                                    <span class="font-semibold text-lg">{{ $registration->activity->activity_name }}</span>
-                                    <flux:badge :variant="$statusBadge['variant']">{{ $statusBadge['label'] }}</flux:badge>
+                                    <span class="font-semibold text-neutral-900 dark:text-neutral-100">{{ $registration->activity->activity_name }}</span>
+                                    <flux:badge :variant="$statusBadge['variant']">{{ $statusBadge['icon'] }} {{ $statusBadge['label'] }}</flux:badge>
                                 </div>
                                 <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
                                     <span>📅 {{ $registration->activity->start_date?->format('d/m/Y') }}</span>
@@ -212,14 +224,14 @@
                                     <span>🕒 {{ __('Đăng ký lúc: ') }} {{ $registration->registration_time }}</span>
                                 </div>
                             </div>
+                            @if ($registration->registration_status !== 2)
+                                <flux:button
+                                    onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký?') }}')) { event.stopImmediatePropagation(); }"
+                                    wire:click="cancelRegistration({{ $registration->id }})" variant="danger" size="sm">
+                                    {{ __('Hủy đăng ký') }}
+                                </flux:button>
+                            @endif
                         </div>
-                        @if ($registration->registration_status !== 2)
-                            <flux:button
-                                onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký?') }}')) { event.stopImmediatePropagation(); }"
-                                wire:click="cancelRegistration({{ $registration->id }})" variant="danger" size="sm">
-                                {{ __('Hủy đăng ký') }}
-                            </flux:button>
-                        @endif
                     </div>
                 @endforeach
             </div>

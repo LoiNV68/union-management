@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\MemberTransaction;
 use App\Models\Member;
 use App\Models\Notification;
+use App\Events\TransactionUpdated;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -119,6 +120,7 @@ class ManageTransactions extends Component
         if ($this->editingId) {
             Transaction::findOrFail($this->editingId)->update($data);
             $this->dispatch('transaction-updated');
+            TransactionUpdated::dispatch(Transaction::find($this->editingId));
         } else {
             $transaction = Transaction::create($data);
 
@@ -133,6 +135,7 @@ class ManageTransactions extends Component
             }
 
             $this->dispatch('transaction-created');
+            TransactionUpdated::dispatch($transaction);
         }
 
         $this->closeCreateForm();
@@ -167,19 +170,23 @@ class ManageTransactions extends Component
         ]);
 
         $this->dispatch('payment-confirmed');
+        TransactionUpdated::dispatch($memberTransaction->transaction);
     }
 
     public function closeTransaction(int $id): void
     {
         Transaction::findOrFail($id)->update(['status' => 1]);
         $this->dispatch('transaction-closed');
+        TransactionUpdated::dispatch(Transaction::find($id));
     }
 
     public function deleteTransaction(): void
     {
         if ($this->deletingId) {
-            Transaction::findOrFail($this->deletingId)->delete();
+            $transaction = Transaction::findOrFail($this->deletingId);
+            $transaction->delete();
             $this->dispatch('transaction-deleted');
+            TransactionUpdated::dispatch($transaction); // Although deleted, we might want to notify to remove from list
             $this->closeDeleteModal();
         }
     }
@@ -218,5 +225,16 @@ class ManageTransactions extends Component
                 ])
                 ->find($this->viewingId) : null,
         ]);
+    }
+    public function getListeners(): array
+    {
+        return [
+            'echo:transactions,transaction.updated' => '$refresh',
+            'transaction-created' => '$refresh',
+            'transaction-updated' => '$refresh',
+            'transaction-deleted' => '$refresh',
+            'transaction-closed' => '$refresh',
+            'payment-confirmed' => '$refresh',
+        ];
     }
 }

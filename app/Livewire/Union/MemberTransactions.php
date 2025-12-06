@@ -4,6 +4,7 @@ namespace App\Livewire\Union;
 
 use App\Models\MemberTransaction;
 use App\Models\Member;
+use App\Events\TransactionUpdated;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -108,6 +109,7 @@ class MemberTransactions extends Component
 
         $this->dispatch('payment-marked');
         $this->dispatch('toast', message: 'Thanh toán thành công (demo)!', type: 'success');
+        TransactionUpdated::dispatch($memberTransaction->transaction);
     }
 
     public function markAsPaid(): void
@@ -138,6 +140,7 @@ class MemberTransactions extends Component
 
         $this->dispatch('payment-marked');
         $this->closeQrModal();
+        TransactionUpdated::dispatch($memberTransaction->transaction);
     }
 
     public function render()
@@ -160,5 +163,12 @@ class MemberTransactions extends Component
                 ->withQueryString() : collect(),
             'viewingTransaction' => $this->viewingId ? MemberTransaction::with(['transaction'])->find($this->viewingId) : null,
         ]);
+    }
+    public function getListeners(): array
+    {
+        return [
+            'echo:transactions,transaction.updated' => '$refresh',
+            'payment-marked' => '$refresh',
+        ];
     }
 }

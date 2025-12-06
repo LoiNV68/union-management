@@ -8,9 +8,17 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Prevent flash of black screen during Livewire navigate */
+html, body {
+    background-color: #fafafa;
+}
+.dark html, .dark body, html.dark, html.dark body {
+    background-color: #171717;
+}
+
 @theme {
-    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    --font-sans: "Inter", "Instrument Sans", ui-sans-serif, system-ui,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 
     --color-zinc-50: #fafafa;
@@ -48,6 +56,357 @@
     }
 }
 
+/* ========================================
+   PREMIUM DESIGN SYSTEM
+   ======================================== */
+
+/* Gradient Backgrounds */
+.gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.gradient-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.gradient-orange {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.gradient-purple {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.gradient-dark {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+/* Glassmorphism Effects */
+.glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dark .glass-card {
+    background: rgba(30, 30, 40, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Premium Card Styles */
+.premium-card {
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease;
+}
+
+.dark .premium-card {
+    background: rgb(30, 30, 35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.premium-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Stat Cards with Gradient Icons */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: currentColor;
+    opacity: 0.05;
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover::before {
+    transform: translate(20%, -20%) scale(1.2);
+}
+
+/* Icon Containers with Gradients */
+.icon-gradient-blue {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.icon-gradient-green {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+}
+
+.icon-gradient-purple {
+    background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.icon-gradient-orange {
+    background: linear-gradient(135deg, #f97316 0%, #eab308 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+}
+
+.icon-gradient-pink {
+    background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+.icon-gradient-teal {
+    background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+}
+
+/* Animated Gradient Text */
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% center;
+    }
+    50% {
+        background-position: 100% center;
+    }
+    100% {
+        background-position: 0% center;
+    }
+}
+
+/* Premium Table Styles */
+.premium-table {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .premium-table {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.premium-table thead {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.dark .premium-table thead {
+    background: linear-gradient(135deg, #1e1e24 0%, #252530 100%);
+}
+
+.premium-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.premium-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.dark .premium-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+/* Premium Modal Styles */
+.premium-modal {
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    animation: modal-enter 0.3s ease-out;
+}
+
+.dark .premium-modal {
+    background: rgb(24, 24, 28);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+@keyframes modal-enter {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Backdrop Overlay */
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Progress Rings */
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring circle {
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+/* Animated Badges */
+.badge-pulse {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Score Badge Styles */
+.score-excellent {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+}
+
+.score-good {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+}
+
+.score-average {
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+    color: white;
+}
+
+.score-below {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+/* Button Enhancements */
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45);
+}
+
+/* Floating Action Elements */
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Shimmer Effect for Loading */
+.shimmer {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Glow Effects */
+.glow-blue {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+.glow-green {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.glow-purple {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+/* ========================================
+   FLUX UI OVERRIDES
+   ======================================== */
+
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }
@@ -62,42 +421,72 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
-/* Ẩn scrollbar mặc định */
+/* ========================================
+   SCROLLBAR STYLES
+   ======================================== */
+
 .scrollbar-auto-hide::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-/* Khi hover, hiện scrollbar mỏng */
 .scrollbar-auto-hide:hover::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
 
-/* Scrollbar track */
 .scrollbar-auto-hide::-webkit-scrollbar-track {
     background: transparent;
 }
 
-/* Scrollbar thumb */
 .scrollbar-auto-hide::-webkit-scrollbar-thumb {
     background-color: rgba(100, 100, 100, 0.5);
     border-radius: 3px;
 }
 
-/* Firefox */
 .scrollbar-auto-hide {
-    scrollbar-width: none; /* mặc định ẩn */
+    scrollbar-width: none;
 }
 
 .scrollbar-auto-hide:hover {
-    scrollbar-width: thin; /* hover hiện scrollbar mỏng */
+    scrollbar-width: thin;
+}
+
+/* Premium Scrollbar */
+.scrollbar-premium::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.scrollbar-premium::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.scrollbar-premium::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+.scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
 }
 
 /* Flatpickr Z-Index Fix */
 .flatpickr-calendar {
     z-index: 9999 !important;
+}
+
+/* ========================================
+   RESPONSIVE UTILITIES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .premium-card:hover {
+        transform: none;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
 }

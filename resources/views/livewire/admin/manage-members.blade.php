@@ -232,13 +232,13 @@
 
                             {{-- MÃ SV — sticky left --}}
                             <td
-                                class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-14 lg:bg-white dark:bg-neutral-900 z-30 shadow-right">
+                                class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-14 lg:bg-white dark:bg-neutral-900  shadow-right">
                                 {{ $member->user?->student_code ?? 'Chưa cập nhật' }}
                             </td>
 
                             {{-- HỌ VÀ TÊN — sticky left (đứng sau MÃ SV) --}}
                             <td
-                                class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-[173px] lg:bg-white dark:bg-neutral-900 z-20 shadow-right">
+                                class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap lg:sticky lg:left-[173px] lg:bg-white dark:bg-neutral-900  shadow-right">
                                 {{ $member->full_name }}
                             </td>
 
@@ -280,7 +280,7 @@
 
                             {{-- THAO TÁC — sticky right --}}
                             <td
-                                class="px-4 py-3 text-sm lg:sticky lg:right-0 lg:bg-white dark:bg-neutral-900 z-20 shadow-left">
+                                class="px-4 py-3 text-sm lg:sticky lg:right-0 lg:bg-white dark:bg-neutral-900 shadow-left">
                                 <div class="flex items-center justify-end gap-2 whitespace-nowrap">
                                     <flux:button wire:click="openViewModal({{ $member->id }})" variant="ghost" size="sm">
                                         {{ __('Xem') }}
