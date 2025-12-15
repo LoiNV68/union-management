@@ -32,9 +32,10 @@ RUN echo "clear_env = no" >> /usr/local/etc/php-fpm.d/www.conf
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Configure Nginx (Overwrite default site)
-COPY docker/nginx/default.conf /etc/nginx/sites-available/default
-RUN rm -f /etc/nginx/sites-enabled/default && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Configure Nginx (use template for dynamic PORT)
+RUN mkdir -p /etc/nginx/templates
+COPY docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
 
 # Configure Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

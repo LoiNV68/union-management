@@ -3,6 +3,13 @@ set -e
 
 echo "Starting application..."
 
+# Set default PORT if not set
+export PORT=${PORT:-80}
+
+# Generate Nginx config from template
+echo "Configuring Nginx for port $PORT..."
+envsubst '${PORT}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf
+
 # Run migrations (skip if fails)
 php artisan migrate --force || echo "Migration skipped or failed"
 
