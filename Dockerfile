@@ -26,6 +26,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath opcache gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Remove default Nginx config
+RUN rm -rf /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
+
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
