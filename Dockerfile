@@ -14,31 +14,19 @@ COPY . .
 COPY --from=composer_deps /app/vendor/ ./vendor/
 RUN npm run build
 
-# Stage 3 - Backend (Laravel + PHP + Composer + Nginx + Supervisor)
-FROM php:8.4-fpm
+# Stage 3 - Backend (Laravel + PHP)
+FROM php:8.4-cli
 
-# Install system dependencies and Nginx/Supervisor
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git curl unzip libpq-dev libonig-dev libzip-dev zip \
-    nginx supervisor \
     libpng-dev libjpeg-dev libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath opcache gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configure PHP-FPM to not clear env vars
-RUN echo "clear_env = no" >> /usr/local/etc/php-fpm.d/www.conf
-
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Configure Nginx (use template for dynamic PORT)
-RUN mkdir -p /etc/nginx/templates
-COPY docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
-RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
-
-# Configure Supervisor
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 WORKDIR /var/www
 
@@ -48,21 +36,18 @@ COPY . .
 # Copy vendor dependencies from composer_deps
 COPY --from=composer_deps /app/vendor/ ./vendor/
 
-# Copy built frontend PROPERLY
+# Copy built frontend
 COPY --from=frontend /app/public/build ./public/build
 
-# Final composer dump-autoload (to optimize and generate classes map)
+# Final composer dump-autoload
 RUN composer dump-autoload --optimize
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Copy and set entrypoint (convert Windows line endings)
+# Copy and set entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
-
-# Expose port
-EXPOSE 80
 
 # Use entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
