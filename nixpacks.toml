@@ -1,6 +1,14 @@
-# nixpacks.toml
+# nixpacks.toml - Laravel deployment configuration for Railway
+
 [phases.setup]
-nixPkgs = ['...', 'php84']   # <-- Cái này bắt buộc phải có
+nixPkgs = ['php84', 'php84Extensions.pdo_mysql', 'php84Extensions.mbstring', 'php84Extensions.zip', 'php84Extensions.bcmath', 'php84Extensions.gd']
+
+[phases.install]
+cmds = [
+    'composer install --no-dev --optimize-autoloader',
+    'npm install',
+    'npm run build'
+]
 
 [start]
-cmd = "npm start"
+cmd = "php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
