@@ -1,22 +1,46 @@
-FROM serversideup/php:8.4-fpm-nginx
+# Stage 1 - Build Frontend (Vite)
+FROM node:20 AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-# Switch to root to install Node.js
-USER root
+# Stage 2 - Backend (Laravel + PHP + Composer + Nginx + Supervisor)
+FROM php:8.4-fpm
 
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install system dependencies and Nginx/Supervisor
+RUN apt-get update && apt-get install -y \
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    nginx supervisor \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath opcache gd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Switch back to the default user
-USER www-data
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy application files
-COPY --chown=www-data:www-data . /var/www/html
+# Configure Nginx & Supervisor
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+WORKDIR /var/www
+
+# Copy app files
+COPY . .
+
+# Copy built frontend from Stage 1
+COPY --from=frontend /app/public/build ./public/build
 
 # Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+RUN composer install --no-dev --optimize-autoloader
 
-# Install Node.js dependencies and build assets
-RUN npm install && npm run build && rm -rf node_modules
+# Set permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Expose port
+EXPOSE 80
+
+# Start Supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
