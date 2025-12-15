@@ -26,14 +26,14 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath opcache gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Remove default Nginx config
-RUN rm -rf /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
-
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Configure Nginx & Supervisor
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Configure Nginx (Overwrite default site)
+COPY docker/nginx/default.conf /etc/nginx/sites-available/default
+RUN rm -f /etc/nginx/sites-enabled/default && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Configure Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 WORKDIR /var/www
