@@ -56,8 +56,12 @@ RUN composer dump-autoload --optimize
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
+# Copy and set entrypoint
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Expose port
 EXPOSE 80
 
-# Start Supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Use entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
