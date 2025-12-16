@@ -1,30 +1,21 @@
 #!/bin/bash
 
-echo "Bắt đầu chạy Migrations và Seeding..."
-
-# Chạy migrations
+# Kiểm tra kết nối và chạy Migration
 php artisan migrate --force
 if [ $? -ne 0 ]; then
-    echo "🚨 Migration thất bại! Dừng lại."
-    # Dừng script nếu migration thất bại để kiểm tra log lỗi
+    echo "🚨 LỖI QUAN TRỌNG: Migration thất bại. Kiểm tra biến môi trường DB."
     exit 1
 fi
 
-# Chạy seeder (chỉ chạy nếu migration thành công)
+# Chạy Seeder
 php artisan db:seed --force
 if [ $? -ne 0 ]; then
-    echo "🚨 Seeding thất bại! Dừng lại."
-    # Dừng script nếu seeding thất bại
+    echo "🚨 LỖI QUAN TRỌNG: Seeding thất bại. Kiểm tra Seeder và kết nối DB."
     exit 1
 fi
 
-echo "Hoàn tất Database. Tiến hành Cache cấu hình..."
-
-# Dọn dẹp và cache cấu hình
+# Chạy các lệnh khác và khởi động server
 php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
-
-echo "Khởi động Server Laravel..."
-# Khởi động server (lệnh này sẽ chạy mãi mãi)
 php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
