@@ -37,13 +37,20 @@ class FortifyServiceProvider extends ServiceProvider
                 ->where('student_code', $credentials['student_code'] ?? null)
                 ->first();
 
-            if (! $user) {
+            if (!$user) {
                 return null; // keep generic message for unknown user
             }
 
             if ($user->is_locked ?? false) {
                 throw ValidationException::withMessages([
-                    Fortify::username() => __('Your account is locked. Please contact support.'),
+                    Fortify::username() => __('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.'),
+                ]);
+            }
+
+            // Check if user has member information (except for admins)
+            if ($user->role === 0 && !$user->member) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => __('Bạn chưa có thông tin thành viên, chưa thể đăng nhập. Vui lòng liên hệ quản trị viên.'),
                 ]);
             }
 

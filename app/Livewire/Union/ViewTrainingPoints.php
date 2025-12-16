@@ -35,7 +35,7 @@ class ViewTrainingPoints extends Component
         $member = Member::where('user_id', $user->id)->first();
 
         if (!$member) {
-            abort(403, 'Bạn không phải là thành viên.');
+            abort(403, 'Bạn không có thông tin thành viên.');
         }
 
         $trainingPointsQuery = TrainingPoint::query()

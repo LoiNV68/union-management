@@ -147,7 +147,9 @@ class MemberTransactions extends Component
     {
         $user = Auth::user();
         $member = Member::where('user_id', $user->id)->first();
-
+        if (!$member) {
+            abort(403, 'Bạn không có thông tin thành viên.');
+        }
         return view('livewire.union.member-transactions', [
             'memberTransactions' => $member ? MemberTransaction::query()
                 ->where('member_id', $member->id)

@@ -66,6 +66,7 @@
                             <div>
                                 <x-date-picker :disabled="$modalMode === 'view'" wire:model="birth_date"
                                     :label="__('Ngày sinh')" required />
+                                <flux:error name="birth_date" />
                             </div>
                             <div>
                                 <flux:input :disabled="$modalMode === 'view'" wire:model="phone_number"
@@ -81,6 +82,7 @@
                             <div>
                                 <x-date-picker :disabled="$modalMode === 'view'" wire:model="join_date"
                                     :label="__('Ngày tham gia')" />
+                                <flux:error name="join_date" />
                             </div>
 
                             <div>
@@ -98,6 +100,7 @@
                                         <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
                                     @endforeach
                                 </flux:select>
+                                <flux:error name="branch_id" />
                             </div>
                             <div>
                                 <flux:select :disabled="$modalMode === 'view'" wire:model="user_id"
@@ -107,6 +110,7 @@
                                         <option value="{{ $user->id }}">{{ $user->student_code }}</option>
                                     @endforeach
                                 </flux:select>
+                                <flux:error name="user_id" />
                             </div>
                             <div class="md:col-span-2">
                                 <flux:textarea :disabled="$modalMode === 'view'" wire:model="address" :label="__('Địa chỉ')"

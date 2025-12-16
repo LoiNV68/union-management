@@ -83,7 +83,7 @@ class RegisterActivities extends Component
     $member = Member::where('user_id', $user->id)->first();
 
     if (!$member) {
-      $this->addError('register', 'Bạn không phải là thành viên. Vui lòng liên hệ quản trị viên.');
+      $this->addError('register', 'Bạn không có thông tin thành viên. Vui lòng liên hệ quản trị viên.');
       return;
     }
 
@@ -144,7 +144,9 @@ class RegisterActivities extends Component
   {
     $user = Auth::user();
     $member = Member::where('user_id', $user->id)->first();
-
+    if (!$member) {
+      abort(403, 'Bạn không có thông tin thành viên.');
+    }
     return view('livewire.union.register-activities', [
       'activities' => Activity::query()
         ->withCount('registrations')
