@@ -67,6 +67,7 @@
                     </div>
                     <div>
                         <x-date-picker wire:model="due_date" :label="__('Hạn thanh toán')" />
+                        <flux:error name="due_date" />
                     </div>
 
                     <div class="flex items-center justify-end gap-4 pt-4">

@@ -39,7 +39,7 @@ new class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('members', 'email')->ignore($user->member->id)],
-            'birth_date' => ['nullable', 'date'],
+            'birth_date' => ['nullable', 'date', 'before:today'],
             'gender' => ['nullable', 'in:0,1'],
             'phone_number' => ['nullable', 'string', 'max:20'],
             'address' => ['nullable', 'string', 'max:255'], // Thêm dòng này
@@ -106,16 +106,14 @@ new class extends Component {
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-3 mt-4">
-                    <flux:input wire:model="birth_date" :label="__('Ngày sinh')" type="date" />
-
+                    <x-date-picker wire:model="birth_date" :label="__('Ngày sinh')" />
                     <flux:select wire:model="gender" :label="__('Giới tính')">
                         <option value="">-- {{ __('Select') }} --</option>
                         <option value="0">{{ __('Nam') }}</option>
                         <option value="1">{{ __('Nữ') }}</option>
                     </flux:select>
 
-                    <flux:input wire:model="phone_number" :label="__('Số điện thoại')" type="text"
-                        autocomplete="tel" />
+                    <flux:input wire:model="phone_number" :label="__('Số điện thoại')" type="text" autocomplete="tel" />
                 </div>
 
 
@@ -124,8 +122,7 @@ new class extends Component {
                         <flux:text class="mt-4">
                             {{ __('Your email address is unverified.') }}
 
-                            <flux:link class="text-sm cursor-pointer"
-                                wire:click.prevent="resendVerificationNotification">
+                            <flux:link class="text-sm cursor-pointer" wire:click.prevent="resendVerificationNotification">
                                 {{ __('Click here to re-send the verification email.') }}
                             </flux:link>
                         </flux:text>

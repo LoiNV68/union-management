@@ -1,7 +1,6 @@
 @props(['disabled' => false])
 
-<div
-    x-data="{
+<div x-data="{
         value: @entangle($attributes->wire('model')),
         instance: null,
         init() {
@@ -31,14 +30,7 @@
                 }
             });
         }
-    }"
-    wire:ignore
->
-    <flux:input
-        x-ref="input"
-        type="text"
-        {{ $attributes->whereDoesntStartWith('wire:model') }}
-        :disabled="$disabled"
-        placeholder="dd/mm/yyyy"
-    />
+    }" wire:ignore>
+    <flux:input x-ref="input" type="text" {{ $attributes->whereDoesntStartWith('wire:model') }} :disabled="$disabled"
+        placeholder="dd/mm/yyyy" :invalid="$errors->has($attributes->wire('model')->value())" />
 </div>

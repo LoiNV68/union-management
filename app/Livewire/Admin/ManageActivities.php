@@ -41,6 +41,18 @@ class ManageActivities extends Component
     public string $notification_title = '';
     public string $notification_content = '';
 
+    protected $messages = [
+        'activity_name.required' => 'Vui lòng nhập tên hoạt động.',
+        'activity_name.unique' => 'Tên hoạt động này đã tồn tại.',
+        'start_date.required' => 'Vui lòng chọn ngày bắt đầu.',
+        'start_date.after_or_equal' => 'Ngày bắt đầu phải từ ngày hôm nay trở đi.',
+        'end_date.required' => 'Vui lòng chọn ngày kết thúc.',
+        'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+        'max_participants.min' => 'Số lượng người tham gia phải ít nhất là 1.',
+        'notification_title.required' => 'Vui lòng nhập tiêu đề thông báo.',
+        'notification_content.required' => 'Vui lòng nhập nội dung thông báo.',
+    ];
+
     public function mount(): void
     {
         abort_unless(in_array(Auth::user()?->role, [1, 2]), 403);
@@ -176,9 +188,9 @@ class ManageActivities extends Component
     {
         $rules = [
             'activity_name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'description' => ['nullable', 'string', 'required'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'end_date' => ['required', 'date', 'after:start_date'],
             'location' => ['nullable', 'string', 'max:255'],
             'type' => ['nullable'],
             'max_participants' => ['nullable', 'integer', 'min:1'],

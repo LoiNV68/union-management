@@ -63,10 +63,12 @@
                         <div>
                              <x-date-picker wire:model="start_date"
                                     :label="__('Ngày bắt đầu')" />
+                            <flux:error name="start_date" />
                         </div>
                         <div>
                             <x-date-picker wire:model="end_date"
                                     :label="__('Ngày kết thúc')" />
+                            <flux:error name="end_date" />
                         </div>
                     </div>
                     <div>
