@@ -45,7 +45,7 @@
 
     <!-- User List -->
     <div class="premium-card p-6">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div class="flex items-center gap-2">
                 <div class="icon-gradient-blue">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,11 +54,11 @@
                 </div>
                 <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">Danh sách người dùng</h2>
             </div>
-            <div class="flex items-end gap-3">
-                <div class="w-64">
+            <div class="flex flex-col sm:flex-row sm:items-end gap-3 w-full md:w-auto">
+                <div class="w-full sm:w-64">
                     <flux:input wire:model.live.debounce.300ms="search" placeholder="🔍 Tìm theo mã sinh viên..." type="text" />
                 </div>
-                <div class="w-32">
+                <div class="w-full sm:w-32">
                     <flux:select wire:model.live="perPage">
                         <option value="10">10 / trang</option>
                         <option value="20">20 / trang</option>
@@ -71,13 +71,13 @@
         <div class="space-y-3">
             @php $usersCollection = $users ?? collect(); @endphp
             @forelse ($usersCollection as $u)
-                <div wire:key="user-{{ $u->id }}" class="flex items-center justify-between p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl {{ $u->role === 2 ? 'gradient-primary' : ($u->role === 1 ? 'bg-blue-500' : 'bg-neutral-400') }} flex items-center justify-center text-white font-bold text-sm">
+                <div wire:key="user-{{ $u->id }}" class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <div class="w-10 h-10 rounded-xl {{ $u->role === 2 ? 'gradient-primary' : ($u->role === 1 ? 'bg-blue-500' : 'bg-neutral-400') }} flex items-center justify-center text-white font-bold text-sm shrink-0">
                             {{ $u->role === 2 ? '👑' : ($u->role === 1 ? '🛡️' : substr($u->student_code, 0, 2)) }}
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 flex-wrap">
                                 <span class="font-semibold text-neutral-900 dark:text-neutral-100">{{ $u->student_code }}</span>
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
                                     {{ $u->role === 2 ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : '' }}
@@ -101,25 +101,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-36">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+                        <div class="w-full sm:w-36">
                             <flux:select wire:change="setRole({{ $u->id }}, $event.target.value)">
                                 <option value="0" @selected($u->role === 0)>👤 User</option>
                                 <option value="1" @selected($u->role === 1)>🛡️ Admin</option>
                                 <option value="2" @selected($u->role === 2)>👑 Super Admin</option>
                             </flux:select>
                         </div>
-                        <flux:button wire:click="openToggleLockModal({{ $u->id }}, {{ $u->is_locked ? 'true' : 'false' }})" 
-                            variant="{{ $u->is_locked ? 'primary' : 'ghost' }}" size="sm">
-                            @if($u->is_locked)
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
-                            @else
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                            @endif
-                        </flux:button>
-                        <flux:button variant="danger" size="sm" wire:click="openDeleteModal({{ $u->id }})">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </flux:button>
+                        <div class="flex items-center gap-2 justify-end">
+                            <flux:button wire:click="openToggleLockModal({{ $u->id }}, {{ $u->is_locked ? 'true' : 'false' }})" 
+                                variant="{{ $u->is_locked ? 'primary' : 'ghost' }}" size="sm">
+                                @if($u->is_locked)
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
+                                @else
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                @endif
+                            </flux:button>
+                            <flux:button variant="danger" size="sm" wire:click="openDeleteModal({{ $u->id }})">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </flux:button>
+                        </div>
                     </div>
                 </div>
             @empty
