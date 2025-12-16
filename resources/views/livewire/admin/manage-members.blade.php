@@ -96,9 +96,7 @@
                                 <flux:select :disabled="$modalMode === 'view'" wire:model="branch_id"
                                     :label="__('Chi đoàn')">
                                     <option value="">-- Chọn chi đoàn --</option>
-                                    @foreach ($this->branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
-                                    @endforeach
+                                    
                                 </flux:select>
                                 <flux:error name="branch_id" />
                             </div>
@@ -106,9 +104,7 @@
                                 <flux:select :disabled="$modalMode === 'view'" wire:model="user_id"
                                     :label="__('Tài khoản')">
                                     <option value="">-- Chọn tài khoản --</option>
-                                    @foreach ($this->users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->student_code }}</option>
-                                    @endforeach
+                                   
                                 </flux:select>
                                 <flux:error name="user_id" />
                             </div>
