@@ -18,16 +18,16 @@ class MemberFactory extends Factory
      */
     public function definition(): array
     {
-        $fullName = $this->faker->name();
+        $fullName = fake()->name();
 
         return [
             'full_name' => $fullName,
-            'birth_date' => $this->faker->dateTimeBetween('-26 years', '-18 years')->format('Y-m-d'),
-            'gender' => $this->faker->randomElement([0, 1]),
-            'address' => $this->faker->address(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'phone_number' => $this->faker->numerify('0#########'),
-            'join_date' => $this->faker->date('Y-m-d'),
+            'birth_date' => fake()->dateTimeBetween('-26 years', '-18 years')->format('Y-m-d'),
+            'gender' => fake()->randomElement([0, 1]),
+            'address' => fake()->address(),
+            'email' => fake()->unique()->safeEmail(),
+            'phone_number' => fake()->numerify('0#########'),
+            'join_date' => fake()->date('Y-m-d'),
             'status' => 1,
             'user_id' => null,
             'branch_id' => null,

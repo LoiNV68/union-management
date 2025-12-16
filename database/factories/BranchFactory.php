@@ -17,14 +17,13 @@ class BranchFactory extends Factory
      */
     public function definition(): array
     {
-        // Tạo phần đầu D11 / D12 / D13 ngẫu nhiên
-        $prefix = $this->faker->randomElement(['D11', 'D12', 'D13']);
+        // Tạo phần đầu D11 / D12 / D13 ngẫu nhiên - dùng fake() thay vì $this->faker
+        $prefix = fake()->randomElement(['D11', 'D12', 'D13']);
         // Sinh hai phần số ngẫu nhiên từ 01–99
-        $part1 = str_pad($this->faker->numberBetween(1, 99), 2, '0', STR_PAD_LEFT);
-        $part2 = str_pad($this->faker->numberBetween(1, 99), 2, '0', STR_PAD_LEFT);
+        $part1 = str_pad(fake()->numberBetween(1, 99), 2, '0', STR_PAD_LEFT);
+        $part2 = str_pad(fake()->numberBetween(1, 99), 2, '0', STR_PAD_LEFT);
         return [
             'branch_name' => "{$prefix}.{$part1}.{$part2}",
-            // 'description' => $this->faker->optional()->sentence(),
             'description' => "Chi đoàn của đoàn viên",
             'secretary' => null,
         ];
