@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\Notification;
 use App\Events\TransactionUpdated;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -150,7 +151,7 @@ class ManageTransactions extends Component
             if ($memberTransaction->member->user_id) {
                 Notification::create([
                     'title' => 'Thông báo thu tiền: ' . $transaction->title,
-                    'content' => 'Bạn có khoản thu mới cần thanh toán. Số tiền: ' . number_format($transaction->amount, 0, ',', '.') . ' VNĐ',
+                    'content' => 'Bạn có khoản thu mới cần thanh toán. Số tiền: ' . number_format((float) $transaction->amount, 0, ',', '.') . ' VNĐ',
                     'date_sent' => now(),
                     'sender_id' => Auth::id(),
                     'receiver_id' => $memberTransaction->member->user_id,
@@ -189,6 +190,15 @@ class ManageTransactions extends Component
             TransactionUpdated::dispatch($transaction); // Although deleted, we might want to notify to remove from list
             $this->closeDeleteModal();
         }
+    }
+
+    #[Computed]
+    public function typeOptions()
+    {
+        return [
+            ['value' => 0, 'label' => 'Thu'],
+            ['value' => 1, 'label' => 'Chi'],
+        ];
     }
 
     private function resetForm(): void

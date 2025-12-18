@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Semester;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -116,6 +117,16 @@ class ManageSemesters extends Component
             $this->dispatch('semester-deleted');
             $this->closeDeleteModal();
         }
+    }
+
+    #[Computed]
+    public function semesterOptions()
+    {
+        return [
+            ['value' => 1, 'label' => '📚 Học kỳ 1'],
+            ['value' => 2, 'label' => '📖 Học kỳ 2'],
+            ['value' => 3, 'label' => '☀️ Học kỳ 3 (Hè)'],
+        ];
     }
 
     private function resetForm(): void

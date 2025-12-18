@@ -26,29 +26,28 @@
                 <flux:input wire:model.live.debounce.300ms="search" placeholder="🔍 Tìm kiếm theo tên hoặc mã SV..." type="text" />
             </div>
             <div class="w-48">
-                <flux:select wire:model.live="filterSemesterId">
-                    <option value="">📅 Tất cả học kỳ</option>
-                    @foreach ($semesters as $semester)
-                        <option value="{{ $semester->id }}">
-                            {{ $semester->school_year }} - HK{{ $semester->semester }}
-                        </option>
-                    @endforeach
-                </flux:select>
+                <x-searchable-select
+                    wire:model.live="filterSemesterId"
+                    placeholder="📅 Tất cả học kỳ"
+                    :items="$this->semesterOptions"
+                />
             </div>
             <div class="w-48">
-                <flux:select wire:model.live="filterBranchId">
-                    <option value="">🏛️ Tất cả chi hội</option>
-                    @foreach ($branches as $branch)
-                        <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
-                    @endforeach
-                </flux:select>
+                <x-searchable-select
+                    wire:model.live="filterBranchId"
+                    placeholder="🏛️ Tất cả chi hội"
+                    :items="$this->branchOptions"
+                />
             </div>
             <div class="w-32">
-                <flux:select wire:model.live="perPage">
-                    <option value="10">10 / trang</option>
-                    <option value="20">20 / trang</option>
-                    <option value="50">50 / trang</option>
-                </flux:select>
+                <x-searchable-select
+                    wire:model.live="perPage"
+                    :items="[
+                        ['value' => '10', 'label' => '10 / trang'],
+                        ['value' => '20', 'label' => '20 / trang'],
+                        ['value' => '50', 'label' => '50 / trang'],
+                    ]"
+                />
             </div>
         </div>
     </div>
@@ -74,23 +73,23 @@
                 </div>
 
                 <form wire:submit="save" class="space-y-5">
-                    <flux:select wire:model="member_id" label="Thành viên" required :disabled="$editingId ? true : false">
-                        <option value="">Chọn thành viên</option>
-                        @foreach ($members as $member)
-                            <option value="{{ $member->id }}">
-                                {{ $member->full_name }} - {{ $member->user?->student_code }}
-                            </option>
-                        @endforeach
-                    </flux:select>
+                    <x-searchable-select
+                        wire:model="member_id"
+                        label="Thành viên"
+                        required
+                        :disabled="$editingId ? true : false"
+                        placeholder="Chọn thành viên"
+                        :items="$this->memberOptions"
+                    />
 
-                    <flux:select wire:model="semester_id" label="Học kỳ" required :disabled="$editingId ? true : false">
-                        <option value="">Chọn học kỳ</option>
-                        @foreach ($semesters as $semester)
-                            <option value="{{ $semester->id }}">
-                                {{ $semester->school_year }} - Học kỳ {{ $semester->semester }}
-                            </option>
-                        @endforeach
-                    </flux:select>
+                    <x-searchable-select
+                        wire:model="semester_id"
+                        label="Học kỳ"
+                        required
+                        :disabled="$editingId ? true : false"
+                        placeholder="Chọn học kỳ"
+                        :items="$this->semesterOptions"
+                    />
 
                     <flux:input wire:model="point" label="Điểm" type="number" step="0.01" min="0" max="100" required placeholder="0.00" />
 

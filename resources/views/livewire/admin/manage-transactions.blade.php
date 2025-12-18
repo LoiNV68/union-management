@@ -59,10 +59,12 @@
                                 required />
                         </div>
                         <div>
-                            <flux:select wire:model="type" :label="__('Loại')" required>
-                                <option value="0">Thu</option>
-                                <option value="1">Chi</option>
-                            </flux:select>
+                            <x-searchable-select 
+                                wire:model="type" 
+                                :label="__('Loại')" 
+                                :items="$this->typeOptions" 
+                                required 
+                            />
                         </div>
                     </div>
                     <div>

@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Semester;
 use App\Events\TrainingPointUpdated;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -158,6 +159,42 @@ class ManageTrainingPoints extends Component
         }
     }
 
+    #[Computed]
+    public function memberOptions()
+    {
+        return Member::with('user')
+            ->where('status', 1)
+            ->orderBy('full_name')
+            ->get()
+            ->map(fn($m) => [
+                'value' => $m->id,
+                'label' => $m->full_name . ' - ' . ($m->user?->student_code ?? '')
+            ])->toArray();
+    }
+
+    #[Computed]
+    public function semesterOptions()
+    {
+        return Semester::orderByDesc('school_year')
+            ->orderByDesc('semester')
+            ->get()
+            ->map(fn($s) => [
+                'value' => $s->id,
+                'label' => $s->school_year . ' - Học kỳ ' . $s->semester
+            ])->toArray();
+    }
+
+    #[Computed]
+    public function branchOptions()
+    {
+        return \App\Models\Branch::orderBy('branch_name')
+            ->get()
+            ->map(fn($b) => [
+                'value' => $b->id,
+                'label' => $b->branch_name
+            ])->toArray();
+    }
+
     private function resetForm(): void
     {
         $this->member_id = null;
@@ -190,9 +227,9 @@ class ManageTrainingPoints extends Component
                 ->orderByDesc('updated_at')
                 ->paginate($this->perPage)
                 ->withQueryString(),
-            'members' => Member::with('user')->where('status', 1)->orderBy('full_name')->get(),
-            'semesters' => Semester::orderByDesc('school_year')->orderByDesc('semester')->get(),
-            'branches' => \App\Models\Branch::orderBy('branch_name')->get(),
+            'members' => [],
+            'semesters' => [],
+            'branches' => [],
         ]);
     }
     public function getListeners(): array

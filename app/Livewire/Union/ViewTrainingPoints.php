@@ -6,6 +6,7 @@ use App\Models\TrainingPoint;
 use App\Models\Member;
 use App\Models\Semester;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class ViewTrainingPoints extends Component
@@ -27,6 +28,18 @@ class ViewTrainingPoints extends Component
         return [
             'echo:training-points,training-point.updated' => '$refresh',
         ];
+    }
+
+    #[Computed]
+    public function semesterOptions()
+    {
+        return Semester::orderByDesc('school_year')
+            ->orderByDesc('semester')
+            ->get()
+            ->map(fn($s) => [
+                'value' => $s->id,
+                'label' => $s->school_year . ' - Học kỳ ' . $s->semester
+            ])->toArray();
     }
 
     public function render()
@@ -54,7 +67,7 @@ class ViewTrainingPoints extends Component
 
         return view('livewire.union.view-training-points', [
             'trainingPoints' => $trainingPoints,
-            'semesters' => Semester::orderByDesc('school_year')->orderByDesc('semester')->get(),
+            'semesters' => [],
             'totalPoints' => $totalPoints,
             'averagePoints' => $averagePoints,
             'member' => $member,

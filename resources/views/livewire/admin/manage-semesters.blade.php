@@ -64,11 +64,8 @@
                     <form wire:submit="save" class="space-y-4">
                         <flux:input wire:model="school_year" label="Năm học" type="text" required
                             placeholder="VD: 2024-2025" />
-                        <flux:select wire:model="semester" label="Học kỳ" required>
-                            <option value="1">📚 Học kỳ 1</option>
-                            <option value="2">📖 Học kỳ 2</option>
-                            <option value="3">☀️ Học kỳ 3 (Hè)</option>
-                        </flux:select>
+                        <x-searchable-select wire:model="semester" label="Học kỳ" required
+                            :items="$this->semesterOptions" />
                         <div class="flex items-center justify-end gap-3 pt-4">
                             <flux:button wire:click="closeCreateForm" variant="ghost" type="button">{{ __('Hủy') }}
                             </flux:button>
@@ -137,9 +134,11 @@
                 @forelse ($semesters as $index => $sem)
                     <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
                         <td class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100">
-                            {{ $semesters->firstItem() + $index }}</td>
+                            {{ $semesters->firstItem() + $index }}
+                        </td>
                         <td class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100">📅
-                            {{ $sem->school_year }}</td>
+                            {{ $sem->school_year }}
+                        </td>
                         <td class="px-4 py-3 text-sm">
                             <flux:badge variant="primary">
                                 {{ $sem->semester == 1 ? '📚' : ($sem->semester == 2 ? '📖' : '☀️') }} Học kỳ
@@ -153,7 +152,8 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                            {{ $sem->created_at->format('d/m/Y') }}</td>
+                            {{ $sem->created_at->format('d/m/Y') }}
+                        </td>
                         <td class="px-4 py-3 text-sm">
                             <div class="flex items-center justify-center gap-1">
                                 <flux:button wire:click="openEditForm({{ $sem->id }})" variant="ghost" size="sm"

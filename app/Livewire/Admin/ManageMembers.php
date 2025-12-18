@@ -98,6 +98,36 @@ class ManageMembers extends Component
     return $query->get();
   }
 
+  #[Computed]
+  public function branchOptions()
+  {
+    return $this->branches->map(fn($b) => ['value' => $b->id, 'label' => $b->branch_name])->toArray();
+  }
+
+  #[Computed]
+  public function userOptions()
+  {
+    return $this->users->map(fn($u) => ['value' => $u->id, 'label' => $u->student_code])->toArray();
+  }
+
+  #[Computed]
+  public function genderOptions()
+  {
+    return [
+      ['value' => 0, 'label' => 'Nam'],
+      ['value' => 1, 'label' => 'Nữ'],
+    ];
+  }
+
+  #[Computed]
+  public function statusOptions()
+  {
+    return [
+      ['value' => 0, 'label' => 'Không hoạt động'],
+      ['value' => 1, 'label' => 'Hoạt động'],
+    ];
+  }
+
   public function updatingSearch(): void
   {
     $this->resetPage();

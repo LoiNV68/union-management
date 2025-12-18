@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -138,6 +139,18 @@ class ManageBranches extends Component
     }
   }
 
+  #[Computed]
+  public function secretaryOptions()
+  {
+    return User::select('id', 'student_code')
+      ->orderBy('id')
+      ->get()
+      ->map(fn($u) => [
+        'value' => $u->id,
+        'label' => $u->student_code . ' (' . ($u->full_name ?? "Chưa có thông tin") . ')'
+      ])->toArray();
+  }
+
   private function resetForm(): void
   {
     $this->branch_name = '';
@@ -158,7 +171,7 @@ class ManageBranches extends Component
         ->orderByDesc('id')
         ->paginate($this->perPage)
         ->withQueryString(),
-      'users' => User::select('id', 'student_code')->orderBy('id')->get(),
+      'users' => [],
     ]);
   }
 }

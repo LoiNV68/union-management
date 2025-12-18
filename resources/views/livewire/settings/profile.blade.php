@@ -71,6 +71,16 @@ new class extends Component {
         $this->dispatch('profile-updated', name: $user->name);
     }
 
+    public function with(): array
+    {
+        return [
+            'genderOptions' => [
+                ['value' => '0', 'label' => 'Nam'],
+                ['value' => '1', 'label' => 'Nữ'],
+            ],
+        ];
+    }
+
     /**
      * Send an email verification notification to the current user.
      */
@@ -107,11 +117,7 @@ new class extends Component {
 
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-3 mt-4">
                     <x-date-picker wire:model="birth_date" :label="__('Ngày sinh')" />
-                    <flux:select wire:model="gender" :label="__('Giới tính')">
-                        <option value="">-- {{ __('Select') }} --</option>
-                        <option value="0">{{ __('Nam') }}</option>
-                        <option value="1">{{ __('Nữ') }}</option>
-                    </flux:select>
+                    <x-searchable-select wire:model="gender" :label="__('Giới tính')" :items="$genderOptions" />
 
                     <flux:input wire:model="phone_number" :label="__('Số điện thoại')" type="text" autocomplete="tel" />
                 </div>

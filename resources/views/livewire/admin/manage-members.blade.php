@@ -73,11 +73,13 @@
                                     :label="__('Số điện thoại')" type="text" />
                             </div>
                             <div>
-                                <flux:select :disabled="$modalMode === 'view'" wire:model="gender" :label="__('Giới tính')"
-                                    required>
-                                    <option value="0">Nam</option>
-                                    <option value="1">Nữ</option>
-                                </flux:select>
+                                <x-searchable-select
+                                    wire:model="gender"
+                                    :label="__('Giới tính')"
+                                    :items="$this->genderOptions"
+                                    :disabled="$modalMode === 'view'"
+                                    required
+                                />
                             </div>
                             <div>
                                 <x-date-picker :disabled="$modalMode === 'view'" wire:model="join_date"
@@ -86,29 +88,31 @@
                             </div>
 
                             <div>
-                                <flux:select :disabled="$modalMode === 'view'" wire:model="status" :label="__('Trạng thái')"
-                                    required>
-                                    <option value="0">Không hoạt động</option>
-                                    <option value="1">Hoạt động</option>
-                                </flux:select>
+                                <x-searchable-select
+                                    wire:model="status"
+                                    :label="__('Trạng thái')"
+                                    :items="$this->statusOptions"
+                                    :disabled="$modalMode === 'view'"
+                                    required
+                                />
                             </div>
                             <div>
-                                <flux:select :disabled="$modalMode === 'view'" wire:model="branch_id"
-                                    :label="__('Chi đoàn')">
-                                    <option value="">-- Chọn chi đoàn --</option>
-                                    @foreach ($this->branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
-                                    @endforeach
-                                </flux:select>
+                                <x-searchable-select
+                                    wire:model="branch_id"
+                                    :label="__('Chi đoàn')"
+                                    :items="$this->branchOptions"
+                                    :disabled="$modalMode === 'view'"
+                                    required
+                                />
                             </div>
                             <div>
-                                <flux:select :disabled="$modalMode === 'view'" wire:model="user_id"
-                                    :label="__('Tài khoản')">
-                                    <option value="">-- Chọn tài khoản --</option>
-                                    @foreach ($this->users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->student_code }}</option>
-                                    @endforeach
-                                </flux:select>
+                                <x-searchable-select
+                                    wire:model="user_id"
+                                    :label="__('Tài khoản')"
+                                    :items="$this->userOptions"
+                                    :disabled="$modalMode === 'view'"
+                                    required
+                                />
                             </div>
                             <div class="md:col-span-2">
                                 <flux:textarea :disabled="$modalMode === 'view'" wire:model="address" :label="__('Địa chỉ')"

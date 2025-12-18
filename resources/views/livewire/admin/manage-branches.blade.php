@@ -71,12 +71,12 @@
                     <form wire:submit="saveBranch" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <flux:input wire:model="branch_name" :label="__('Tên Chi đoàn')" type="text" required :disabled="$mode === 'view'" />
-                            <flux:select :disabled="$mode === 'view'" wire:model="secretary" :label="__('Bí thư')">
-                                <option value="">-- Chọn bí thư --</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->full_name }} ({{ $user->student_code ?? $user->email }})</option>
-                                @endforeach
-                            </flux:select>
+                            <x-searchable-select 
+                                wire:model="secretary" 
+                                :label="__('Bí thư')" 
+                                :items="$this->secretaryOptions" 
+                                :disabled="$mode === 'view'" 
+                            />
                             <div class="md:col-span-2">
                                 <flux:textarea :disabled="$mode === 'view'" wire:model="description" :label="__('Mô tả')" rows="3" />
                             </div>

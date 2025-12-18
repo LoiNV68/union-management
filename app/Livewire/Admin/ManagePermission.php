@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -134,6 +135,16 @@ class ManagePermission extends Component
     } catch (\Exception $e) {
       $this->addError('delete', __('Có lỗi xảy ra khi xóa người dùng.'));
     }
+  }
+
+  #[Computed]
+  public function roleOptions()
+  {
+    return [
+      ['value' => 0, 'label' => '👤 User'],
+      ['value' => 1, 'label' => '🛡️ Admin'],
+      ['value' => 2, 'label' => '👑 Super Admin'],
+    ];
   }
 
   public function render()

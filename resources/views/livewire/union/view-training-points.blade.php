@@ -25,15 +25,9 @@
     <!-- Statistics Cards -->
     <div class="grid gap-4 md:grid-cols-4 mb-6">
         <div class="md:col-span-2">
-            <div class="premium-card p-4">
-                <flux:select wire:model.live="filterSemesterId" label="📅 Lọc theo học kỳ">
-                    <option value="">Tất cả học kỳ</option>
-                    @foreach ($semesters as $semester)
-                        <option value="{{ $semester->id }}">
-                            {{ $semester->school_year }} - Học kỳ {{ $semester->semester }}
-                        </option>
-                    @endforeach
-                </flux:select>
+            <div class="w-full sm:w-64">
+                <x-searchable-select wire:model.live="filterSemesterId" placeholder="📅 Tất cả học kỳ"
+                    :items="$this->semesterOptions" />
             </div>
         </div>
 
@@ -85,10 +79,10 @@
                                 {{ $tp->semester->school_year }} - Học kỳ {{ $tp->semester->semester }}
                             </h3>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
-                                            {{ $tp->point >= 90 ? 'score-excellent' : '' }}
-                                            {{ $tp->point >= 80 && $tp->point < 90 ? 'score-good' : '' }}
-                                            {{ $tp->point >= 65 && $tp->point < 80 ? 'score-average' : '' }}
-                                            {{ $tp->point < 65 ? 'score-below' : '' }}">
+                                                            {{ $tp->point >= 90 ? 'score-excellent' : '' }}
+                                                            {{ $tp->point >= 80 && $tp->point < 90 ? 'score-good' : '' }}
+                                                            {{ $tp->point >= 65 && $tp->point < 80 ? 'score-average' : '' }}
+                                                            {{ $tp->point < 65 ? 'score-below' : '' }}">
                                 {{ $tp->point >= 90 ? '⭐ Xuất sắc' : ($tp->point >= 80 ? '👍 Tốt' : ($tp->point >= 65 ? '📚 Khá' : '📝 TB')) }}
                             </span>
                         </div>
@@ -120,15 +114,15 @@
                     <div class="text-center ml-6">
                         <p class="text-sm text-neutral-500 mb-1">Điểm</p>
                         <div class="w-20 h-20 rounded-2xl flex items-center justify-center
-                                        {{ $tp->point >= 90 ? 'bg-green-100 dark:bg-green-900/30' : '' }}
-                                        {{ $tp->point >= 80 && $tp->point < 90 ? 'bg-blue-100 dark:bg-blue-900/30' : '' }}
-                                        {{ $tp->point >= 65 && $tp->point < 80 ? 'bg-yellow-100 dark:bg-yellow-900/30' : '' }}
-                                        {{ $tp->point < 65 ? 'bg-red-100 dark:bg-red-900/30' : '' }}">
+                                                        {{ $tp->point >= 90 ? 'bg-green-100 dark:bg-green-900/30' : '' }}
+                                                        {{ $tp->point >= 80 && $tp->point < 90 ? 'bg-blue-100 dark:bg-blue-900/30' : '' }}
+                                                        {{ $tp->point >= 65 && $tp->point < 80 ? 'bg-yellow-100 dark:bg-yellow-900/30' : '' }}
+                                                        {{ $tp->point < 65 ? 'bg-red-100 dark:bg-red-900/30' : '' }}">
                             <span class="text-3xl font-bold
-                                            {{ $tp->point >= 90 ? 'text-green-600' : '' }}
-                                            {{ $tp->point >= 80 && $tp->point < 90 ? 'text-blue-600' : '' }}
-                                            {{ $tp->point >= 65 && $tp->point < 80 ? 'text-yellow-600' : '' }}
-                                            {{ $tp->point < 65 ? 'text-red-600' : '' }}">
+                                                            {{ $tp->point >= 90 ? 'text-green-600' : '' }}
+                                                            {{ $tp->point >= 80 && $tp->point < 90 ? 'text-blue-600' : '' }}
+                                                            {{ $tp->point >= 65 && $tp->point < 80 ? 'text-yellow-600' : '' }}
+                                                            {{ $tp->point < 65 ? 'text-red-600' : '' }}">
                                 {{ number_format($tp->point, 0) }}
                             </span>
                         </div>
