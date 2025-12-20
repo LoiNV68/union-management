@@ -107,8 +107,14 @@
                     <flux:button wire:click="closeViewModal" variant="ghost" size="sm">×</flux:button>
                 </div>
 
+                <div class="mb-4">
+                    <flux:input wire:model.live.debounce.300ms="memberSearch" 
+                        placeholder="🔍 Tìm theo tên sinh viên hoặc mã SV..." 
+                        type="text" />
+                </div>
+
                 <div class="space-y-3">
-                    @foreach ($viewingTransaction->memberTransactions as $mt)
+                    @forelse ($viewingTransaction->filteredMemberTransactions as $mt)
                         <div
                             class="flex items-center justify-between rounded border p-3 {{ $mt->payment_status >= 1 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-neutral-50 dark:bg-neutral-900' }}">
                             <div class="flex-1">
@@ -130,7 +136,11 @@
                                 @endif
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="p-8 text-center text-neutral-500">
+                            {{ __('Không tìm thấy sinh viên nào.') }}
+                        </div>
+                    @endforelse
                 </div>
 
                 <div class="mt-6 flex items-center justify-end">

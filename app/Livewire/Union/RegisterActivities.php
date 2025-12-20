@@ -20,11 +20,26 @@ class RegisterActivities extends Component
   public int $perPage = 10;
   public ?int $viewingActivityId = null;
   public bool $showActivityModal = false;
+  public bool $showCancelModal = false;
   public bool $showNotificationsPanel = false;
+  public ?int $cancellingId = null;
 
   public function mount(): void
   {
     abort_unless(Auth::user()?->role === 0, 403);
+  }
+
+  public function openCancelModal(int $id): void
+  {
+    $this->cancellingId = $id;
+    $this->showCancelModal = true;
+    $this->dispatch('debug', message: 'Modal opened for ID: ' . $id);
+  }
+
+  public function closeCancelModal(): void
+  {
+    $this->showCancelModal = false;
+    $this->cancellingId = null;
   }
 
   // Listen to events from WebSocket AND Livewire
@@ -137,6 +152,7 @@ class RegisterActivities extends Component
     $registration->delete();
     $this->dispatch('activity-cancelled');
     $this->dispatch('registration-cancelled')->to('admin.manage-activities');
+    $this->closeCancelModal();
   }
 
 

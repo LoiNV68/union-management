@@ -26,9 +26,24 @@ class ManageActivities extends Component
     public bool $showDeleteModal = false;
     public bool $showNotificationModal = false;
     public bool $showRegistrationsModal = false;
+    public bool $showCancelModal = false;
     public ?int $deletingId = null;
+    public ?int $cancellingId = null;
     public ?int $notifyingActivityId = null;
     public ?int $registrationsActivityId = null;
+
+    public function openCancelModal(int $id): void
+    {
+        $this->cancellingId = $id;
+        $this->showCancelModal = true;
+        $this->dispatch('debug', message: 'Admin modal opened for ID: ' . $id);
+    }
+
+    public function closeCancelModal(): void
+    {
+        $this->showCancelModal = false;
+        $this->cancellingId = null;
+    }
 
     // Form fields
     public string $activity_name = '';
@@ -184,6 +199,7 @@ class ManageActivities extends Component
 
         $this->dispatch('registration-cancelled');
         $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
+        $this->closeCancelModal();
     }
 
     public function saveActivity(): void

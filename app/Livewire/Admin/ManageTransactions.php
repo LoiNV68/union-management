@@ -21,6 +21,7 @@ class ManageTransactions extends Component
     protected $paginationTheme = 'tailwind';
 
     public string $search = '';
+    public string $memberSearch = '';
     public int $perPage = 10;
     public bool $showCreateForm = false;
     public bool $showViewModal = false;
@@ -87,6 +88,7 @@ class ManageTransactions extends Component
     {
         $this->showViewModal = false;
         $this->viewingId = null;
+        $this->memberSearch = '';
     }
 
     public function openDeleteModal(int $id): void
@@ -219,6 +221,32 @@ class ManageTransactions extends Component
 
     public function render()
     {
+        $viewingTransaction = null;
+        if ($this->viewingId) {
+            $viewingTransaction = Transaction::withCount([
+                'memberTransactions as paid_count' => function ($query) {
+                    $query->where('payment_status', '>=', 1);
+                }
+            ])->find($this->viewingId);
+
+            if ($viewingTransaction) {
+                // Attach filtered and ordered member transactions
+                $viewingTransaction->filteredMemberTransactions = $viewingTransaction->memberTransactions()
+                    ->with(['member.user'])
+                    ->when($this->memberSearch, function ($query) {
+                        $query->whereHas('member', function ($mq) {
+                            $mq->where('full_name', 'like', '%' . $this->memberSearch . '%')
+                                ->orWhereHas('user', function ($uq) {
+                                    $uq->where('student_code', 'like', '%' . $this->memberSearch . '%');
+                                });
+                        });
+                    })
+                    ->orderByDesc('payment_status') // Confirmed/Pending first
+                    ->orderBy('member_id')
+                    ->get();
+            }
+        }
+
         return view('livewire.admin.manage-transactions', [
             'transactions' => Transaction::query()
                 ->with(['creator', 'memberTransactions'])
@@ -234,13 +262,7 @@ class ManageTransactions extends Component
                 ->orderByDesc('created_at')
                 ->paginate($this->perPage)
                 ->withQueryString(),
-            'viewingTransaction' => $this->viewingId ? Transaction::with(['memberTransactions.member.user'])
-                ->withCount([
-                    'memberTransactions as paid_count' => function ($query) {
-                        $query->where('payment_status', '>=', 1);
-                    }
-                ])
-                ->find($this->viewingId) : null,
+            'viewingTransaction' => $viewingTransaction,
         ]);
     }
     public function getListeners(): array

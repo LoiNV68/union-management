@@ -222,8 +222,8 @@
                             <div class="flex items-center gap-2">
                                 <flux:badge variant="success">{{ __('Đã duyệt') }}</flux:badge>
                                 <flux:button 
-                                    onclick="if(!confirm('{{ __('Bạn có chắc chắn muốn hủy đăng ký này?') }}')) { event.stopImmediatePropagation(); }"
-                                    wire:click="cancelRegistration({{ $registration->id }})" 
+                                    wire:key="cancel-btn-{{ $registration->id }}"
+                                    wire:click="openCancelModal({{ $registration->id }})" 
                                     variant="danger" 
                                     size="sm">
                                     {{ __('Hủy đăng ký') }}
@@ -339,4 +339,26 @@
     <x-action-message class="me-3"
         on="registration-cancelled">{{ __('Đơn đăng ký đã được hủy thành công.') }}</x-action-message>
 
+    <!-- Cancellation Confirmation Modal -->
+    @if ($showCancelModal)
+        <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50" wire:click="closeCancelModal">
+            <div class="w-full max-w-md rounded-lg bg-white dark:bg-neutral-800 p-6 shadow-xl" wire:click.stop>
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                        <svg class="size-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ __('Xác nhận hủy đăng ký') }}</h3>
+                    <p class="text-neutral-600 dark:text-neutral-400">
+                        {{ __('Bạn có chắc chắn muốn hủy đăng ký này?') }}
+                    </p>
+                </div>
+                <div class="flex items-center justify-center gap-3">
+                    <flux:button wire:click="closeCancelModal" variant="ghost">{{ __('Hủy bỏ') }}</flux:button>
+                    <flux:button wire:click="cancelRegistration({{ $cancellingId }})" variant="danger">{{ __('Xác nhận hủy') }}</flux:button>
+                </div>
+            </div>
+        </div>
+    @endif
 </section>
