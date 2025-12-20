@@ -62,6 +62,10 @@
                 <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">Danh sách người dùng</h2>
             </div>
             <div class="flex flex-col sm:flex-row sm:items-end gap-3 w-full md:w-auto">
+                <flux:button wire:click="exportExcel" variant="ghost" class="gap-2 w-full sm:w-auto justify-center">
+                    <flux:icon.arrow-down-tray class="w-4 h-4" />
+                    {{ __('Xuất Excel') }}
+                </flux:button>
                 <div class="w-full sm:w-64">
                     <flux:input wire:model.live.debounce.300ms="search" placeholder="🔍 Tìm theo mã sinh viên..."
                         type="text" />

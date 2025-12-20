@@ -10,6 +10,8 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MembersExport;
 
 class ManageMembers extends Component
 {
@@ -252,6 +254,11 @@ class ManageMembers extends Component
     $this->statusFilter = 'all';
     $this->branchFilter = null;
     $this->resetPage();
+  }
+
+  public function exportExcel()
+  {
+    return Excel::download(new MembersExport, 'members.xlsx');
   }
 
   private function resetForm(): void

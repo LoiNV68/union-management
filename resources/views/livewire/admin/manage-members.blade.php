@@ -4,9 +4,15 @@
 
     <div class=" flex items-center justify-between">
         <flux:heading size="lg">{{ __('Quản lý thành viên') }}</flux:heading>
-        <flux:button wire:click="openCreateForm" variant="primary">
-            {{ __('Thêm thông tin đoàn viên') }}
-        </flux:button>
+        <div class="flex gap-2">
+            <flux:button wire:click="exportExcel" variant="ghost" class="gap-2">
+                <flux:icon.arrow-down-tray class="w-4 h-4" />
+                {{ __('Xuất Excel') }}
+            </flux:button>
+            <flux:button wire:click="openCreateForm" variant="primary">
+                {{ __('Thêm thông tin đoàn viên') }}
+            </flux:button>
+        </div>
     </div>
 
     <!-- Search and Filter -->

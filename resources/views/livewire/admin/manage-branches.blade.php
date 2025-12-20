@@ -15,9 +15,15 @@
                     <p class="text-neutral-600 dark:text-neutral-400 text-sm">Quản lý các chi đoàn và bí thư</p>
                 </div>
             </div>
+            <div class="flex gap-2">
+            <flux:button wire:click="exportExcel" variant="ghost" class="gap-2">
+                <flux:icon.arrow-down-tray class="w-4 h-4" />
+                {{ __('Xuất Excel') }}
+            </flux:button>
             <flux:button wire:click="openBranchModal('create')" variant="primary">
                 {{ __('Thêm Chi đoàn') }}
             </flux:button>
+        </div>
         </div>
     </div>
 

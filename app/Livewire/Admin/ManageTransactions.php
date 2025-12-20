@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TransactionsExport;
 
 class ManageTransactions extends Component
 {
@@ -190,6 +192,11 @@ class ManageTransactions extends Component
             TransactionUpdated::dispatch($transaction); // Although deleted, we might want to notify to remove from list
             $this->closeDeleteModal();
         }
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new TransactionsExport, 'transactions.xlsx');
     }
 
     #[Computed]

@@ -18,9 +18,15 @@
                     <p class="text-neutral-600 dark:text-neutral-400 text-sm">Tạo và quản lý các hoạt động đoàn</p>
                 </div>
             </div>
-            <flux:button wire:click="openCreateForm" variant="primary">
-                {{ __('Thêm Hoạt động') }}
+            <div class="flex gap-2">
+            <flux:button wire:click="exportExcel" variant="ghost" class="gap-2">
+                <flux:icon.arrow-down-tray class="w-4 h-4" />
+                {{ __('Xuất Excel') }}
             </flux:button>
+            <flux:button wire:click="openCreateForm" variant="primary">
+                {{ __('Tạo Hoạt Động Mới') }}
+            </flux:button>
+        </div>
         </div>
     </div>
 

@@ -13,9 +13,15 @@
                     <p class="text-neutral-600 dark:text-neutral-400 text-sm">Quản lý điểm rèn luyện của đoàn viên theo học kỳ</p>
                 </div>
             </div>
-            <flux:button wire:click="openCreateForm" variant="primary" class="gap-2">
-                {{ __('Thêm Điểm') }}
+            <div class="flex gap-2">
+            <flux:button wire:click="exportExcel" variant="ghost" class="gap-2">
+                <flux:icon.arrow-down-tray class="w-4 h-4" />
+                {{ __('Xuất Excel') }}
             </flux:button>
+            <flux:button wire:click="openCreateForm" variant="primary">
+                {{ __('Đánh Giá Điểm Rèn Luyện') }}
+            </flux:button>
+        </div>
         </div>
     </div>
 

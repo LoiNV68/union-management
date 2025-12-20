@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BranchesExport;
 
 class ManageBranches extends Component
 {
@@ -137,6 +139,11 @@ class ManageBranches extends Component
       $this->dispatch('branch-deleted');
       $this->closeDeleteModal();
     }
+  }
+
+  public function exportExcel()
+  {
+    return Excel::download(new BranchesExport, 'branches.xlsx');
   }
 
   #[Computed]

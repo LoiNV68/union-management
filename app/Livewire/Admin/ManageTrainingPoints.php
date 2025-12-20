@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TrainingPointsExport;
 
 class ManageTrainingPoints extends Component
 {
@@ -157,6 +159,11 @@ class ManageTrainingPoints extends Component
             TrainingPointUpdated::dispatch($tp);
             $this->closeDeleteModal();
         }
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new TrainingPointsExport, 'training_points.xlsx');
     }
 
     #[Computed]

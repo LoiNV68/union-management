@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class ManagePermission extends Component
 {
@@ -146,6 +148,12 @@ class ManagePermission extends Component
     } catch (\Exception $e) {
       $this->addError('delete', __('Có lỗi xảy ra khi xóa người dùng.'));
     }
+  }
+
+  public function exportExcel()
+  {
+    $this->ensureSuperAdmin();
+    return Excel::download(new UsersExport, 'users.xlsx');
   }
 
   #[Computed]

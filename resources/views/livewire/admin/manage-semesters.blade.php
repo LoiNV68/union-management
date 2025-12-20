@@ -15,9 +15,15 @@
                     <p class="text-neutral-600 dark:text-neutral-400 text-sm">Quản lý các học kỳ và năm học</p>
                 </div>
             </div>
-            <flux:button wire:click="openCreateForm" variant="primary">
-                {{ __('Thêm Học Kỳ') }}
-            </flux:button>
+            <div class="flex gap-2">
+                <flux:button wire:click="exportExcel" variant="ghost" class="gap-2">
+                    <flux:icon.arrow-down-tray class="w-4 h-4" />
+                    {{ __('Xuất Excel') }}
+                </flux:button>
+                <flux:button wire:click="openCreateForm" variant="primary">
+                    {{ __('Thêm Học Kỳ') }}
+                </flux:button>
+            </div>
         </div>
     </div>
 
@@ -62,8 +68,18 @@
                 </div>
                 <div class="p-6">
                     <form wire:submit="save" class="space-y-4">
-                        <flux:input wire:model="school_year" label="Năm học" type="text" required
-                            placeholder="VD: 2024-2025" />
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <x-searchable-select wire:model.live="start_year" :label="__('Năm bắt đầu')"
+                                    :items="$this->yearOptions" required />
+                                <flux:error name="start_year" />
+                            </div>
+                            <div>
+                                <x-searchable-select wire:model="end_year" :label="__('Năm kết thúc')"
+                                    :items="$this->yearOptions" disabled required />
+                                <flux:error name="end_year" />
+                            </div>
+                        </div>
                         <x-searchable-select wire:model="semester" label="Học kỳ" required
                             :items="$this->semesterOptions" />
                         <div class="flex items-center justify-end gap-3 pt-4">

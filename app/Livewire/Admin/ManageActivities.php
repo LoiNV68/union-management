@@ -9,6 +9,8 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ActivitiesExport;
 
 class ManageActivities extends Component
 {
@@ -271,6 +273,11 @@ class ManageActivities extends Component
 
         $this->dispatch('notification-sent');
         $this->closeNotificationModal();
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ActivitiesExport, 'activities.xlsx');
     }
 
     private function resetForm(): void
