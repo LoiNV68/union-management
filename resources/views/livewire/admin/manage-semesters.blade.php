@@ -80,8 +80,13 @@
                                 <flux:error name="end_year" />
                             </div>
                         </div>
-                        <x-searchable-select wire:model="semester" label="Học kỳ" required
-                            :items="$this->semesterOptions" />
+                        <flux:select wire:model="semester" label="Học kỳ" required>
+                            @foreach ($this->semesterOptions as $option)
+                                <option value="{{ $option['value'] }}" {{ $semester == $option['value'] ? 'selected' : '' }}>
+                                    {{ $option['label'] }}
+                                </option>
+                            @endforeach
+                        </flux:select>
                         <div class="flex items-center justify-end gap-3 pt-4">
                             <flux:button wire:click="closeCreateForm" variant="ghost" type="button">{{ __('Hủy') }}
                             </flux:button>

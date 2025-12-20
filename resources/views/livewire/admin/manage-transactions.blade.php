@@ -61,7 +61,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <flux:input wire:model="amount" :label="__('Số tiền (VNĐ)')" type="number" step="1000" min="0"
+                            <flux:input wire:model="amount" :label="__('Số tiền (VNĐ)')" type="number" step="any" min="0"
                                 required />
                         </div>
                         <div>

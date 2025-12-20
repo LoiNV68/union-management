@@ -106,7 +106,7 @@ class ManageTransactions extends Component
         $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|gt:0',
             'type' => 'required|in:0,1',
             'due_date' => 'nullable|date',
         ]);

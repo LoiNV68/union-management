@@ -18,7 +18,7 @@
                 class="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                 <img src="{{ asset('images/head-logo.svg') }}" alt="logo" class="w-10 h-10 rounded-sm">
             </div>
-            <span class="text-lg font-bold text-neutral-900 dark:text-white">Union MS</span>
+            <span class="text-lg font-bold text-neutral-900 dark:text-white">Quản lý đoàn viên</span>
         </a>
 
         <div class="mt-4">

@@ -50,8 +50,18 @@
         if (this.open) {
             this.$nextTick(() => this.updatePosition());
         }
+    },
+    handleOutsideClick(event) {
+        if (!this.open) return;
+        if (this.$refs.trigger.contains(event.target)) return;
+        if (event.target.closest('[data-searchable-dropdown]')) return;
+        this.open = false;
     }
-}" @click.outside="open = false" @scroll.window="if(open) updatePosition()" @resize.window="if(open) updatePosition()" class="relative">
+}" 
+    @click.window.capture="handleOutsideClick($event)"
+    @scroll.window.capture="if(open) updatePosition()" 
+    @resize.window="if(open) updatePosition()" 
+    class="relative">
     <flux:field>
         @if ($label) <flux:label>{{ $label }}</flux:label> @endif
         
@@ -77,6 +87,8 @@
 
     <template x-teleport="body">
         <div x-show="open" 
+             x-ref="dropdown"
+             data-searchable-dropdown
              x-transition:enter="transition ease-out duration-100"
              x-transition:enter-start="transform opacity-0 scale-95"
              x-transition:enter-end="transform opacity-100 scale-100"

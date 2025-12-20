@@ -43,11 +43,11 @@
                                      border-neutral-200 dark:border-neutral-700 px-6 py-4 flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         @if ($modalMode === 'view')
-                            {{ __('Thông tin Member') }}
+                            {{ __('Thông tin đoàn viên') }}
                         @elseif ($modalMode === 'edit')
-                            {{ __('Sửa thông tin Member') }}
+                            {{ __('Sửa thông tin đoàn viên') }}
                         @else
-                            {{ __('Thêm Member mới') }}
+                            {{ __('Thêm đoàn viên mới') }}
                         @endif
                     </h2>
                     <button wire:click="closeModal"
@@ -79,13 +79,13 @@
                                     :label="__('Số điện thoại')" type="text" />
                             </div>
                             <div>
-                                <x-searchable-select
-                                    wire:model="gender"
-                                    :label="__('Giới tính')"
-                                    :items="$this->genderOptions"
-                                    :disabled="$modalMode === 'view'"
-                                    required
-                                />
+                                <flux:radio.group wire:model="gender" :label="__('Giới tính')" :disabled="$modalMode === 'view'">
+                                    <div class="flex items-center gap-6">
+                                        @foreach ($this->genderOptions as $option)
+                                            <flux:radio value="{{ $option['value'] }}" label="{{ $option['label'] }}" />
+                                        @endforeach
+                                    </div>
+                                </flux:radio.group>
                             </div>
                             <div>
                                 <x-date-picker :disabled="$modalMode === 'view'" wire:model="join_date"
@@ -94,13 +94,13 @@
                             </div>
 
                             <div>
-                                <x-searchable-select
-                                    wire:model="status"
-                                    :label="__('Trạng thái')"
-                                    :items="$this->statusOptions"
-                                    :disabled="$modalMode === 'view'"
-                                    required
-                                />
+                                <flux:select wire:model="status" :label="__('Trạng thái')" :disabled="$modalMode === 'view'">
+                                    @foreach ($this->statusOptions as $option)
+                                        <option value="{{ $option['value'] }}" {{ $status == $option['value'] ? 'selected' : '' }}>
+                                            {{ $option['label'] }}
+                                        </option>
+                                    @endforeach
+                                </flux:select>
                             </div>
                             <div>
                                 <x-searchable-select

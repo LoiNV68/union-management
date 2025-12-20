@@ -32,11 +32,11 @@
                 <flux:input wire:model="new_student_code" :label="__('Mã sinh viên')" type="text" required
                     placeholder="Nhập mã sinh viên..." />
                 <flux:input wire:model="new_password" :label="__('Mật khẩu')" type="password" required
-                    placeholder="••••••••" />
+                    placeholder="••••••••" viewable />
                 <flux:select searchable wire:model="new_role" :label="__('Vai trò')">
-                    <option value="0">👤 User</option>
-                    <option value="1">🛡️ Admin</option>
-                    <option value="2">👑 Super Admin</option>
+                    <option value="0">👤 Đoàn viên</option>
+                    <option value="1">🛡️ Cán bộ đoàn</option>
+                    <option value="2">👑 Quản trị viên</option>
                 </flux:select>
             </div>
             <div class="flex items-center justify-end gap-4 pt-2">
@@ -96,9 +96,9 @@
                                     class="font-semibold text-neutral-900 dark:text-neutral-100">{{ $u->student_code }}</span>
                                 <span
                                     class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                                        {{ $u->role === 2 ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : '' }}
-                                        {{ $u->role === 1 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
-                                        {{ $u->role === 0 ? 'bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400' : '' }}">
+                                            {{ $u->role === 2 ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : '' }}
+                                            {{ $u->role === 1 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
+                                            {{ $u->role === 0 ? 'bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400' : '' }}">
                                     {{ $u->role === 0 ? 'User' : ($u->role === 1 ? 'Admin' : 'Super Admin') }}
                                 </span>
                             </div>
@@ -126,8 +126,13 @@
                     </div>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
                         <div class="w-full sm:w-36">
-                            <x-searchable-select @change="$wire.setRole({{ $u->id }}, $event.detail)" :value="$u->role"
-                                :items="$this->roleOptions" size="sm" />
+                            <flux:select wire:change="setRole({{ $u->id }}, $event.target.value)" size="sm">
+                                @foreach ($this->roleOptions as $option)
+                                    <option value="{{ $option['value'] }}" {{ $u->role == $option['value'] ? 'selected' : '' }}>
+                                        {{ $option['label'] }}
+                                    </option>
+                                @endforeach
+                            </flux:select>
                         </div>
                         <div class="flex items-center gap-2 justify-end">
                             <flux:button
@@ -214,7 +219,8 @@
                     </div>
                     <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ __('Xác nhận xóa') }}</h3>
                     <p class="text-neutral-600 dark:text-neutral-400">
-                        {{ __('Bạn có chắc chắn muốn xóa người dùng này? Hành động này không thể hoàn tác.') }}</p>
+                        {{ __('Bạn có chắc chắn muốn xóa người dùng này? Hành động này không thể hoàn tác.') }}
+                    </p>
                 </div>
                 @error('delete')
                     <p class="mb-4 text-center text-sm text-red-600">{{ $message }}</p>
