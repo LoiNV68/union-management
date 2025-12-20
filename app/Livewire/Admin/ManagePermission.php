@@ -49,9 +49,13 @@ class ManagePermission extends Component
   public function createUser(): void
   {
     $this->validate([
-      'new_student_code' => ['required', 'string', 'max:255', 'unique:users,student_code'],
+      'new_student_code' => ['required', 'string', 'regex:/^225[0-9]{7}$/', 'unique:users,student_code'],
       'new_password' => ['required', 'string', 'min:6'],
       'new_role' => ['required', 'integer', 'in:0,1,2'],
+    ], [
+      'new_student_code.required' => 'Vui lòng nhập mã sinh viên.',
+      'new_student_code.regex' => 'Mã sinh viên phải có định dạng 225xxxxxxx (10 chữ số, bắt đầu bằng 225).',
+      'new_student_code.unique' => 'Mã sinh viên đã tồn tại trong hệ thống.',
     ]);
 
     User::query()->create([
