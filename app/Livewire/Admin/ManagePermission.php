@@ -50,12 +50,19 @@ class ManagePermission extends Component
   {
     $this->validate([
       'new_student_code' => ['required', 'string', 'regex:/^225[0-9]{7}$/', 'unique:users,student_code'],
-      'new_password' => ['required', 'string', 'min:6'],
+      'new_password' => ['required', 'min:6', 'max:255', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/'],
       'new_role' => ['required', 'integer', 'in:0,1,2'],
     ], [
       'new_student_code.required' => 'Vui lòng nhập mã sinh viên.',
       'new_student_code.regex' => 'Mã sinh viên phải có định dạng 225xxxxxxx (10 chữ số, bắt đầu bằng 225).',
       'new_student_code.unique' => 'Mã sinh viên đã tồn tại trong hệ thống.',
+      'new_password.required' => 'Vui lòng nhập mật khẩu.',
+      'new_password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+      'new_password.max' => 'Mật khẩu không được vượt quá 255 ký tự.',
+      'new_password.regex' => 'Mật khẩu phải có ít nhất 1 chữ thường, 1 chữ in hoa, 1 số và 1 ký tự đặc biệt (@$!%*?&).',
+      'new_role.required' => 'Vui lòng chọn vai trò.',
+      'new_role.integer' => 'Vai trò phải hợp lệ.',
+      'new_role.in' => 'Vai trò không hợp lệ.',
     ]);
 
     User::query()->create([
