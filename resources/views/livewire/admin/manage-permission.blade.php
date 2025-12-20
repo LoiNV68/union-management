@@ -28,7 +28,7 @@
             <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">Tạo tài khoản mới</h2>
         </div>
         <form wire:submit="createUser" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                 <flux:input wire:model="new_student_code" :label="__('Mã sinh viên')" type="text" required
                     placeholder="Nhập mã sinh viên..." />
                 <flux:input wire:model="new_password" :label="__('Mật khẩu')" type="password" required
