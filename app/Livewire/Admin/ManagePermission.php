@@ -74,7 +74,10 @@ class ManagePermission extends Component
     ]);
 
     $this->reset(['new_student_code', 'new_password', 'new_role']);
-    $this->dispatch('user-created');
+    $this->dispatch('notify', [
+      'type' => 'success',
+      'message' => 'Đã tạo tài khoản mới.'
+    ]);
   }
 
   public function setRole(int $userId, $role): void
@@ -87,7 +90,10 @@ class ManagePermission extends Component
 
     $user = User::query()->findOrFail($userId);
     $user->update(['role' => $roleValue]);
-    $this->dispatch('user-updated');
+    $this->dispatch('notify', [
+      'type' => 'success',
+      'message' => 'Đã cập nhật vai trò người dùng.'
+    ]);
   }
 
   // Toggle Lock Modal Methods
@@ -114,7 +120,10 @@ class ManagePermission extends Component
     $this->ensureSuperAdmin();
     $user = User::query()->findOrFail($this->selectedUserId);
     $user->update(['is_locked' => !$this->selectedUserLocked]);
-    $this->dispatch('user-updated');
+    $this->dispatch('notify', [
+      'type' => 'success',
+      'message' => 'Đã cập nhật trạng thái khóa người dùng.'
+    ]);
     $this->closeToggleLockModal();
   }
 
@@ -143,7 +152,10 @@ class ManagePermission extends Component
       $user = User::query()->findOrFail($this->selectedUserId);
       $user->delete();
       $this->resetPage();
-      $this->dispatch('user-updated');
+      $this->dispatch('notify', [
+        'type' => 'success',
+        'message' => 'Đã xóa người dùng.'
+      ]);
       $this->closeDeleteModal();
     } catch (\Exception $e) {
       $this->addError('delete', __('Có lỗi xảy ra khi xóa người dùng.'));

@@ -129,7 +129,10 @@ class ManageTrainingPoints extends Component
 
         if ($this->editingId) {
             TrainingPoint::findOrFail($this->editingId)->update($data);
-            $this->dispatch('training-point-updated');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã cập nhật điểm rèn luyện.'
+            ]);
             TrainingPointUpdated::dispatch(TrainingPoint::find($this->editingId));
         } else {
             // Check if record already exists
@@ -143,7 +146,10 @@ class ManageTrainingPoints extends Component
             }
 
             $tp = TrainingPoint::create($data);
-            $this->dispatch('training-point-created');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã thêm điểm rèn luyện mới.'
+            ]);
             TrainingPointUpdated::dispatch($tp);
         }
 
@@ -155,7 +161,10 @@ class ManageTrainingPoints extends Component
         if ($this->deletingId) {
             $tp = TrainingPoint::findOrFail($this->deletingId);
             $tp->delete();
-            $this->dispatch('training-point-deleted');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã xóa điểm rèn luyện.'
+            ]);
             TrainingPointUpdated::dispatch($tp);
             $this->closeDeleteModal();
         }

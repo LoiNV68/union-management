@@ -176,7 +176,10 @@ class ManageActivities extends Component
         $registration->update([
             'registration_status' => 1, // Approved
         ]);
-        $this->dispatch('registration-approved');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã duyệt đơn đăng ký.'
+        ]);
         $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
     }
 
@@ -187,7 +190,10 @@ class ManageActivities extends Component
         $registration->update([
             'registration_status' => 2, // Rejected
         ]);
-        $this->dispatch('registration-rejected');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã từ chối đơn đăng ký.'
+        ]);
         $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
     }
 
@@ -197,6 +203,10 @@ class ManageActivities extends Component
         $activityId = $registration->activity_id;
         $registration->delete();
 
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã hủy đơn đăng ký.'
+        ]);
         $this->dispatch('registration-cancelled');
         $this->dispatch('activity-updated', activityId: $activityId)->to('union.register-activities');
         $this->closeCancelModal();
@@ -235,10 +245,16 @@ class ManageActivities extends Component
 
         if ($this->editingId) {
             Activity::findOrFail($this->editingId)->update($data);
-            $this->dispatch('activity-updated');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã cập nhật hoạt động.'
+            ]);
         } else {
             Activity::create($data);
-            $this->dispatch('activity-created');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã thêm hoạt động mới.'
+            ]);
             $this->dispatch('activity-list-updated')->to('union.register-activities');
         }
 
@@ -249,7 +265,10 @@ class ManageActivities extends Component
     {
         if ($this->deletingId) {
             Activity::findOrFail($this->deletingId)->delete();
-            $this->dispatch('activity-deleted');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã xóa hoạt động.'
+            ]);
             $this->closeDeleteModal();
         }
     }
@@ -287,7 +306,10 @@ class ManageActivities extends Component
             ]);
         }
 
-        $this->dispatch('notification-sent');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã gửi thông báo cho các thành viên tham gia.'
+        ]);
         $this->closeNotificationModal();
     }
 

@@ -333,10 +333,3 @@
     <div class="mt-4 space-y-2">
         {{ $members->onEachSide(1)->links() }}
     </div>
-
-    <!-- Action Messages -->
-    <x-action-message class="me-3" on="member-created">{{ __('Member đã được thêm thành công.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="member-updated">{{ __('Member đã được cập nhật thành công.') }}</x-action-message>
-    <x-action-message class="me-3" on="member-deleted">{{ __('Member đã được xóa thành công.') }}</x-action-message>
-</section>

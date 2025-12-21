@@ -40,8 +40,7 @@
                 </flux:select>
             </div>
             <div class="flex items-center justify-end gap-4 pt-2">
-                <x-action-message class="text-green-600 font-medium" on="user-created">✅
-                    {{ __('Tạo tài khoản thành công!') }}</x-action-message>
+
                 <flux:button variant="primary" type="submit" class="flex items-center gap-2">
                     {{ __('Tạo tài khoản') }}
                 </flux:button>
@@ -96,9 +95,9 @@
                                     class="font-semibold text-neutral-900 dark:text-neutral-100">{{ $u->student_code }}</span>
                                 <span
                                     class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                                            {{ $u->role === 2 ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : '' }}
-                                            {{ $u->role === 1 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
-                                            {{ $u->role === 0 ? 'bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400' : '' }}">
+                                                {{ $u->role === 2 ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : '' }}
+                                                {{ $u->role === 1 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
+                                                {{ $u->role === 0 ? 'bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400' : '' }}">
                                     {{ $u->role === 0 ? 'User' : ($u->role === 1 ? 'Admin' : 'Super Admin') }}
                                 </span>
                             </div>

@@ -195,9 +195,3 @@
             {{ $branches->onEachSide(1)->links() }}
         </div>
     @endif
-
-    <!-- Action Messages -->
-    <x-action-message class="me-3 text-green-600" on="branch-created">✅ {{ __('Chi đoàn đã được thêm thành công.') }}</x-action-message>
-    <x-action-message class="me-3 text-green-600" on="branch-updated">✅ {{ __('Chi đoàn đã được cập nhật thành công.') }}</x-action-message>
-    <x-action-message class="me-3 text-green-600" on="branch-deleted">✅ {{ __('Chi đoàn đã được xóa thành công.') }}</x-action-message>
-</section>

@@ -41,7 +41,7 @@
                     <flux:navlist.group class="grid mt-4">
                         <p
                             class="px-3 py-2 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider flex items-center gap-2">
-                            {{ __('QUẢN TRỊ') }}
+                            {{ auth()->user()?->role === 1 ? __('CÁN BỘ ĐOÀN') : (auth()->user()?->role === 2 ? __('QUẢN TRỊ VIÊN') : __('ĐOÀN VIÊN')) }}
                         </p>
                         <flux:navlist.item icon="lock-closed" :href="route('admin.permission')"
                             :current="request()->routeIs('admin.permission')" wire:navigate
@@ -68,16 +68,7 @@
                             class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('admin.transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
                             {{ __('Thu chi') }}
                         </flux:navlist.item>
-                        <flux:navlist.item icon="academic-cap" :href="route('admin.training-points')"
-                            :current="request()->routeIs('admin.training-points')" wire:navigate
-                            class="rounded-lg mx-1 hover:bg-amber-50 dark:hover:bg-amber-900/20 {{ request()->routeIs('admin.training-points') ? '!bg-amber-100 dark:!bg-amber-900/30 !text-amber-700 dark:!text-amber-300' : '' }}">
-                            {{ __('Điểm rèn luyện') }}
-                        </flux:navlist.item>
-                        <flux:navlist.item icon="calendar" :href="route('admin.semesters')"
-                            :current="request()->routeIs('admin.semesters')" wire:navigate
-                            class="rounded-lg mx-1 hover:bg-pink-50 dark:hover:bg-pink-900/20 {{ request()->routeIs('admin.semesters') ? '!bg-pink-100 dark:!bg-pink-900/30 !text-pink-700 dark:!text-pink-300' : '' }}">
-                            {{ __('Học kỳ') }}
-                        </flux:navlist.item>
+                        
                     </flux:navlist.group>
                 @endif
 
@@ -87,7 +78,7 @@
                         <p
                             class="px-3 py-2 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider flex items-center gap-2">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                            {{ __('QUẢN TRỊ') }}
+                            {{ auth()->user()?->role === 1 ? __('CÁN BỘ ĐOÀN') : (auth()->user()?->role === 2 ? __('QUẢN TRỊ VIÊN') : __('ĐOÀN VIÊN')) }}
                         </p>
                         <flux:navlist.item icon="users" :href="route('admin.members')"
                             :current="request()->routeIs('admin.members')" wire:navigate
@@ -103,11 +94,6 @@
                             :current="request()->routeIs('admin.transactions')" wire:navigate
                             class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('admin.transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
                             {{ __('Thu chi') }}
-                        </flux:navlist.item>
-                        <flux:navlist.item icon="academic-cap" :href="route('admin.training-points')"
-                            :current="request()->routeIs('admin.training-points')" wire:navigate
-                            class="rounded-lg mx-1 hover:bg-amber-50 dark:hover:bg-amber-900/20 {{ request()->routeIs('admin.training-points') ? '!bg-amber-100 dark:!bg-amber-900/30 !text-amber-700 dark:!text-amber-300' : '' }}">
-                            {{ __('Điểm rèn luyện') }}
                         </flux:navlist.item>
                     </flux:navlist.group>
                 @endif
@@ -236,6 +222,23 @@
     </flux:header>
 
     {{ $slot }}
+
+    <x-toast />
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('notify', (event) => {
+                let data = event[0] || event;
+                window.dispatchEvent(new CustomEvent('toast', {
+                    detail: {
+                        text: data.message,
+                        variant: data.type || 'success',
+                        heading: data.heading || (data.type === 'danger' ? 'Lỗi' : 'Thành công'),
+                    }
+                }));
+            });
+        });
+    </script>
 
     @fluxScripts
 </body>

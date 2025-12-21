@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Transaction;
 use App\Models\MemberTransaction;
 use App\Models\Member;
+use App\Models\Branch;
 use App\Models\Notification;
 use App\Events\TransactionUpdated;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class ManageTransactions extends Component
 
     public string $search = '';
     public string $memberSearch = '';
+    public string $classSearch = '';
     public int $perPage = 10;
     public bool $showCreateForm = false;
     public bool $showViewModal = false;
@@ -89,6 +91,7 @@ class ManageTransactions extends Component
         $this->showViewModal = false;
         $this->viewingId = null;
         $this->memberSearch = '';
+        $this->classSearch = '';
     }
 
     public function openDeleteModal(int $id): void
@@ -124,7 +127,10 @@ class ManageTransactions extends Component
 
         if ($this->editingId) {
             Transaction::findOrFail($this->editingId)->update($data);
-            $this->dispatch('transaction-updated');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã cập nhật giao dịch thành công.'
+            ]);
             TransactionUpdated::dispatch(Transaction::find($this->editingId));
         } else {
             $transaction = Transaction::create($data);
@@ -139,7 +145,10 @@ class ManageTransactions extends Component
                 ]);
             }
 
-            $this->dispatch('transaction-created');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã tạo khoản thu chi thành công.'
+            ]);
             TransactionUpdated::dispatch($transaction);
         }
 
@@ -164,7 +173,10 @@ class ManageTransactions extends Component
             }
         }
 
-        $this->dispatch('notification-sent');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã gửi thông báo đến các thành viên.'
+        ]);
     }
 
     public function confirmPayment(int $memberTransactionId): void
@@ -174,14 +186,30 @@ class ManageTransactions extends Component
             'payment_status' => 2, // Confirmed
         ]);
 
-        $this->dispatch('payment-confirmed');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã xác nhận thanh toán.'
+        ]);
         TransactionUpdated::dispatch($memberTransaction->transaction);
     }
 
     public function closeTransaction(int $id): void
     {
         Transaction::findOrFail($id)->update(['status' => 1]);
-        $this->dispatch('transaction-closed');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã đóng khoản thu chi.'
+        ]);
+        TransactionUpdated::dispatch(Transaction::find($id));
+    }
+
+    public function openTransaction(int $id): void
+    {
+        Transaction::findOrFail($id)->update(['status' => 0]);
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Đã mở lại khoản thu chi.'
+        ]);
         TransactionUpdated::dispatch(Transaction::find($id));
     }
 
@@ -190,7 +218,10 @@ class ManageTransactions extends Component
         if ($this->deletingId) {
             $transaction = Transaction::findOrFail($this->deletingId);
             $transaction->delete();
-            $this->dispatch('transaction-deleted');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã xóa khoản thu chi.'
+            ]);
             TransactionUpdated::dispatch($transaction); // Although deleted, we might want to notify to remove from list
             $this->closeDeleteModal();
         }
@@ -208,6 +239,12 @@ class ManageTransactions extends Component
             ['value' => 0, 'label' => 'Thu'],
             ['value' => 1, 'label' => 'Chi'],
         ];
+    }
+
+    #[Computed]
+    public function branches()
+    {
+        return Branch::orderBy('branch_name')->get();
     }
 
     private function resetForm(): void
@@ -239,6 +276,11 @@ class ManageTransactions extends Component
                                 ->orWhereHas('user', function ($uq) {
                                     $uq->where('student_code', 'like', '%' . $this->memberSearch . '%');
                                 });
+                        });
+                    })
+                    ->when($this->classSearch, function ($query) {
+                        $query->whereHas('member', function ($mq) {
+                            $mq->where('branch_id', $this->classSearch);
                         });
                     })
                     ->orderByDesc('payment_status') // Confirmed/Pending first

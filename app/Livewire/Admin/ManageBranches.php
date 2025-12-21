@@ -116,10 +116,16 @@ class ManageBranches extends Component
 
     if ($this->mode === 'edit') {
       Branch::findOrFail($this->branchId)->update($data);
-      $this->dispatch('branch-updated');
+      $this->dispatch('notify', [
+        'type' => 'success',
+        'message' => 'Đã cập nhật chi đoàn.'
+      ]);
     } else {
       Branch::create($data);
-      $this->dispatch('branch-created');
+      $this->dispatch('notify', [
+        'type' => 'success',
+        'message' => 'Đã thêm chi đoàn mới.'
+      ]);
     }
 
     $this->closeBranchModal();
@@ -136,7 +142,10 @@ class ManageBranches extends Component
       }
 
       $branch->delete();
-      $this->dispatch('branch-deleted');
+      $this->dispatch('notify', [
+        'type' => 'success',
+        'message' => 'Đã xóa chi đoàn.'
+      ]);
       $this->closeDeleteModal();
     }
   }

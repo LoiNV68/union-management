@@ -131,7 +131,10 @@ class ManageSemesters extends Component
             }
 
             Semester::findOrFail($this->editingId)->update($data);
-            $this->dispatch('semester-updated');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã cập nhật học kỳ.'
+            ]);
         } else {
             // Check if semester already exists
             $existing = Semester::where('school_year', $this->school_year)
@@ -144,7 +147,10 @@ class ManageSemesters extends Component
             }
 
             Semester::create($data);
-            $this->dispatch('semester-created');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã thêm học kỳ mới.'
+            ]);
         }
 
         $this->closeCreateForm();
@@ -162,7 +168,10 @@ class ManageSemesters extends Component
             }
 
             Semester::findOrFail($this->deletingId)->delete();
-            $this->dispatch('semester-deleted');
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Đã xóa học kỳ.'
+            ]);
             $this->closeDeleteModal();
         }
     }

@@ -174,112 +174,170 @@
             <div class="premium-card p-6">
                 <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
                     <span class="w-1.5 h-6 rounded-full gradient-success"></span>
-                    Tổng quan tài chính
+                    Tổng quan thu chi
                 </h3>
-                <div class="space-y-4">
+
+                <div id="financial-chart" class="w-full min-h-[300px]"></div>
+
+                <div class="mt-4 grid grid-cols-2 gap-4">
                     <div
-                        class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-100 dark:border-green-900/30">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-green-500 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                                </svg>
-                            </div>
-                            <span class="font-medium text-neutral-700 dark:text-neutral-300">Tổng thu</span>
-                        </div>
-                        <span
-                            class="text-xl font-bold text-green-600">+{{ number_format($totalRevenue, 0, ',', '.') }}₫</span>
+                        class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-center border border-red-100 dark:border-red-900/30">
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Tổng chi</p>
+                        <p class="text-lg font-bold text-red-600 dark:text-red-400">
+                            {{ number_format($totalExpense, 0, ',', '.') }}₫
+                        </p>
                     </div>
                     <div
-                        class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-100 dark:border-red-900/30">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-red-500 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                                </svg>
-                            </div>
-                            <span class="font-medium text-neutral-700 dark:text-neutral-300">Tổng chi</span>
-                        </div>
-                        <span
-                            class="text-xl font-bold text-red-600">-{{ number_format($totalExpense, 0, ',', '.') }}₫</span>
+                        class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-center border border-green-100 dark:border-green-900/30">
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Qũy còn lại (Thực tế)</p>
+                        <p class="text-lg font-bold text-green-600 dark:text-green-400">
+                            {{ number_format($actualRevenue - $totalExpense, 0, ',', '.') }}₫
+                        </p>
                     </div>
-                    <div class="p-4 rounded-xl gradient-primary text-white">
-                        <div class="flex items-center justify-between">
-                            <span class="font-medium opacity-90">💰 Quỹ còn lại</span>
-                            <span
-                                class="text-2xl font-bold">{{ number_format($totalRevenue - $totalExpense, 0, ',', '.') }}₫</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="flex-1 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-center">
-                            <p class="text-2xl font-bold text-neutral-900 dark:text-white">{{ $paidTransactions }}</p>
-                            <p class="text-xs text-neutral-500">Đã thanh toán</p>
-                        </div>
-                        <div class="flex-1 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-center">
-                            <p class="text-2xl font-bold text-neutral-900 dark:text-white">{{ $pendingTransactions }}
-                            </p>
-                            <p class="text-xs text-neutral-500">Chờ thanh toán</p>
-                        </div>
+                    <div
+                        class="col-span-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-center border border-amber-100 dark:border-amber-900/30">
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Dự kiến thu thêm</p>
+                        <p class="text-lg font-bold text-amber-600 dark:text-amber-400">
+                            {{ number_format($pendingRevenue, 0, ',', '.') }}₫
+                        </p>
                     </div>
                 </div>
             </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+            <script>
+                document.addEventListener('livewire:init', () => {
+                    const options = {
+                        series: [{{ $totalExpense }}, {{ max(0, $actualRevenue - $totalExpense) }}, {{ $pendingRevenue }}],
+                        chart: {
+                            type: 'donut',
+                            height: 380,
+                            fontFamily: 'inherit',
+                            animations: {
+                                enabled: true,
+                                easing: 'easeinout',
+                                speed: 800,
+                            }
+                        },
+                        labels: ['Tổng chi', 'Quỹ đã thu', 'Chưa thu'],
+                        colors: ['#ef4444', '#10b981', '#f59e0b'],
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: '70%',
+                                    labels: {
+                                        show: true,
+                                        name: {
+                                            show: true,
+                                            fontSize: '14px',
+                                            fontFamily: 'inherit',
+                                            offsetY: -10
+                                        },
+                                        value: {
+                                            show: true,
+                                            fontSize: '24px',
+                                            fontFamily: 'inherit',
+                                            fontWeight: 600,
+                                            offsetY: 16,
+                                            formatter: function (val) {
+                                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+                                            }
+                                        },
+                                        total: {
+                                            show: true,
+                                            label: 'Thực thu',
+                                            fontSize: '14px',
+                                            fontFamily: 'inherit',
+                                            fontWeight: 500,
+                                            color: '#6b7280',
+                                            formatter: function (w) {
+                                                // Display Actual Revenue in center
+                                                const actual = {{ $actualRevenue }};
+                                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(actual);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            show: false,
+                        },
+                        legend: {
+                            position: 'bottom',
+                            fontFamily: 'inherit',
+                            markers: {
+                                radius: 12
+                            }
+                        },
+                        tooltip: {
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+                                }
+                            }
+                        }
+                    };
+
+                    const chart = new ApexCharts(document.querySelector("#financial-chart"), options);
+                    chart.render();
+
+                    // Re-render on theme change if needed (optional)
+                    // ... 
+                });
+            </script>
         </div>
 
-        <!-- Recent Activities -->
+        <!-- Activity Statistics -->
         <div class="premium-card p-6">
-            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-                <span class="w-1.5 h-6 rounded-full gradient-purple"></span>
-                Hoạt động gần đây
+            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-6 flex items-center gap-2">
+                <span class="w-1.5 h-6 rounded-full gradient-warning"></span>
+                Thống kê hoạt động
             </h3>
-            <div class="space-y-3">
-                @forelse($recentActivities as $activity)
-                    <div
-                        class="flex items-center justify-between p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors border border-neutral-100 dark:border-neutral-700/50">
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-12 h-12 rounded-xl {{ $activity->start_date > now() ? 'gradient-primary' : 'bg-neutral-200 dark:bg-neutral-700' }} flex items-center justify-center text-white">
-                                <svg class="w-6 h-6 {{ $activity->start_date > now() ? '' : 'text-neutral-500' }}"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-neutral-900 dark:text-neutral-100">
-                                    {{ $activity->activity_name }}</p>
-                                <p class="text-sm text-neutral-500 flex items-center gap-2">
-                                    <span>📅 {{ \Carbon\Carbon::parse($activity->start_date)->format('d/m/Y') }}</span>
-                                    <span>•</span>
-                                    <span>📍 {{ $activity->location }}</span>
-                                </p>
-                            </div>
-                        </div>
-                        @if($activity->start_date > now())
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold gradient-primary text-white">
-                                🔥 Sắp diễn ra
-                            </span>
-                        @else
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
-                                ✓ Đã diễn ra
-                            </span>
-                        @endif
+            
+            <div class="space-y-6">
+                <!-- Top Row: Activity Distribution -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalActivities }}</p>
+                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tổng hoạt động</p>
                     </div>
-                @empty
-                    <div class="text-center py-8">
-                        <div
-                            class="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <p class="text-neutral-500 font-medium">Chưa có hoạt động nào</p>
+                    
+                    <div class="p-5 rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 border-2 border-blue-500/50 text-center">
+                        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">{{ $upcomingActivities }}</p>
+                        <p class="text-sm font-medium text-blue-500 dark:text-blue-300">Sắp diễn ra</p>
                     </div>
-                @endforelse
+                    
+                    <div class="p-5 rounded-2xl bg-emerald-600 dark:bg-emerald-700 text-center shadow-lg shadow-emerald-200 dark:shadow-none">
+                        <p class="text-3xl font-bold text-white mb-1">{{ $completedActivities }}</p>
+                        <p class="text-sm font-medium text-emerald-50 text-center">Đã hoàn thành</p>
+                    </div>
+                    
+                    <div class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ number_format($avgParticipation, 1) }}</p>
+                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">TB tham gia/hoạt động</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: Registration Stats -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 py-4 px-8 bg-neutral-50/50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalRegistrations }}</p>
+                        <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Tổng đăng ký</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">{{ $approvedRegistrations }}</p>
+                        <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Đã duyệt</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-amber-500 dark:text-amber-400 mb-1">{{ $pendingRegistrations }}</p>
+                        <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Chờ duyệt</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

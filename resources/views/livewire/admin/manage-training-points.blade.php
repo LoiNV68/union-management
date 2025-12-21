@@ -276,8 +276,3 @@
         {{ $trainingPoints->links() }}
     </div>
 
-    <!-- Action Messages -->
-    <x-action-message class="me-3" on="training-point-created">{{ __('Đã thêm điểm rèn luyện.') }}</x-action-message>
-    <x-action-message class="me-3" on="training-point-updated">{{ __('Đã cập nhật điểm rèn luyện.') }}</x-action-message>
-    <x-action-message class="me-3" on="training-point-deleted">{{ __('Đã xóa điểm rèn luyện.') }}</x-action-message>
-</section>

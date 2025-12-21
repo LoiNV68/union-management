@@ -216,10 +216,3 @@
     <div class="mt-4">
         {{ $semesters->links() }}
     </div>
-
-    <!-- Action Messages -->
-    <x-action-message class="me-3 text-green-600" on="semester-created">✅ {{ __('Đã thêm học kỳ.') }}</x-action-message>
-    <x-action-message class="me-3 text-green-600" on="semester-updated">✅
-        {{ __('Đã cập nhật học kỳ.') }}</x-action-message>
-    <x-action-message class="me-3 text-green-600" on="semester-deleted">✅ {{ __('Đã xóa học kỳ.') }}</x-action-message>
-</section>

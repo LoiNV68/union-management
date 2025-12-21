@@ -325,19 +325,7 @@
         {{ $activities->onEachSide(1)->links() }}
     </div>
 
-    <!-- Action Messages -->
-    <x-action-message class="me-3"
-        on="activity-created">{{ __('Hoạt động đã được thêm thành công.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="activity-updated">{{ __('Hoạt động đã được cập nhật thành công.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="activity-deleted">{{ __('Hoạt động đã được xóa thành công.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="registration-approved">{{ __('Đơn đăng ký đã được duyệt.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="registration-rejected">{{ __('Đơn đăng ký đã bị từ chối.') }}</x-action-message>
-    <x-action-message class="me-3"
-        on="registration-cancelled">{{ __('Đơn đăng ký đã được hủy thành công.') }}</x-action-message>
+
 
     <!-- Cancellation Confirmation Modal -->
     @if ($showCancelModal)
