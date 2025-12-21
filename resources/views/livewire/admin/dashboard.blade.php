@@ -177,36 +177,9 @@
                     Tổng quan thu chi
                 </h3>
 
-                <div id="financial-chart" class="w-full min-h-[300px]"></div>
+                <script src="https://cdn.jsdelivr.net/npm/apexcharts" data-navigate-once></script>
 
-                <div class="mt-4 grid grid-cols-2 gap-4">
-                    <div
-                        class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-center border border-red-100 dark:border-red-900/30">
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Tổng chi</p>
-                        <p class="text-lg font-bold text-red-600 dark:text-red-400">
-                            {{ number_format($totalExpense, 0, ',', '.') }}₫
-                        </p>
-                    </div>
-                    <div
-                        class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-center border border-green-100 dark:border-green-900/30">
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Qũy còn lại (Thực tế)</p>
-                        <p class="text-lg font-bold text-green-600 dark:text-green-400">
-                            {{ number_format($actualRevenue - $totalExpense, 0, ',', '.') }}₫
-                        </p>
-                    </div>
-                    <div
-                        class="col-span-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-center border border-amber-100 dark:border-amber-900/30">
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Dự kiến thu thêm</p>
-                        <p class="text-lg font-bold text-amber-600 dark:text-amber-400">
-                            {{ number_format($pendingRevenue, 0, ',', '.') }}₫
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-            <script>
-                document.addEventListener('livewire:init', () => {
+                <div id="financial-chart" class="w-full min-h-[300px]" x-init="
                     const options = {
                         series: [{{ $totalExpense }}, {{ max(0, $actualRevenue - $totalExpense) }}, {{ $pendingRevenue }}],
                         chart: {
@@ -283,62 +256,104 @@
                         }
                     };
 
-                    const chart = new ApexCharts(document.querySelector("#financial-chart"), options);
-                    chart.render();
+                    new ApexCharts($el, options).render();
+                "></div>
 
-                    // Re-render on theme change if needed (optional)
-                    // ... 
-                });
-            </script>
-        </div>
-
-        <!-- Activity Statistics -->
-        <div class="premium-card p-6">
-            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-6 flex items-center gap-2">
-                <span class="w-1.5 h-6 rounded-full gradient-warning"></span>
-                Thống kê hoạt động
-            </h3>
-            
-            <div class="space-y-6">
-                <!-- Top Row: Activity Distribution -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalActivities }}</p>
-                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tổng hoạt động</p>
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div
+                        class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-center border border-red-100 dark:border-red-900/30">
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Tổng chi</p>
+                        <p class="text-lg font-bold text-red-600 dark:text-red-400">
+                            {{ number_format($totalExpense, 0, ',', '.') }}₫
+                        </p>
                     </div>
-                    
-                    <div class="p-5 rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 border-2 border-blue-500/50 text-center">
-                        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">{{ $upcomingActivities }}</p>
-                        <p class="text-sm font-medium text-blue-500 dark:text-blue-300">Sắp diễn ra</p>
+                    <div
+                        class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-center border border-green-100 dark:border-green-900/30">
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Qũy còn lại (Thực tế)</p>
+                        <p class="text-lg font-bold text-green-600 dark:text-green-400">
+                            {{ number_format($actualRevenue - $totalExpense, 0, ',', '.') }}₫
+                        </p>
                     </div>
-                    
-                    <div class="p-5 rounded-2xl bg-emerald-600 dark:bg-emerald-700 text-center shadow-lg shadow-emerald-200 dark:shadow-none">
-                        <p class="text-3xl font-bold text-white mb-1">{{ $completedActivities }}</p>
-                        <p class="text-sm font-medium text-emerald-50 text-center">Đã hoàn thành</p>
-                    </div>
-                    
-                    <div class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ number_format($avgParticipation, 1) }}</p>
-                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">TB tham gia/hoạt động</p>
+                    <div
+                        class="col-span-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-center border border-amber-100 dark:border-amber-900/30">
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Dự kiến thu thêm</p>
+                        <p class="text-lg font-bold text-amber-600 dark:text-amber-400">
+                            {{ number_format($pendingRevenue, 0, ',', '.') }}₫
+                        </p>
                     </div>
                 </div>
+            </div>
 
-                <!-- Bottom Row: Registration Stats -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 py-4 px-8 bg-neutral-50/50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalRegistrations }}</p>
-                        <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Tổng đăng ký</p>
+            <!-- Activity Statistics -->
+            <div class="premium-card p-6">
+                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-6 flex items-center gap-2">
+                    <span class="w-1.5 h-6 rounded-full gradient-warning"></span>
+                    Thống kê hoạt động
+                </h3>
+
+                <div class="space-y-6">
+                    <!-- Top Row: Activity Distribution -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div
+                            class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
+                            <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalActivities }}
+                            </p>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tổng hoạt động</p>
+                        </div>
+
+                        <div
+                            class="p-5 rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 border-2 border-blue-500/50 text-center">
+                            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                                {{ $upcomingActivities }}
+                            </p>
+                            <p class="text-sm font-medium text-blue-500 dark:text-blue-300">Sắp diễn ra</p>
+                        </div>
+
+                        <div
+                            class="p-5 rounded-2xl bg-emerald-600 dark:bg-emerald-700 text-center shadow-lg shadow-emerald-200 dark:shadow-none">
+                            <p class="text-3xl font-bold text-white mb-1">{{ $completedActivities }}</p>
+                            <p class="text-sm font-medium text-emerald-50 text-center">Đã hoàn thành</p>
+                        </div>
+
+                        <div
+                            class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
+                            <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">
+                                {{ number_format($avgParticipation, 1) }}
+                            </p>
+                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">TB tham gia/hoạt động
+                            </p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">{{ $approvedRegistrations }}</p>
-                        <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Đã duyệt</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-amber-500 dark:text-amber-400 mb-1">{{ $pendingRegistrations }}</p>
-                        <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Chờ duyệt</p>
+
+                    <!-- Bottom Row: Registration Stats -->
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-3 gap-8 py-4 px-8 bg-neutral-50/50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">
+                                {{ $totalRegistrations }}
+                            </p>
+                            <p
+                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Tổng đăng ký</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">
+                                {{ $approvedRegistrations }}
+                            </p>
+                            <p
+                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Đã duyệt</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-amber-500 dark:text-amber-400 mb-1">
+                                {{ $pendingRegistrations }}
+                            </p>
+                            <p
+                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Chờ duyệt</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </x-layouts.app>
