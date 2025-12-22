@@ -116,11 +116,11 @@
                             class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('union.transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
                             {{ __('Khoản thu') }}
                         </flux:navlist.item>
-                        <flux:navlist.item icon="academic-cap" :href="route('union.training-points')"
+                        <!-- <flux:navlist.item icon="academic-cap" :href="route('union.training-points')"
                             :current="request()->routeIs('union.training-points')" wire:navigate
                             class="rounded-lg mx-1 hover:bg-orange-50 dark:hover:bg-orange-900/20 {{ request()->routeIs('union.training-points') ? '!bg-orange-100 dark:!bg-orange-900/30 !text-orange-700 dark:!text-orange-300' : '' }}">
                             {{ __('Điểm rèn luyện') }}
-                        </flux:navlist.item>
+                        </flux:navlist.item> -->
                     </flux:navlist.group>
                 @endif
             </flux:navlist>

@@ -33,6 +33,18 @@ class UnionDashboardController extends Controller
       ->where('registration_status', 0)
       ->count();
 
+    $upcomingRegistrations = ActivityRegistration::where('member_id', $member->id)
+      ->where('registration_status', 1)
+      ->whereHas('activity', function ($q) {
+        $q->where('start_date', '>', now());
+      })->count();
+
+    $completedRegistrations = ActivityRegistration::where('member_id', $member->id)
+      ->where('registration_status', 1)
+      ->whereHas('activity', function ($q) {
+        $q->where('start_date', '<=', now());
+      })->count();
+
     // Financial statistics
     $totalTransactions = MemberTransaction::where('member_id', $member->id)->count();
     $paidTransactions = MemberTransaction::where('member_id', $member->id)
@@ -79,6 +91,8 @@ class UnionDashboardController extends Controller
       'totalRegistrations',
       'approvedRegistrations',
       'pendingRegistrations',
+      'upcomingRegistrations',
+      'completedRegistrations',
       'totalTransactions',
       'paidTransactions',
       'pendingPayments',
