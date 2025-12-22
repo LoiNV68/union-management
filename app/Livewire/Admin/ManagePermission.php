@@ -24,8 +24,10 @@ class ManagePermission extends Component
   // Modal state
   public bool $showToggleLockModal = false;
   public bool $showDeleteModal = false;
+  public bool $showPasswordModal = false;
   public ?int $selectedUserId = null;
   public bool $selectedUserLocked = false;
+  public string $new_password_update = '';
 
   private function ensureSuperAdmin(): void
   {
@@ -159,6 +161,54 @@ class ManagePermission extends Component
       $this->closeDeleteModal();
     } catch (\Exception $e) {
       $this->addError('delete', __('Có lỗi xảy ra khi xóa người dùng.'));
+    }
+  }
+
+  // Password Modal Methods
+  public function openPasswordModal(int $userId): void
+  {
+    $this->selectedUserId = $userId;
+    $this->new_password_update = '';
+    $this->showPasswordModal = true;
+  }
+
+  public function closePasswordModal(): void
+  {
+    $this->showPasswordModal = false;
+    $this->selectedUserId = null;
+    $this->new_password_update = '';
+    $this->resetErrorBag('new_password_update');
+  }
+
+  public function confirmPasswordUpdate(): void
+  {
+    if ($this->selectedUserId === null) {
+      return;
+    }
+
+    $this->validate([
+      'new_password_update' => ['required', 'string', 'min:6', 'max:255', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.@$!%*?&\/|\\\]).+$/'],
+    ], [
+      'new_password_update.required' => 'Vui lòng nhập mật khẩu mới.',
+      'new_password_update.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+      'new_password_update.max' => 'Mật khẩu không được vượt quá 255 ký tự.',
+      'new_password_update.regex' => 'Mật khẩu phải có ít nhất 1 chữ thường, 1 chữ in hoa, 1 số và 1 ký tự đặc biệt (@$!%*?&. / | \).',
+    ]);
+
+    try {
+      $this->ensureSuperAdmin();
+      $user = User::query()->findOrFail($this->selectedUserId);
+      $user->update([
+        'password' => Hash::make($this->new_password_update)
+      ]);
+
+      $this->dispatch('notify', [
+        'type' => 'success',
+        'message' => 'Đã đặt lại mật khẩu thành công.'
+      ]);
+      $this->closePasswordModal();
+    } catch (\Exception $e) {
+      $this->addError('new_password_update', __('Có lỗi xảy ra khi đổi mật khẩu.'));
     }
   }
 
