@@ -47,7 +47,7 @@
                     <div class="bg-gray-50 rounded-lg p-4">
                         <p class="font-semibold text-lg">{{ $viewingTransaction->transaction->title }}</p>
                         <p class="text-2xl font-bold text-red-600">
-                            {{ number_format($viewingTransaction->transaction->amount) }} ₫
+                            {{ number_format($viewingTransaction->amount_per_member, 0, ',', '.') }} ₫
                         </p>
                         <p class="text-sm text-gray-600 mt-2">
                             Mã SV: {{ $viewingTransaction->member->user?->student_code ?? 'N/A' }}
@@ -108,7 +108,7 @@
                         <div class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
                             <span class="inline-flex items-center gap-1">
                                 💰 <span
-                                    class="font-semibold text-red-600">{{ number_format($mt->transaction->amount, 0, ',', '.') }}
+                                    class="font-semibold text-red-600">{{ number_format($mt->amount_per_member, 0, ',', '.') }}
                                     VNĐ</span>
                             </span>
                             @if ($mt->transaction->due_date)

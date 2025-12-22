@@ -52,4 +52,20 @@ class MemberTransaction extends Model
     {
         return $query->where('payment_status', 2);
     }
+
+    /**
+     * Get the amount per member (transaction amount divided by total number of all members)
+     */
+    public function getAmountPerMemberAttribute(): float
+    {
+        // Get total number of all members in this transaction (across all branches)
+        $totalMembersCount = $this->transaction->memberTransactions()->count();
+
+        if ($totalMembersCount === 0) {
+            return 0;
+        }
+
+        // Divide transaction amount by total number of all members
+        return round($this->transaction->amount / $totalMembersCount, 2);
+    }
 }

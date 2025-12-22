@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UnionDashboardController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -46,6 +47,9 @@ Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])
 
 // Admin (role=1, 2) - Management pages (Volt SFC)
 Route::middleware(['auth', 'verified', 'role'])->group(function () {
+    // Statistics - Only Super Admin (role 2)
+    Route::get('admin/statistics', \App\Livewire\Admin\Statistics::class)
+        ->name('admin.statistics');
     Volt::route('admin/manage-permission', 'admin.manage-permission')
         ->name('admin.permission');
 
@@ -58,8 +62,13 @@ Route::middleware(['auth', 'verified', 'role'])->group(function () {
     Volt::route('admin/manage-activities', 'admin.manage-activities')
         ->name('admin.activities');
 
-    Volt::route('admin/manage-transactions', 'admin.manage-transactions')
+    // Transactions - Only Super Admin (role 2)
+    Route::get('admin/manage-transactions', \App\Livewire\Admin\ManageTransactions::class)
         ->name('admin.transactions');
+    
+    // Branch Transactions - Only Branch Officers (role 1)
+    Route::get('union/manage-branch-transactions', \App\Livewire\Union\ManageBranchTransactions::class)
+        ->name('union.branch-transactions');
 
     // Volt::route('admin/manage-training-points', 'admin.manage-training-points')
     //     ->name('admin.training-points');
@@ -92,6 +101,4 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('union/transactions', 'union.member-transactions')
         ->name('union.transactions');
 
-    Volt::route('union/training-points', 'union.view-training-points')
-        ->name('union.training-points');
 });

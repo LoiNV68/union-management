@@ -73,56 +73,6 @@
                     </div>
                 </div>
 
-                <!-- Training Points Average -->
-                <div class="premium-card stat-card p-6 group">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">Điểm TB</p>
-                            <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-1">
-                                {{ number_format($avgPoints, 1) }}
-                            </p>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
-                                    📚 {{ $trainingPoints->count() }} học kỳ
-                                </span>
-                            </div>
-                        </div>
-                        <div class="icon-gradient-orange group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Latest Training Point -->
-                @if($latestPoint)
-                    <div class="premium-card stat-card p-6 group">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">Điểm mới nhất</p>
-                                <p class="text-3xl font-bold mt-1 {{ $latestPoint->point >= 90 ? 'text-green-600' : ($latestPoint->point >= 80 ? 'text-blue-600' : ($latestPoint->point >= 65 ? 'text-yellow-600' : 'text-red-600')) }}">
-                                    {{ number_format($latestPoint->point, 1) }}
-                                </p>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
-                                        {{ $latestPoint->point >= 90 ? 'score-excellent' : ($latestPoint->point >= 80 ? 'score-good' : ($latestPoint->point >= 65 ? 'score-average' : 'score-below')) }}">
-                                        {{ $latestPoint->semester->school_year }} - HK{{ $latestPoint->semester->semester }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="{{ $latestPoint->point >= 90 ? 'icon-gradient-green' : ($latestPoint->point >= 80 ? 'icon-gradient-blue' : ($latestPoint->point >= 65 ? 'icon-gradient-orange' : 'icon-gradient-pink')) }} group-hover:scale-110 transition-transform duration-300">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="premium-card p-6 flex items-center justify-center">
-                        <p class="text-sm text-neutral-500">Chưa có điểm rèn luyện</p>
-                    </div>
-                @endif
             </div>
 
             <!-- Charts Row -->
@@ -160,40 +110,6 @@
                     </div>
                 </div>
 
-                <!-- Training Points Chart -->
-                <div class="premium-card p-6">
-                    <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-                        <span class="w-1.5 h-6 rounded-full gradient-orange"></span>
-                        Điểm rèn luyện theo học kỳ
-                    </h3>
-                    @if($trainingPoints->count() > 0)
-                        <div class="space-y-3">
-                            @foreach($trainingPoints->take(5) as $tp)
-                                <div class="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700">
-                                    <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                                        {{ $tp->semester->school_year }} - HK{{ $tp->semester->semester }}
-                                    </span>
-                                    <span class="text-lg font-bold px-3 py-1 rounded-lg
-                                        {{ $tp->point >= 90 ? 'score-excellent' : '' }}
-                                        {{ $tp->point >= 80 && $tp->point < 90 ? 'score-good' : '' }}
-                                        {{ $tp->point >= 65 && $tp->point < 80 ? 'score-average' : '' }}
-                                        {{ $tp->point < 65 ? 'score-below' : '' }}">
-                                        {{ number_format($tp->point, 1) }}
-                                    </span>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-                                </svg>
-                            </div>
-                            <p class="text-neutral-500 font-medium">Chưa có điểm rèn luyện</p>
-                        </div>
-                    @endif
-                </div>
             </div>
 
             <!-- Recent Registrations -->

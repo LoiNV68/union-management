@@ -6,8 +6,6 @@ use App\Models\Member;
 use App\Models\Activity;
 use App\Models\Transaction;
 use App\Models\MemberTransaction;
-use App\Models\TrainingPoint;
-use App\Models\Semester;
 use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
@@ -66,35 +64,11 @@ class AdminDashboardController extends Controller
       ? round(($paidTransactions / $totalMemberTransactions) * 100, 2)
       : 0;
 
-    // Training points statistics
-    $totalTrainingPoints = TrainingPoint::count();
-    $avgTrainingPoint = TrainingPoint::avg('point') ?? 0;
-    $currentSemester = Semester::orderByDesc('school_year')
-      ->orderByDesc('semester')
-      ->first();
-
-    $currentSemesterAvg = 0;
-    if ($currentSemester) {
-      $currentSemesterAvg = TrainingPoint::where('semester_id', $currentSemester->id)
-        ->avg('point') ?? 0;
-    }
-
     // Recent activities
     $recentActivities = Activity::with('user')
       ->orderByDesc('created_at')
       ->limit(5)
       ->get();
-
-    // Training points distribution
-    $trainingPointsDistribution = [
-      'excellent' => TrainingPoint::where('point', '>=', 90)->count(),
-      'good' => TrainingPoint::whereBetween('point', [80, 89.99])->count(),
-      'average' => TrainingPoint::whereBetween('point', [65, 79.99])->count(),
-      'below' => TrainingPoint::where('point', '<', 65)->count(),
-      'low' => TrainingPoint::whereBetween('point', [50, 64.99])->count(), // "Below" usually means <50 or <65? 
-      // Adjusted based on typical scales, keeping existing 'below' logic but let's check view usage.
-    ];
-    // Keeping existing distribution logic for safety, just modifying Financials.
 
     return view('livewire.admin.dashboard', compact(
       'totalMembers',
@@ -117,12 +91,7 @@ class AdminDashboardController extends Controller
       'paidTransactions',
       'pendingTransactions',
       'paymentRate',
-      'totalTrainingPoints',
-      'avgTrainingPoint',
-      'currentSemester',
-      'currentSemesterAvg',
-      'recentActivities',
-      'trainingPointsDistribution'
+      'recentActivities'
     ));
   }
 }

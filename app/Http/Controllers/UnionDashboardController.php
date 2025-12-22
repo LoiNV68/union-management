@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use App\Models\ActivityRegistration;
 use App\Models\MemberTransaction;
-use App\Models\TrainingPoint;
 use Illuminate\Support\Facades\Auth;
 
 class UnionDashboardController extends Controller
@@ -57,16 +56,6 @@ class UnionDashboardController extends Controller
         return $mt->transaction->amount ?? 0;
       });
 
-    // Training points statistics
-    $trainingPoints = TrainingPoint::where('member_id', $member->id)
-      ->with('semester')
-      ->orderByDesc('updated_at')
-      ->get();
-
-    $totalPoints = $trainingPoints->sum('point');
-    $avgPoints = $trainingPoints->count() > 0 ? $totalPoints / $trainingPoints->count() : 0;
-    $latestPoint = $trainingPoints->first();
-
     // Recent activity registrations
     $recentRegistrations = ActivityRegistration::where('member_id', $member->id)
       ->with('activity')
@@ -84,10 +73,6 @@ class UnionDashboardController extends Controller
       'pendingPayments',
       'totalAmount',
       'paidAmount',
-      'trainingPoints',
-      'totalPoints',
-      'avgPoints',
-      'latestPoint',
       'recentRegistrations'
     ));
   }
