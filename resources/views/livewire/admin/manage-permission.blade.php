@@ -134,6 +134,10 @@
                             </flux:select>
                         </div>
                         <div class="flex items-center gap-2 justify-end">
+                            <flux:button wire:click="openPasswordModal({{ $u->id }})" variant="ghost" size="sm"
+                                square x-on:click.stop>
+                                <flux:icon.key class="size-4" />
+                            </flux:button>
                             <flux:button
                                 wire:click="openToggleLockModal({{ $u->id }}, {{ $u->is_locked ? 'true' : 'false' }})"
                                 variant="ghost" size="sm" square x-on:click.stop>
@@ -228,6 +232,41 @@
                     <flux:button wire:click="closeDeleteModal" variant="ghost">{{ __('Hủy') }}</flux:button>
                     <flux:button wire:click="confirmDelete" variant="danger">{{ __('Xóa') }}</flux:button>
                 </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Change Password Modal -->
+    @if ($showPasswordModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop" wire:click="closePasswordModal">
+            <div class="w-full max-w-md premium-modal p-6" wire:click.stop>
+                <div class="text-center mb-6">
+                    <div
+                        class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ __('Đổi mật khẩu') }}</h3>
+                    <p class="text-neutral-600 dark:text-neutral-400">
+                        {{ __('Nhập mật khẩu mới cho người dùng này.') }}
+                    </p>
+                </div>
+
+                <form wire:submit.prevent="confirmPasswordUpdate" class="space-y-4">
+                    <flux:input wire:model="new_password_update" :label="__('Mật khẩu mới')" type="password" required
+                        placeholder="••••••••" viewable />
+
+                    <div class="flex items-center justify-center gap-3 pt-4">
+                        <flux:button wire:click="closePasswordModal" variant="ghost" type="button">
+                            {{ __('Hủy') }}
+                        </flux:button>
+                        <flux:button type="submit" variant="primary">
+                            {{ __('Cập nhật') }}
+                        </flux:button>
+                    </div>
+                </form>
             </div>
         </div>
     @endif
