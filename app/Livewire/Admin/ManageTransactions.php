@@ -41,7 +41,7 @@ class ManageTransactions extends Component
 
     public function mount(): void
     {
-        abort_unless(Auth::user()?->role === 2, 403);
+        abort_unless(in_array(Auth::user()?->role, [1, 2]), 403);
     }
 
     public function updatedSearch(): void
@@ -71,10 +71,10 @@ class ManageTransactions extends Component
     public function openEditForm(int $id): void
     {
         $transaction = Transaction::findOrFail($id);
-        
+
         // Chỉ cho phép chỉnh sửa transactions do mình tạo
         abort_unless($transaction->created_by === Auth::id(), 403);
-        
+
         $this->editingId = $id;
         $this->title = $transaction->title;
         $this->description = $transaction->description ?? '';
@@ -87,10 +87,10 @@ class ManageTransactions extends Component
     public function openViewModal(int $id): void
     {
         $transaction = Transaction::findOrFail($id);
-        
+
         // Chỉ cho phép xem transactions do mình tạo
         abort_unless($transaction->created_by === Auth::id(), 403);
-        
+
         $this->viewingId = $id;
         $this->showViewModal = true;
     }
@@ -136,10 +136,10 @@ class ManageTransactions extends Component
 
         if ($this->editingId) {
             $transaction = Transaction::findOrFail($this->editingId);
-            
+
             // Chỉ cho phép cập nhật transactions do mình tạo
             abort_unless($transaction->created_by === Auth::id(), 403);
-            
+
             $transaction->update($data);
             $this->dispatch('notify', [
                 'type' => 'success',
@@ -153,7 +153,7 @@ class ManageTransactions extends Component
             if ($transaction->type === 0) {
                 $members = Member::where('status', 1)->get();
                 $totalMembersCount = $members->count();
-                
+
                 foreach ($members as $member) {
                     MemberTransaction::create([
                         'transaction_id' => $transaction->id,
@@ -169,7 +169,7 @@ class ManageTransactions extends Component
                 $branches = Branch::whereNotNull('secretary')->with('members')->get();
                 foreach ($branches as $branch) {
                     $branchActiveMembersCount = $branch->members()->where('status', 1)->count();
-                    
+
                     if ($branchActiveMembersCount > 0 && $branch->secretary) {
                         // Số tiền thu của chi đoàn = số tiền mỗi thành viên × số thành viên trong chi đoàn
                         $branchRevenueAmount = $amountPerMember * $branchActiveMembersCount;
@@ -199,7 +199,7 @@ class ManageTransactions extends Component
     public function sendNotification(int $transactionId): void
     {
         $transaction = Transaction::findOrFail($transactionId);
-        
+
         // Chỉ cho phép gửi thông báo cho transactions do mình tạo
         abort_unless($transaction->created_by === Auth::id(), 403);
         $memberTransactions = $transaction->memberTransactions()->with('member.user')->get();
@@ -230,10 +230,10 @@ class ManageTransactions extends Component
     public function confirmPayment(int $memberTransactionId): void
     {
         $memberTransaction = MemberTransaction::findOrFail($memberTransactionId);
-        
+
         // Chỉ cho phép xác nhận thanh toán cho transactions do mình tạo
         abort_unless($memberTransaction->transaction->created_by === Auth::id(), 403);
-        
+
         $memberTransaction->update([
             'payment_status' => 2, // Confirmed
         ]);
@@ -248,10 +248,10 @@ class ManageTransactions extends Component
     public function closeTransaction(int $id): void
     {
         $transaction = Transaction::findOrFail($id);
-        
+
         // Chỉ cho phép đóng transactions do mình tạo
         abort_unless($transaction->created_by === Auth::id(), 403);
-        
+
         $transaction->update(['status' => 1]);
         $this->dispatch('notify', [
             'type' => 'success',
@@ -263,10 +263,10 @@ class ManageTransactions extends Component
     public function openTransaction(int $id): void
     {
         $transaction = Transaction::findOrFail($id);
-        
+
         // Chỉ cho phép mở transactions do mình tạo
         abort_unless($transaction->created_by === Auth::id(), 403);
-        
+
         $transaction->update(['status' => 0]);
         $this->dispatch('notify', [
             'type' => 'success',
@@ -279,10 +279,10 @@ class ManageTransactions extends Component
     {
         if ($this->deletingId) {
             $transaction = Transaction::findOrFail($this->deletingId);
-            
+
             // Chỉ cho phép xóa transactions do mình tạo
             abort_unless($transaction->created_by === Auth::id(), 403);
-            
+
             $transaction->delete();
             $this->dispatch('notify', [
                 'type' => 'success',

@@ -68,12 +68,12 @@
                             class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('admin.transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
                             {{ __('Thu chi') }}
                         </flux:navlist.item>
-                        
-                        <flux:navlist.item icon="chart-bar" :href="route('admin.statistics')"
-                            :current="request()->routeIs('admin.statistics')" wire:navigate
-                            class="rounded-lg mx-1 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 {{ request()->routeIs('admin.statistics') ? '!bg-indigo-100 dark:!bg-indigo-900/30 !text-indigo-700 dark:!text-indigo-300' : '' }}">
-                            {{ __('Thống kê') }}
-                        </flux:navlist.item>
+
+                        <!-- <flux:navlist.item icon="chart-bar" :href="route('admin.statistics')"
+                                        :current="request()->routeIs('admin.statistics')" wire:navigate
+                                        class="rounded-lg mx-1 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 {{ request()->routeIs('admin.statistics') ? '!bg-indigo-100 dark:!bg-indigo-900/30 !text-indigo-700 dark:!text-indigo-300' : '' }}">
+                                        {{ __('Thống kê') }}
+                                    </flux:navlist.item> -->
                     </flux:navlist.group>
                 @endif
 
@@ -95,11 +95,16 @@
                             class="rounded-lg mx-1 hover:bg-orange-50 dark:hover:bg-orange-900/20 {{ request()->routeIs('admin.activities') ? '!bg-orange-100 dark:!bg-orange-900/30 !text-orange-700 dark:!text-orange-300' : '' }}">
                             {{ __('Hoạt động') }}
                         </flux:navlist.item>
-                        <flux:navlist.item icon="wallet" :href="route('union.branch-transactions')"
-                            :current="request()->routeIs('union.branch-transactions')" wire:navigate
-                            class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('union.branch-transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
-                            {{ __('Thu chi chi đoàn') }}
+                        <flux:navlist.item icon="wallet" :href="route('admin.transactions')"
+                            :current="request()->routeIs('admin.transactions')" wire:navigate
+                            class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('admin.transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
+                            {{ __('Quản lý thu chi') }}
                         </flux:navlist.item>
+                        <!-- <flux:navlist.item icon="wallet" :href="route('union.branch-transactions')"
+                                :current="request()->routeIs('union.branch-transactions')" wire:navigate
+                                class="rounded-lg mx-1 hover:bg-green-50 dark:hover:bg-green-900/20 {{ request()->routeIs('union.branch-transactions') ? '!bg-green-100 dark:!bg-green-900/30 !text-green-700 dark:!text-green-300' : '' }}">
+                                {{ __('Thu chi chi đoàn') }}
+                            </flux:navlist.item> -->
                     </flux:navlist.group>
                 @endif
 

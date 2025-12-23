@@ -191,7 +191,8 @@
                     </div>
                     <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ __('Xác nhận xóa') }}</h3>
                     <p class="text-neutral-600 dark:text-neutral-400">
-                        {{ __('Bạn có chắc chắn muốn xóa khoản thu chi này?') }}</p>
+                        {{ __('Bạn có chắc chắn muốn xóa khoản thu chi này?') }}
+                    </p>
                 </div>
                 <div class="flex items-center justify-center gap-3">
                     <flux:button wire:click="closeDeleteModal" variant="ghost">{{ __('Hủy') }}</flux:button>
@@ -200,7 +201,6 @@
             </div>
         </div>
     @endif
-
     <!-- Transactions List -->
     <div class="space-y-4">
         @forelse ($transactions as $transaction)

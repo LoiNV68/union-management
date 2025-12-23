@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 
         // Tạo tài khoản super admin thủ công
         $adminUser = User::factory()->create([
-            'student_code' => '2254800001',
+            'student_code' => '123',
             'password' => bcrypt('123A@a321'),
             'role' => 2,
         ]);

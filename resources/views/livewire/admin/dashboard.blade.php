@@ -14,8 +14,8 @@
             </div>
         </div>
 
-        <!-- Statistics Cards with Gradient Icons -->
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <!-- Major Statistics Cards -->
+        <div class="grid gap-4 md:grid-cols-2">
             <!-- Members Card -->
             <div class="premium-card stat-card p-6 group">
                 <div class="flex items-center justify-between">
@@ -61,221 +61,81 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Finance Card -->
-            <div class="premium-card stat-card p-6 group">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
-                            Quỹ hiện tại</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-1">
-                            {{ number_format($totalRevenue - $totalExpense, 0, ',', '.') }}<span
-                                class="text-lg">₫</span>
-                        </p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span
-                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                📊 {{ $paymentRate }}% thanh toán
-                            </span>
-                        </div>
-                    </div>
-                    <div class="icon-gradient-green group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- Charts Row -->
-        <div class="grid gap-4 md:grid-cols-1">
-            <!-- Financial Summary -->
-            <div class="premium-card p-6">
-                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-6 rounded-full gradient-success"></span>
-                    Tổng quan thu chi
-                </h3>
+        <!-- Integrated Financial Statistics -->
+        @livewire('admin.statistics', ['showHeader' => false])
 
-                <script src="https://cdn.jsdelivr.net/npm/apexcharts" data-navigate-once></script>
+        <!-- Activity Statistics section -->
+        <div class="premium-card p-6">
+            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-6 flex items-center gap-2">
+                <span class="w-1.5 h-6 rounded-full gradient-warning"></span>
+                Thống kê hoạt động
+            </h3>
 
-                <div id="financial-chart" class="w-full min-h-[300px]" x-init="
-                    const options = {
-                        series: [{{ $totalExpense }}, {{ max(0, $actualRevenue - $totalExpense) }}, {{ $pendingRevenue }}],
-                        chart: {
-                            type: 'donut',
-                            height: 380,
-                            fontFamily: 'inherit',
-                            animations: {
-                                enabled: true,
-                                easing: 'easeinout',
-                                speed: 800,
-                            }
-                        },
-                        labels: ['Tổng chi', 'Quỹ đã thu', 'Chưa thu'],
-                        colors: ['#ef4444', '#10b981', '#f59e0b'],
-                        plotOptions: {
-                            pie: {
-                                donut: {
-                                    size: '70%',
-                                    labels: {
-                                        show: true,
-                                        name: {
-                                            show: true,
-                                            fontSize: '14px',
-                                            fontFamily: 'inherit',
-                                            offsetY: -10
-                                        },
-                                        value: {
-                                            show: true,
-                                            fontSize: '24px',
-                                            fontFamily: 'inherit',
-                                            fontWeight: 600,
-                                            offsetY: 16,
-                                            formatter: function (val) {
-                                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-                                            }
-                                        },
-                                        total: {
-                                            show: true,
-                                            label: 'Thực thu',
-                                            fontSize: '14px',
-                                            fontFamily: 'inherit',
-                                            fontWeight: 500,
-                                            color: '#6b7280',
-                                            formatter: function (w) {
-                                                // Display Actual Revenue in center
-                                                const actual = {{ $actualRevenue }};
-                                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(actual);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        stroke: {
-                            show: false,
-                        },
-                        legend: {
-                            position: 'bottom',
-                            fontFamily: 'inherit',
-                            markers: {
-                                radius: 12
-                            }
-                        },
-                        tooltip: {
-                            theme: 'dark',
-                            y: {
-                                formatter: function (val) {
-                                    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-                                }
-                            }
-                        }
-                    };
-
-                    new ApexCharts($el, options).render();
-                "></div>
-
-                <div class="mt-4 grid grid-cols-2 gap-4">
+            <div class="space-y-6">
+                <!-- Top Row: Activity Distribution -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div
-                        class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-center border border-red-100 dark:border-red-900/30">
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Tổng chi</p>
-                        <p class="text-lg font-bold text-red-600 dark:text-red-400">
-                            {{ number_format($totalExpense, 0, ',', '.') }}₫
+                        class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalActivities }}
                         </p>
+                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tổng hoạt động</p>
                     </div>
+
                     <div
-                        class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-center border border-green-100 dark:border-green-900/30">
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Qũy còn lại (Thực tế)</p>
-                        <p class="text-lg font-bold text-green-600 dark:text-green-400">
-                            {{ number_format($actualRevenue - $totalExpense, 0, ',', '.') }}₫
+                        class="p-5 rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 border-2 border-blue-500/50 text-center">
+                        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                            {{ $upcomingActivities }}
                         </p>
+                        <p class="text-sm font-medium text-blue-500 dark:text-blue-300">Sắp diễn ra</p>
                     </div>
+
                     <div
-                        class="col-span-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-center border border-amber-100 dark:border-amber-900/30">
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Dự kiến thu thêm</p>
-                        <p class="text-lg font-bold text-amber-600 dark:text-amber-400">
-                            {{ number_format($pendingRevenue, 0, ',', '.') }}₫
+                        class="p-5 rounded-2xl bg-emerald-600 dark:bg-emerald-700 text-center shadow-lg shadow-emerald-200 dark:shadow-none">
+                        <p class="text-3xl font-bold text-white mb-1">{{ $completedActivities }}</p>
+                        <p class="text-sm font-medium text-emerald-50 text-center">Đã hoàn thành</p>
+                    </div>
+
+                    <div
+                        class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">
+                            {{ number_format($avgParticipation, 1) }}
+                        </p>
+                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">TB tham gia/hoạt động
                         </p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Activity Statistics -->
-            <div class="premium-card p-6">
-                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-6 flex items-center gap-2">
-                    <span class="w-1.5 h-6 rounded-full gradient-warning"></span>
-                    Thống kê hoạt động
-                </h3>
-
-                <div class="space-y-6">
-                    <!-- Top Row: Activity Distribution -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div
-                            class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
-                            <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">{{ $totalActivities }}
-                            </p>
-                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tổng hoạt động</p>
-                        </div>
-
-                        <div
-                            class="p-5 rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 border-2 border-blue-500/50 text-center">
-                            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                                {{ $upcomingActivities }}
-                            </p>
-                            <p class="text-sm font-medium text-blue-500 dark:text-blue-300">Sắp diễn ra</p>
-                        </div>
-
-                        <div
-                            class="p-5 rounded-2xl bg-emerald-600 dark:bg-emerald-700 text-center shadow-lg shadow-emerald-200 dark:shadow-none">
-                            <p class="text-3xl font-bold text-white mb-1">{{ $completedActivities }}</p>
-                            <p class="text-sm font-medium text-emerald-50 text-center">Đã hoàn thành</p>
-                        </div>
-
-                        <div
-                            class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-700/50 text-center">
-                            <p class="text-3xl font-bold text-neutral-900 dark:text-white mb-1">
-                                {{ number_format($avgParticipation, 1) }}
-                            </p>
-                            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">TB tham gia/hoạt động
-                            </p>
-                        </div>
+                <!-- Bottom Row: Registration Stats -->
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-8 py-4 px-8 bg-neutral-50/50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">
+                            {{ $totalRegistrations }}
+                        </p>
+                        <p
+                            class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Tổng đăng ký</p>
                     </div>
-
-                    <!-- Bottom Row: Registration Stats -->
-                    <div
-                        class="grid grid-cols-1 sm:grid-cols-3 gap-8 py-4 px-8 bg-neutral-50/50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
-                        <div class="text-center">
-                            <p class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">
-                                {{ $totalRegistrations }}
-                            </p>
-                            <p
-                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                Tổng đăng ký</p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">
-                                {{ $approvedRegistrations }}
-                            </p>
-                            <p
-                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                Đã duyệt</p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-bold text-amber-500 dark:text-amber-400 mb-1">
-                                {{ $pendingRegistrations }}
-                            </p>
-                            <p
-                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                Chờ duyệt</p>
-                        </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">
+                            {{ $approvedRegistrations }}
+                        </p>
+                        <p
+                            class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Đã duyệt</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-amber-500 dark:text-amber-400 mb-1">
+                            {{ $pendingRegistrations }}
+                        </p>
+                        <p
+                            class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            Chờ duyệt</p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </x-layouts.app>
