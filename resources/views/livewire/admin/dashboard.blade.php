@@ -88,88 +88,10 @@
                 </div>
             </div>
 
-            <!-- Training Points Card -->
-            <div class="premium-card stat-card p-6 group">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
-                            Điểm TB</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-1">
-                            {{ number_format($avgTrainingPoint, 1) }}
-                        </p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span
-                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
-                                ⭐ {{ $totalTrainingPoints }} lượt chấm
-                            </span>
-                        </div>
-                    </div>
-                    <div class="icon-gradient-orange group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Charts Row -->
-        <div class="grid gap-4 md:grid-cols-2">
-            <!-- Training Points Distribution -->
-            <div class="premium-card p-6">
-                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-6 rounded-full gradient-primary"></span>
-                    Phân loại điểm rèn luyện
-                </h3>
-                <div class="space-y-4">
-                    <div
-                        class="flex items-center justify-between p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/30">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-lg score-excellent flex items-center justify-center text-sm font-bold">
-                                A+</div>
-                            <span class="font-medium text-neutral-700 dark:text-neutral-300">Xuất sắc (≥90)</span>
-                        </div>
-                        <span
-                            class="text-xl font-bold text-green-600 dark:text-green-400">{{ $trainingPointsDistribution['excellent'] }}</span>
-                    </div>
-                    <div
-                        class="flex items-center justify-between p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-lg score-good flex items-center justify-center text-sm font-bold">
-                                A</div>
-                            <span class="font-medium text-neutral-700 dark:text-neutral-300">Tốt (80-89)</span>
-                        </div>
-                        <span
-                            class="text-xl font-bold text-blue-600 dark:text-blue-400">{{ $trainingPointsDistribution['good'] }}</span>
-                    </div>
-                    <div
-                        class="flex items-center justify-between p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-900/30">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-lg score-average flex items-center justify-center text-sm font-bold">
-                                B</div>
-                            <span class="font-medium text-neutral-700 dark:text-neutral-300">Khá (65-79)</span>
-                        </div>
-                        <span
-                            class="text-xl font-bold text-yellow-600 dark:text-yellow-400">{{ $trainingPointsDistribution['average'] }}</span>
-                    </div>
-                    <div
-                        class="flex items-center justify-between p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-lg score-below flex items-center justify-center text-sm font-bold">
-                                C</div>
-                            <span class="font-medium text-neutral-700 dark:text-neutral-300">Trung bình (&lt;65)</span>
-                        </div>
-                        <span
-                            class="text-xl font-bold text-red-600 dark:text-red-400">{{ $trainingPointsDistribution['below'] }}</span>
-                    </div>
-                </div>
-            </div>
-
+        <div class="grid gap-4 md:grid-cols-1">
             <!-- Financial Summary -->
             <div class="premium-card p-6">
                 <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">

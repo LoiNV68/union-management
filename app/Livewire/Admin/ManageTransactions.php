@@ -41,7 +41,7 @@ class ManageTransactions extends Component
 
     public function mount(): void
     {
-        abort_unless(in_array(Auth::user()?->role, [1, 2]), 403);
+        abort_unless(Auth::user()?->role === 2, 403);
     }
 
     public function updatedSearch(): void
@@ -71,6 +71,10 @@ class ManageTransactions extends Component
     public function openEditForm(int $id): void
     {
         $transaction = Transaction::findOrFail($id);
+        
+        // Chỉ cho phép chỉnh sửa transactions do mình tạo
+        abort_unless($transaction->created_by === Auth::id(), 403);
+        
         $this->editingId = $id;
         $this->title = $transaction->title;
         $this->description = $transaction->description ?? '';
@@ -82,6 +86,11 @@ class ManageTransactions extends Component
 
     public function openViewModal(int $id): void
     {
+        $transaction = Transaction::findOrFail($id);
+        
+        // Chỉ cho phép xem transactions do mình tạo
+        abort_unless($transaction->created_by === Auth::id(), 403);
+        
         $this->viewingId = $id;
         $this->showViewModal = true;
     }
@@ -126,7 +135,12 @@ class ManageTransactions extends Component
         ];
 
         if ($this->editingId) {
-            Transaction::findOrFail($this->editingId)->update($data);
+            $transaction = Transaction::findOrFail($this->editingId);
+            
+            // Chỉ cho phép cập nhật transactions do mình tạo
+            abort_unless($transaction->created_by === Auth::id(), 403);
+            
+            $transaction->update($data);
             $this->dispatch('notify', [
                 'type' => 'success',
                 'message' => 'Đã cập nhật giao dịch thành công.'
@@ -135,14 +149,41 @@ class ManageTransactions extends Component
         } else {
             $transaction = Transaction::create($data);
 
-            // Create member_transactions for all active members
-            $members = Member::where('status', 1)->get();
-            foreach ($members as $member) {
-                MemberTransaction::create([
-                    'transaction_id' => $transaction->id,
-                    'member_id' => $member->id,
-                    'payment_status' => 0,
-                ]);
+            // Create member_transactions for all active members if it's a revenue transaction
+            if ($transaction->type === 0) {
+                $members = Member::where('status', 1)->get();
+                $totalMembersCount = $members->count();
+                
+                foreach ($members as $member) {
+                    MemberTransaction::create([
+                        'transaction_id' => $transaction->id,
+                        'member_id' => $member->id,
+                        'payment_status' => 0,
+                    ]);
+                }
+
+                // Calculate amount per member: tổng số tiền / tổng số thành viên
+                $amountPerMember = $totalMembersCount > 0 ? $transaction->amount / $totalMembersCount : 0;
+
+                // Create revenue transactions for branch officers (cán bộ đoàn)
+                $branches = Branch::whereNotNull('secretary')->with('members')->get();
+                foreach ($branches as $branch) {
+                    $branchActiveMembersCount = $branch->members()->where('status', 1)->count();
+                    
+                    if ($branchActiveMembersCount > 0 && $branch->secretary) {
+                        // Số tiền thu của chi đoàn = số tiền mỗi thành viên × số thành viên trong chi đoàn
+                        $branchRevenueAmount = $amountPerMember * $branchActiveMembersCount;
+
+                        Transaction::create([
+                            'title' => 'Thu từ: ' . $transaction->title . ' - ' . $branch->branch_name,
+                            'description' => 'Khoản thu từ khoản thu tổng: ' . $transaction->title . '. Chi đoàn: ' . $branch->branch_name . '. Số thành viên trong chi đoàn: ' . $branchActiveMembersCount . '. Số tiền: ' . number_format(round($branchRevenueAmount, 2), 0, ',', '.') . ' VNĐ',
+                            'amount' => round($branchRevenueAmount, 2),
+                            'type' => 0, // Revenue
+                            'due_date' => $transaction->due_date,
+                            'created_by' => $branch->secretary, // Cán bộ đoàn
+                        ]);
+                    }
+                }
             }
 
             $this->dispatch('notify', [
@@ -158,13 +199,20 @@ class ManageTransactions extends Component
     public function sendNotification(int $transactionId): void
     {
         $transaction = Transaction::findOrFail($transactionId);
-        $members = $transaction->memberTransactions()->with('member.user')->get();
+        
+        // Chỉ cho phép gửi thông báo cho transactions do mình tạo
+        abort_unless($transaction->created_by === Auth::id(), 403);
+        $memberTransactions = $transaction->memberTransactions()->with('member.user')->get();
 
-        foreach ($members as $memberTransaction) {
+        // Calculate amount per member: tổng số tiền / tổng số thành viên
+        $totalMembersCount = $memberTransactions->count();
+        $amountPerMember = $totalMembersCount > 0 ? $transaction->amount / $totalMembersCount : 0;
+
+        foreach ($memberTransactions as $memberTransaction) {
             if ($memberTransaction->member->user_id) {
                 Notification::create([
                     'title' => 'Thông báo thu tiền: ' . $transaction->title,
-                    'content' => 'Bạn có khoản thu mới cần thanh toán. Số tiền: ' . number_format((float) $transaction->amount, 0, ',', '.') . ' VNĐ',
+                    'content' => 'Bạn có khoản thu mới cần thanh toán. Số tiền: ' . number_format(round($amountPerMember, 2), 0, ',', '.') . ' VNĐ',
                     'date_sent' => now(),
                     'sender_id' => Auth::id(),
                     'receiver_id' => $memberTransaction->member->user_id,
@@ -182,6 +230,10 @@ class ManageTransactions extends Component
     public function confirmPayment(int $memberTransactionId): void
     {
         $memberTransaction = MemberTransaction::findOrFail($memberTransactionId);
+        
+        // Chỉ cho phép xác nhận thanh toán cho transactions do mình tạo
+        abort_unless($memberTransaction->transaction->created_by === Auth::id(), 403);
+        
         $memberTransaction->update([
             'payment_status' => 2, // Confirmed
         ]);
@@ -195,7 +247,12 @@ class ManageTransactions extends Component
 
     public function closeTransaction(int $id): void
     {
-        Transaction::findOrFail($id)->update(['status' => 1]);
+        $transaction = Transaction::findOrFail($id);
+        
+        // Chỉ cho phép đóng transactions do mình tạo
+        abort_unless($transaction->created_by === Auth::id(), 403);
+        
+        $transaction->update(['status' => 1]);
         $this->dispatch('notify', [
             'type' => 'success',
             'message' => 'Đã đóng khoản thu chi.'
@@ -205,7 +262,12 @@ class ManageTransactions extends Component
 
     public function openTransaction(int $id): void
     {
-        Transaction::findOrFail($id)->update(['status' => 0]);
+        $transaction = Transaction::findOrFail($id);
+        
+        // Chỉ cho phép mở transactions do mình tạo
+        abort_unless($transaction->created_by === Auth::id(), 403);
+        
+        $transaction->update(['status' => 0]);
         $this->dispatch('notify', [
             'type' => 'success',
             'message' => 'Đã mở lại khoản thu chi.'
@@ -217,6 +279,10 @@ class ManageTransactions extends Component
     {
         if ($this->deletingId) {
             $transaction = Transaction::findOrFail($this->deletingId);
+            
+            // Chỉ cho phép xóa transactions do mình tạo
+            abort_unless($transaction->created_by === Auth::id(), 403);
+            
             $transaction->delete();
             $this->dispatch('notify', [
                 'type' => 'success',
@@ -292,6 +358,7 @@ class ManageTransactions extends Component
         return view('livewire.admin.manage-transactions', [
             'transactions' => Transaction::query()
                 ->with(['creator', 'memberTransactions'])
+                ->where('created_by', Auth::id()) // Chỉ hiển thị transactions do super admin này tạo
                 ->withCount([
                     'memberTransactions as paid_count' => function ($query) {
                         $query->where('payment_status', '>=', 1);
